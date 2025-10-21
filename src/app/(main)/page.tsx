@@ -1,5 +1,6 @@
-import { HeroSection } from "@/appcomponent/landingpage";
+import { Home } from "@/appcomponent/landingpage";
+
 
 export default function HomePage() {
-  return <HeroSection />;
+  return <Home />;
 }
