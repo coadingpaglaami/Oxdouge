@@ -1,7 +1,6 @@
 "use client";
 import { landingPageData } from "@/data";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Heater } from "../reusable";
 
