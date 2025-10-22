@@ -1,17 +1,13 @@
-'use client';
+"use client";
 
-import { useState } from "react";
 import { shippingAddresses } from "@/data/ShippingAddressData";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ShippingAddressSelector } from "./ShippingAddressTwo";
 
 interface ShippingAddressSectionProps {
   selectedAddress: number;
@@ -22,7 +18,6 @@ export const ShippingAddressSection = ({
   selectedAddress,
   setSelectedAddress,
 }: ShippingAddressSectionProps) => {
-  const [showAddAddress, setShowAddAddress] = useState(false);
 
   return (
     <div className="flex justify-between items-start">
@@ -53,20 +48,33 @@ export const ShippingAddressSection = ({
         </DialogTrigger>
 
         <DialogContent className="min-w-[80vw] w-full h-[60vh] bg-[#121212] text-white border border-primary">
-          <DialogHeader>
-            <DialogTitle>
+          {/* <DialogHeader className="hidden">
+            <DialogTitle className="hidden">
               {!showAddAddress
                 ? "Set Your Default Shipping Address"
                 : "Add New Shipping Address"}
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="hidden">
               {!showAddAddress
                 ? "Update your default shipping address"
                 : "Add a new shipping address"}
             </DialogDescription>
-          </DialogHeader>
-
-          {!showAddAddress ? (
+          </DialogHeader> */}
+          {/* <div className="flex flex-col gap-2">
+            <span className="font-semibold text-white text-xl">
+              {" "}
+              {!showAddAddress
+                ? "Set Your Default Shipping Address"
+                : "Add New Shipping Address"}
+            </span>
+            <span className="text-[#AEAEAE]">
+              {" "}
+              {!showAddAddress
+                ? "Update your default shipping address"
+                : "Add a new shipping address"}
+            </span>
+          </div> */}
+          {/* {!showAddAddress ? (
             <div className="flex flex-col gap-4 mt-4 w-full">
               <RadioGroup
                 value={selectedAddress.toString()}
@@ -110,7 +118,6 @@ export const ShippingAddressSection = ({
             </div>
           ) : (
             <div className="flex flex-col gap-4 mt-4">
-              {/* Add New Address Form */}
               <div className="flex flex-col gap-3">
                 <div className="flex flex-col gap-1">
                   <label className="text-sm">Street Address</label>
@@ -152,7 +159,11 @@ export const ShippingAddressSection = ({
                 Save Address
               </Button>
             </div>
-          )}
+          )} */}
+          <ShippingAddressSelector
+  selectedAddress={selectedAddress}
+  setSelectedAddress={setSelectedAddress}
+/>
         </DialogContent>
       </Dialog>
     </div>

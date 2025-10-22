@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ShoppingCartItem } from "@/interfaces/ShoppingCartItem"; // Your interface for left section items
 import { shippingAddresses } from "@/data/ShippingAddressData";
 import { Button } from "@/components/ui/button";
-import { ShippingAddressSection } from "../reusable/ShippingAddressSection";
+import { ShippingAddressSection } from "../reusable/ShippingAddressSelector";
 
 
 interface CartRightChildProps {
