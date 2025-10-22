@@ -47,14 +47,12 @@ export const Cart = () => {
       <div className="flex flex-col md:flex-row md:justify-between gap-6">
         {/* Left Child */}
         <div className="md:w-[60%] w-full">
- <CartLeftChild cartItems={cartItems} setCartItems={setCartItems} />
+          <CartLeftChild cartItems={cartItems} setCartItems={setCartItems} />
         </div>
         <div className="md:w-[40%] w-full">
-            <CartRightChild cartItems={cartItems} setCartItems={setCartItems} />
+          <CartRightChild cartItems={cartItems} setCartItems={setCartItems} />
         </div>
-       
       </div>
-      
     </div>
   );
 };

@@ -2,19 +2,9 @@
 
 import { useState } from "react";
 import { ShoppingCartItem } from "@/interfaces/ShoppingCartItem"; // Your interface for left section items
-
 import { shippingAddresses } from "@/data/ShippingAddressData";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ShippingAddressSection } from "../reusable/ShippingAddressSection";
 
 
 interface CartRightChildProps {
@@ -25,7 +15,6 @@ export const CartRightChild = ({ cartItems }: CartRightChildProps) => {
   const [selectedAddress, setSelectedAddress] = useState<number>(
     shippingAddresses.find((a) => a.isDefault)?.id ?? shippingAddresses[0].id
   );
-  const [showAddAddress, setShowAddAddress] = useState(false);
 
   // Subtotal
   const subtotal = cartItems.reduce((acc, item) => {
@@ -47,9 +36,9 @@ export const CartRightChild = ({ cartItems }: CartRightChildProps) => {
       <h2 className="text-lg font-semibold text-white">Order Summary</h2>
 
       {/* 2. Shipping Address */}
-      <div className="flex justify-between items-start">
-        {/* Address Info */}
-        <div className="flex flex-col gap-1">
+      {/* <div className="flex justify-between items-start"> */}
+ 
+        {/* <div className="flex flex-col gap-1">
           <p className="text-[#C8C8C8] text-sm">Shipping Address</p>
           {shippingAddresses
             .filter((a) => a.id === selectedAddress)
@@ -64,14 +53,16 @@ export const CartRightChild = ({ cartItems }: CartRightChildProps) => {
                 </p>
               </div>
             ))}
-        </div>
+        </div> */}
+  <ShippingAddressSection
+  selectedAddress={selectedAddress}
+  setSelectedAddress={setSelectedAddress}
+/>
 
-        {/* Change Button → Dialog */}
-        <Dialog >
+
+        {/* <Dialog >
           <DialogTrigger asChild>
-            <Button variant="outline" size="sm">
-              Change
-            </Button>
+
           </DialogTrigger>
 
           <DialogContent className="min-w-[80vw] w-full h-[50vh] bg-[#121212] text-white border border-primary">
@@ -125,7 +116,6 @@ export const CartRightChild = ({ cartItems }: CartRightChildProps) => {
               <div className="flex flex-col gap-4 mt-4">
 
                 <div className="flex flex-col gap-3">
-                  {/* Street Address */}
                   <div className="flex flex-col gap-1">
                     <label className="text-sm">Street Address</label>
                     <input
@@ -133,7 +123,6 @@ export const CartRightChild = ({ cartItems }: CartRightChildProps) => {
                       className="border border-primary/20 rounded p-2 text-white"
                     />
                   </div>
-                  {/* City & State */}
                   <div className="flex gap-2">
                     <div className="flex flex-col gap-1 flex-1">
                       <label className="text-sm">City</label>
@@ -150,7 +139,6 @@ export const CartRightChild = ({ cartItems }: CartRightChildProps) => {
                       />
                     </div>
                   </div>
-                  {/* ZIP Code */}
                   <div className="flex flex-col gap-1">
                     <label className="text-sm">Zip Code</label>
                     <input
@@ -170,8 +158,8 @@ export const CartRightChild = ({ cartItems }: CartRightChildProps) => {
               </div>
             )}
           </DialogContent>
-        </Dialog>
-      </div>
+        </Dialog> */}
+      {/* </div> */}
 
       {/* 3. Subtotal, Shipping, Tax */}
       <div className="flex flex-col gap-2">
