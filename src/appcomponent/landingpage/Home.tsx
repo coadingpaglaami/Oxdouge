@@ -4,6 +4,7 @@ import { HeaterSolution } from "./HeaterSolution";
 import { HeroSection } from "./hero";
 import { WarmSection } from "./WarmSection";
 import { WhyChoose } from "./WhyChoose";
+import { Work } from "./Works";
 
 export const Home = () => {
   return (
@@ -13,6 +14,7 @@ export const Home = () => {
         <WhyChoose />
         <HeaterSolution />
         <WarmSection />
+        <Work />
         <CustomerSay />
         <Experience />
       </div>

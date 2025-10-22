@@ -32,6 +32,7 @@ export const HeaterSolution = () => {
             subtitle={item.subtitle}
             title={item.title}
             key={index}
+            id={item.id}
           />
         ))}
       </div>

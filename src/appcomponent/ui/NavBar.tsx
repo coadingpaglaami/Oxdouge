@@ -1,15 +1,40 @@
 "use client";
 
 import { useState } from "react";
-import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetClose } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
 import { User, ShoppingCart, Menu } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+
+  // const isScrolled = useMemo(() => {
+  //   return window.scrollY > 50;
+  // }, [window?.scrollY])
+
+  // useEffect(() => {
+  //   document.addEventListener("scroll", () => {
+  //     console.log(window.scrollY);
+  //     if (window.scrollY > 50) {
+  //       if
+  //       // setIsScrolled(true);
+
+  //     } else {
+  //       // setIsScrolled(false);
+  //     }
+  //   });
+  // }, []);
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -19,10 +44,16 @@ export const NavBar = () => {
   ];
 
   return (
-    <nav className="w-full py-4 px-6 flex items-center justify-between bg-[#73737321] relative top-0 z-50 ">
+    <nav className="w-full py-4 px-6 flex items-center justify-between  relative ">
       {/* Logo */}
       <Link href="/" className="flex items-center gap-2">
-        <Image src="/landing/logo.svg" alt="Logo" width={80} height={80} priority />
+        <Image
+          src="/landing/logo.svg"
+          alt="Logo"
+          width={80}
+          height={80}
+          priority
+        />
       </Link>
 
       {/* Desktop Nav Links */}
@@ -34,7 +65,11 @@ export const NavBar = () => {
               <Link
                 href={link.href}
                 className={`relative pb-1 transition-all duration-200
-                  ${isActive ? "text-primary after:w-full" : "text-white hover:text-primary"}
+                  ${
+                    isActive
+                      ? "text-primary after:w-full"
+                      : "text-white hover:text-primary"
+                  }
                   after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-primary
                   after:transition-all after:duration-200 after:w-0
                   hover:after:w-full`}
@@ -63,7 +98,9 @@ export const NavBar = () => {
         <SheetContent side="right" className="w-72 p-6 bg-[#231D0D] text-white">
           <SheetHeader>
             <SheetTitle className="sr-only">Menu</SheetTitle>
-            <SheetDescription className="sr-only">Navigate through our sections</SheetDescription>
+            <SheetDescription className="sr-only">
+              Navigate through our sections
+            </SheetDescription>
           </SheetHeader>
 
           <ul className="flex flex-col gap-4 ">
@@ -75,7 +112,11 @@ export const NavBar = () => {
                     href={link.href}
                     onClick={() => setIsOpen(false)}
                     className={`block pb-1 transition-all duration-200
-                      ${isActive ? "text-primary border-primary" : "border-transparent"}
+                      ${
+                        isActive
+                          ? "text-primary border-primary"
+                          : "border-transparent"
+                      }
                       hover:text-primary hover:border-primary
                       border-b`}
                   >
@@ -88,8 +129,12 @@ export const NavBar = () => {
 
           {/* Icons */}
           <div className="flex items-center gap-5 mt-6">
-            <User className="cursor-pointer" />
-            <ShoppingCart className="cursor-pointer" />
+            <button>
+              <User className="cursor-pointer" />
+            </button>
+            <button onClick={() => router.push("/cart")}>
+              <ShoppingCart className="cursor-pointer" />
+            </button>
           </div>
         </SheetContent>
       </Sheet>

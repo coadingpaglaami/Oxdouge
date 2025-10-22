@@ -2,10 +2,12 @@
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ShoppingCart } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { SwipperCards } from "./SwipperCards";
+import { useRouter } from "next/navigation";
 
 export const HeroSection = () => {
+  const router = useRouter();
   return (
     <section className="w-full md:h-screen relative flex flex-col md:flex-row overflow-hidden max-md:gap-8">
       {/* Left Section */}
@@ -59,6 +61,7 @@ export const HeroSection = () => {
             <Button
               className="flex items-center gap-2 px-6 py-4"
               variant="defaultGradient"
+              onClick={() => router.push('/products')}
             >
               Buy Now
               <ArrowRight className="w-5 h-5" />
@@ -66,6 +69,7 @@ export const HeroSection = () => {
             <Button
               variant="outline"
               className="text-white flex items-center gap-2 px-6 py-4"
+
             >
               Learn More
               <Image
