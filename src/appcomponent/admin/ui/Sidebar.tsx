@@ -38,7 +38,7 @@ export const Sidebar = () => {
   return (
     <div className="flex flex-col h-full p-6 gap-8 bg-[#121212]">
       {/* Logo */}
-      <div className="flex justify-center">
+      <Link href='/admin' className="flex justify-center">
         <Image
           src="/landing/logo.svg"
           alt="Logo"
@@ -46,7 +46,7 @@ export const Sidebar = () => {
           height={130}
           className="object-contain"
         />
-      </div>
+      </Link>
 
       {/* Title */}
       <div className="text-center text-primary text-lg font-semibold">

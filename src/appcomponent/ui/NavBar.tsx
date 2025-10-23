@@ -9,10 +9,15 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
-import { User, ShoppingCart, Menu } from "lucide-react";
+import { User, ShoppingCart, Menu, UserCheck2, LogIn } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@radix-ui/react-popover";
 
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,6 +41,23 @@ export const NavBar = () => {
     { name: "Products", href: "/products" },
     { name: "About Us", href: "/about" },
     { name: "Contact Us", href: "/contact" },
+  ];
+  const popoverlinks = [
+    {
+      name: "Profile",
+      href: "/profile",
+      icon: <User />,
+    },
+    {
+      name: "Admin",
+      href: "/admin",
+      icon: <UserCheck2 />,
+    },
+    {
+      name: "Login",
+      href: "/login",
+      icon: <LogIn />,
+    },
   ];
 
   return (
@@ -81,9 +103,30 @@ export const NavBar = () => {
 
       {/* Desktop Icons */}
       <div className="max-md:hidden flex items-center gap-5">
-        <Link href="/login">
+        <Popover >
+          <PopoverTrigger asChild>
+            <button>
+              <User className="cursor-pointer text-white" />
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className="w-28 bg-[#040403] p-2 rounded-md shadow-lg">
+            <div className="flex flex-col gap-2">
+              {popoverlinks.map((link, index) => (
+                <Link
+                  key={index}
+                  href={link.href}
+                  className="flex items-center gap-2"
+                >
+                  <span className="text-white">{link.icon}</span>
+                  <span className="text-white">{link.name}</span>
+                </Link>
+              ))}
+            </div>
+          </PopoverContent>
+        </Popover>
+        {/* <Link href="/login">
           <User className="cursor-pointer text-white" />
-        </Link>
+        </Link> */}
         <Link href="/cart">
           <ShoppingCart className="cursor-pointer text-white" />
         </Link>
