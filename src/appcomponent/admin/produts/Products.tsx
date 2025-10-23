@@ -210,7 +210,7 @@ export const Prodcuts = () => {
 
       {/* search + add */}
       <div className="flex flex-wrap gap-4 items-center justify-between my-4">
-        <div className="relative flex-1 min-w-[220px] md:max-w-[60%]">
+        <div className="relative flex-1 min-w-[220px] md:max-w-[90%]">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
             <Search size={18} />
           </span>

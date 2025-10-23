@@ -17,7 +17,7 @@ export const RevenueData = ()=>{
             <h3 className="text-lg font-medium text-zinc-300 mb-4">Recent Order</h3>
             <div className="space-y-3">
               {recentOrders.map((order) => (
-                <div key={order.id} className="flex justify-between items-center">
+                <div key={order.id} className="flex justify-between items-center bg-[#F9DE862B] p-2 rounded-lg">
                   <div>
                     <p className="text-sm text-zinc-300">{order.id}</p>
                     <p className="text-xs text-zinc-500 mt-0.5">Just now</p>
