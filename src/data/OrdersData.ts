@@ -25,4 +25,12 @@ export const ordersData: Order[] = [
     items: 3,
     totalAmount: 259.49,
   },
+  {
+    id: 104,
+    orderName: "Order #104",
+    placeDate: "2025-01-18",
+    status: "Delivered",
+    items: 4,
+    totalAmount: 199.95,
+  },
 ];

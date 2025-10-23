@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Breadcrumb } from "@/appcomponent/reusable";
 import { productPageData as initialProducts } from "@/data/ProductPageData";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -20,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Edit2, Trash2, Search, Plus, X } from "lucide-react";
+import { Edit2, Trash2, Search, Plus, X, Video } from "lucide-react";
 
 /**
  * Admin Products page with Add/Edit dialog
@@ -245,11 +244,8 @@ export const Prodcuts = () => {
           <TableBody className="">
             {/* <div className="flex flex-col gap-4 w-full"> */}
             {filtered.map((item) => (
-              <TableRow
-                key={item.id}
-                className=" border-none rounded-lg bg-[#18181B]"
-              >
-                <TableCell>
+              <TableRow key={item.id} className=" border-none rounded-lg mb-3">
+                <TableCell className="bg-[#18181B]">
                   <div className="w-20 h-20 ">
                     {/* use next/image for main image path if remote - using plain img for preview compat */}
                     <Image
@@ -261,19 +257,21 @@ export const Prodcuts = () => {
                     />
                   </div>
                 </TableCell>
-                <TableCell className="max-w-[150px] truncate ">
+                <TableCell className="max-w-[150px] truncate bg-[#18181B]">
                   {item.title}
                 </TableCell>
-                <TableCell className="max-w-[120px] truncate">
+                <TableCell className="max-w-[120px] truncate bg-[#18181B] ">
                   {item.category}
                 </TableCell>
-                <TableCell className="max-w-[100px]">{item.price}</TableCell>
-                <TableCell className="max-w-[350px]">
+                <TableCell className="max-w-[100px] bg-[#18181B] ">
+                  {item.price}
+                </TableCell>
+                <TableCell className="max-w-[350px] bg-[#18181B] ">
                   <div className="line-clamp-2 text-sm text-gray-300 ">
                     {item.description}
                   </div>
                 </TableCell>
-                <TableCell className="">
+                <TableCell className="bg-[#18181B] ">
                   <div className="flex gap-2 items-center">
                     <Button
                       variant="outline"
@@ -283,11 +281,14 @@ export const Prodcuts = () => {
                       <Edit2 size={16} />
                     </Button>
                     <Button
-                      variant="outline"    
+                      variant="outline"
                       size="icon"
                       onClick={() => removeProduct(item.id)}
                     >
-                      <Trash2 size={16} className="text-red-400 bg-transparent" />
+                      <Trash2
+                        size={16}
+                        className="text-red-400 bg-transparent"
+                      />
                     </Button>
                   </div>
                 </TableCell>
@@ -418,9 +419,10 @@ export const Prodcuts = () => {
                 <div>
                   <label className="text-sm text-gray-300">More Images</label>
                   <div
+                    onClick={() => moreInputRef.current?.click()}
                     onDrop={handleMoreDrop}
                     onDragOver={(e) => e.preventDefault()}
-                    className="mt-2 border border-primary/20 rounded p-3 min-h-[80px] flex flex-col gap-2"
+                    className="mt-2 border border-primary/20 rounded p-3 min-h-[80px] flex flex-col gap-2 cursor-pointer"
                   >
                     <input
                       ref={moreInputRef}
@@ -428,36 +430,48 @@ export const Prodcuts = () => {
                       accept="image/*"
                       multiple
                       className="hidden"
-                      onChange={(e) =>
-                        e.target.files &&
-                        setMoreImageFiles(Array.from(e.target.files))
-                      }
+                      onChange={(e) => {
+                        if (!e.target.files) return;
+                        setMoreImageFiles((cur) => [
+                          ...cur,
+                          ...Array.from(e.target.files),
+                        ]);
+                      }}
                     />
-                    <div className="flex gap-2 overflow-x-auto">
-                      {moreImagePreviews.length ? (
-                        moreImagePreviews.map((src, idx) => (
-                          <div
-                            key={idx}
-                            className="relative w-20 h-20 rounded overflow-hidden border border-primary/20"
+
+                    <div className="flex gap-2 overflow-x-auto items-center">
+                      {moreImagePreviews.map((src, idx) => (
+                        <div
+                          key={idx}
+                          className="relative w-20 h-20 rounded overflow-hidden border border-primary/20 shrink-0"
+                        >
+                          <img
+                            src={src}
+                            className="w-full h-full object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeMorePreview(idx);
+                            }}
+                            className="absolute top-1 right-1 bg-black/50 p-1 rounded"
                           >
-                            <img
-                              src={src}
-                              className="w-full h-full object-cover"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => removeMorePreview(idx)}
-                              className="absolute top-1 right-1 bg-black/50 p-1 rounded"
-                            >
-                              <X size={14} />
-                            </button>
-                          </div>
-                        ))
-                      ) : (
-                        <div className="text-sm text-gray-500">
-                          Drop multiple images here or click to select
+                            <X size={14} />
+                          </button>
                         </div>
-                      )}
+                      ))}
+
+                      {/* PLUS ICON BOX */}
+                      <div
+                        className="w-20 h-20 flex items-center justify-center rounded border border-dashed border-primary/30 shrink-0 hover:border-primary/60 transition text-white"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          moreInputRef.current?.click();
+                        }}
+                      >
+                        <Plus size={22} className="opacity-70" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -470,7 +484,7 @@ export const Prodcuts = () => {
                   <div
                     onDrop={handleVideoDrop}
                     onDragOver={(e) => e.preventDefault()}
-                    className="mt-2 border border-primary/20 rounded p-3 min-h-[80px] flex items-center gap-3"
+                    className="mt-2 border border-primary/20 rounded p-3 min-h-[100px] flex items-center gap-3"
                   >
                     <input
                       ref={videoInputRef}
@@ -481,22 +495,39 @@ export const Prodcuts = () => {
                         e.target.files && setVideoFile(e.target.files[0])
                       }
                     />
+
                     {videoPreview ? (
-                      <video
-                        src={videoPreview}
-                        controls
-                        className="w-full max-h-48"
-                      />
+                      <div className="relative w-full">
+                        <video
+                          src={videoPreview}
+                          controls
+                          className="w-full max-h-48 rounded border border-primary/30"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setVideoFile(null);
+                            setVideoPreview(null);
+                          }}
+                          className="absolute top-2 right-2 bg-black/60 px-2 py-1 rounded text-xs"
+                        >
+                          Remove
+                        </button>
+                      </div>
                     ) : (
-                      <div className="text-sm text-gray-500">
-                        Drop a video or click to upload (mp4, webm)
+                      <div
+                        onClick={() => videoInputRef.current?.click()}
+                        className="w-24 h-24 flex flex-col items-center justify-center gap-1 rounded border border-dashed border-primary/30 cursor-pointer hover:border-primary/60 transition"
+                      >
+                        <Video size={22} className="opacity-70 text-white" />
+                        <span className="text-xs text-gray-500">Upload</span>
                       </div>
                     )}
                   </div>
                 </div>
 
                 {/* Key Features dynamic list */}
-                <div>
+                <div className="border border-primary/20 p-2 rounded-lg">
                   <label className="text-sm text-gray-300">Key Features</label>
                   <div className="flex flex-col gap-2 mt-2">
                     {keyFeatures.map((kf, i) => (

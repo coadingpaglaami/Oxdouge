@@ -123,6 +123,8 @@
 
 @import "tailwindcss";
 @import "tw-animate-css";
+@import 'tailwind-scrollbar-hide/v4';
+
 
 @custom-variant dark (&:is(.dark *));
 
@@ -185,7 +187,7 @@
   --foreground: oklch(0.985 0 0);
 
   /* Primary should glow more in dark mode */
-  --primary: oklch(0.95 0.13 90);
+  --primary: oklch(0.92 0.145 90);
   --primary-foreground: oklch(0.18 0 0);
 
   /* Secondary solid yellow in dark */

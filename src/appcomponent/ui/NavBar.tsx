@@ -19,23 +19,6 @@ export const NavBar = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  // const isScrolled = useMemo(() => {
-  //   return window.scrollY > 50;
-  // }, [window?.scrollY])
-
-  // useEffect(() => {
-  //   document.addEventListener("scroll", () => {
-  //     console.log(window.scrollY);
-  //     if (window.scrollY > 50) {
-  //       if
-  //       // setIsScrolled(true);
-
-  //     } else {
-  //       // setIsScrolled(false);
-  //     }
-  //   });
-  // }, []);
-
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Products", href: "/products" },
@@ -82,9 +65,13 @@ export const NavBar = () => {
       </ul>
 
       {/* Desktop Icons */}
-      <div className="hidden md:flex items-center gap-5">
-        <User className="cursor-pointer text-white" />
-        <ShoppingCart className="cursor-pointer text-white" />
+      <div className="max-md:hidden flex items-center gap-5">
+        <Link href="/login">
+          <User className="cursor-pointer text-white" />
+        </Link>
+        <Link href="/cart">
+          <ShoppingCart className="cursor-pointer text-white" />
+        </Link>
       </div>
 
       {/* Mobile Menu Button */}

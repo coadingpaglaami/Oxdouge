@@ -24,5 +24,13 @@ export const landingPageData:DiselHeater[] = [
         title:"NOT Overland Pro Duo",
         description:"Dual-outlet warmth for larger tents and mobile workshops.",
         price:"$499.99"
+    },
+    {
+        id:4,
+        img:"/heaterimg/heater2.jpg",
+        subtitle:"Deiseal Heater",
+        title:"NOT Overland Ultra",
+        description:"All-day runtime with advanced fuel efficiency and integrated safety features for extended use.",
+        price:"$599.99"
     }
 ]

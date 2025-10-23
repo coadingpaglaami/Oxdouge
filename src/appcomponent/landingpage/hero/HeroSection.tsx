@@ -69,6 +69,7 @@ export const HeroSection = () => {
             <Button
               variant="outline"
               className="text-white flex items-center gap-2 px-6 py-4"
+              onClick={()=>router.push('/about')}
 
             >
               Learn More

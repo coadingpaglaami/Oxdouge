@@ -1,31 +1,3 @@
-
-
-// export const WarmSection =() => {
-//     const data =[
-//         {
-//             title:'Instant Heat, Anytime',
-//             description:'Feel the warmth in seconds with advanced ceramic heating technology.',
-//         },
-//         {
-//             title:'Smart Energy Saving',
-//             description:'Heats efficiently while keeping your electricity bill low.',
-//         },
-//         {
-//             title:'Safe for Everyone',
-//             description:'Auto shut-off and overheat protection for complete peace of mind.'
-//         },
-//         {
-//             title:'Portable & Travel-Friendly',
-//             description:'Heats efficiently while keeping your electricity bill low.'
-//         }
-//     ]
-//     return (
-//         <div>
-
-//         </div>
-//     )
-// }
-
 "use client";
 
 import Image from "next/image";
@@ -58,13 +30,13 @@ export const WarmSection = () => {
     <div className="flex flex-col md:flex-row gap-10 items-center">
       {/* ---------- Left Side (Image) ---------- */}
       <div className="w-full md:w-1/2 flex justify-center">
-        <div className="border-2 border-primary rounded-2xl shadow-[0_0_25px_rgba(0,174,239,0.4)]">
+        <div className="border-2 border-primary rounded-2xl ">
           <Image
             src="/landing/warm.png"
             alt="Warm Heater"
             width={500}
             height={500}
-            className="rounded-2xl object-cover"
+            className="rounded-2xl object-cover shadow-orange-300"
             priority
           />
         </div>

@@ -2,8 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const Experience = () => {
+  const router = useRouter();
   return (
     <div className="bg-[#231D0D] flex flex-col items-center justify-center text-center py-24">
       {/* ---------- Headings ---------- */}
@@ -23,7 +25,7 @@ export const Experience = () => {
       </p>
 
       {/* ---------- Button ---------- */}
-      <Button className="mt-8 flex items-center gap-2" variant='defaultGradient'>
+      <Button className="mt-8 flex items-center gap-2" variant='defaultGradient' onClick={()=>router.push('/products')}>
         Explore Products
         <ArrowRight className="w-4 h-4" />
       </Button>

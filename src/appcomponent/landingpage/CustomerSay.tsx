@@ -48,7 +48,7 @@ export const CustomerSay = () => {
         {data.map((item, index) => (
           <div
             key={index}
-            className="flex flex-col bg-[#121212] rounded-2xl p-6 border border-primary/30"
+            className="flex flex-col bg-[#121212] rounded-2xl p-6 border border-primary/30 hover:scale-105 transition-transform duration-200"
           >
             {/* Rating */}
             <div className="flex mb-4 gap-2">
