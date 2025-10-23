@@ -11,7 +11,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Table,
@@ -27,10 +26,12 @@ import { Message } from "@/interfaces/Message";
 export const Messages = () => {
   const [mmessages, setMessages] = useState(messages);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
+  console.log(mmessages);
 
   // Separate state for delete dialog
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [selectedDeleteMessage, setSelectedDeleteMessage] = useState<Message | null>(null);
+  const [selectedDeleteMessage, setSelectedDeleteMessage] =
+    useState<Message | null>(null);
 
   const totalNew = messages.filter((msg) => msg.status === "New").length;
 
@@ -47,7 +48,9 @@ export const Messages = () => {
 
   const handleConfirmDelete = () => {
     if (selectedDeleteMessage) {
-      setMessages((prev) => prev.filter((m) => m.id !== selectedDeleteMessage.id));
+      setMessages((prev) =>
+        prev.filter((m) => m.id !== selectedDeleteMessage.id)
+      );
     }
     setDeleteDialogOpen(false);
   };
@@ -91,11 +94,8 @@ export const Messages = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {messages.map((msg, ) => (
-                <TableRow
-                  key={msg.id}
-                 className="border-b border-[#A6A6A6C4]"
-                >
+              {messages.map((msg) => (
+                <TableRow key={msg.id} className="border-b border-[#A6A6A6C4]">
                   <TableCell className="text-white">{msg.sender}</TableCell>
                   <TableCell className="text-white">{msg.email}</TableCell>
                   <TableCell className="text-white line-clamp-2 leading-snug">
@@ -104,7 +104,9 @@ export const Messages = () => {
                   <TableCell className="text-white">{msg.date}</TableCell>
                   <TableCell>
                     <span
-                      className={`px-3 py-1 rounded-full text-sm font-medium ${statusStyles[msg.status].bg} ${statusStyles[msg.status].text}`}
+                      className={`px-3 py-1 rounded-full text-sm font-medium ${
+                        statusStyles[msg.status].bg
+                      } ${statusStyles[msg.status].text}`}
                     >
                       {msg.status}
                     </span>
@@ -183,7 +185,10 @@ export const Messages = () => {
                 </div>
 
                 {/* Send Button */}
-                <Button className="self-center mt-2 w-1/3 " variant='defaultGradient'>
+                <Button
+                  className="self-center mt-2 w-1/3 "
+                  variant="defaultGradient"
+                >
                   Send
                 </Button>
               </div>
@@ -199,7 +204,8 @@ export const Messages = () => {
             <DialogTitle>
               Are You Want to Delete{" "}
               <span className="font-semibold">
-                {selectedDeleteMessage?.sender}'s
+                {selectedDeleteMessage?.sender}
+                {"'"}s
               </span>{" "}
               Messages?
             </DialogTitle>

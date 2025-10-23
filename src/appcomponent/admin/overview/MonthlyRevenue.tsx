@@ -27,7 +27,7 @@ const monthlyData = [
 ];
 
 export const Revenue = () => {
-  const [viewType, setViewType] = useState("Monthly");
+  const [viewType] = useState("Monthly");
 
   return (
     <div className="lg:col-span-2 bg-zinc-800 rounded-lg p-6">

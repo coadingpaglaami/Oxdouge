@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Sheet,
   SheetTrigger,
@@ -18,6 +18,18 @@ export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const [scrolled, setScrolled] = useState(false);
+  // Scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50); // change 50 to your threshold
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Clean up
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -27,7 +39,10 @@ export const NavBar = () => {
   ];
 
   return (
-    <nav className="w-full py-4 px-6 flex items-center justify-between  relative ">
+    <nav
+      className={`w-full py-4 px-6 flex items-center justify-between relative transition-all duration-300
+        ${scrolled ? "bg-black/50 backdrop-blur-md" : "bg-transparent"}`}
+    >
       {/* Logo */}
       <Link href="/" className="flex items-center gap-2">
         <Image
@@ -53,7 +68,7 @@ export const NavBar = () => {
                       ? "text-primary after:w-full"
                       : "text-white hover:text-primary"
                   }
-                  after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-primary
+                  after:absolute after:left-0 after:bottom-0 after:h-0.5 after:bg-primary
                   after:transition-all after:duration-200 after:w-0
                   hover:after:w-full`}
               >

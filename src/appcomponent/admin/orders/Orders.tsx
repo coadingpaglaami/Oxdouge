@@ -31,7 +31,7 @@ import { OrderData } from "@/interfaces/OrderData";
 
 export const Orders = () => {
   const [selectedStatus, setSelectedStatus] = useState("All Orders");
-  const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<OrderData | null>(null);
 
   const statusStyles: Record<string, { bg: string; text: string }> = {
     Pending: { bg: "bg-primary/30", text: "text-primary" },
@@ -88,48 +88,55 @@ export const Orders = () => {
               </TableRow>
             </TableHeader>
 
-<TableBody>
-  {filteredOrders.map((order, index) => (
-    <TableRow
-      key={order.orderId}
-      className={`border-none rounded-lg my-2 transition-all duration-200 
+            <TableBody>
+              {filteredOrders.map((order, index) => (
+                <TableRow
+                  key={order.orderId}
+                  className={`border-none rounded-lg my-2 transition-all duration-200 
         ${
           index % 2 === 0
             ? "bg-[#18181B] hover:bg-[#202024]"
             : "bg-[#25252A] hover:bg-[#2D2D33]"
         }`}
-      style={{ borderSpacing: "0 12px" }}
-    >
-      <TableCell className="text-white py-4 rounded-l-lg">
-        {order.orderId}
-      </TableCell>
-      <TableCell className="text-white">{order.customerName}</TableCell>
-      <TableCell className="text-white">{order.productName}</TableCell>
-      <TableCell className="text-white">{order.quantity}</TableCell>
-      <TableCell className="text-white">${order.totalAmount}</TableCell>
-      <TableCell className="text-white">{order.orderDate}</TableCell>
-      <TableCell>
-        <span
-          className={`px-3 py-1 rounded-full text-sm font-medium ${
-            statusStyles[order.status].bg
-          } ${statusStyles[order.status].text}`}
-        >
-          {order.status}
-        </span>
-      </TableCell>
-      <TableCell className="rounded-r-lg">
-        <Button
-          variant="ghost"
-          onClick={() => setSelectedOrder(order)}
-          className="text-blue-500 hover:bg-blue-500/10"
-        >
-          <Eye className="w-4 h-4" />
-        </Button>
-      </TableCell>
-    </TableRow>
-  ))}
-</TableBody>
-
+                  style={{ borderSpacing: "0 12px" }}
+                >
+                  <TableCell className="text-white py-4 rounded-l-lg">
+                    {order.orderId}
+                  </TableCell>
+                  <TableCell className="text-white">
+                    {order.customerName}
+                  </TableCell>
+                  <TableCell className="text-white">
+                    {order.productName}
+                  </TableCell>
+                  <TableCell className="text-white">{order.quantity}</TableCell>
+                  <TableCell className="text-white">
+                    ${order.totalAmount}
+                  </TableCell>
+                  <TableCell className="text-white">
+                    {order.orderDate}
+                  </TableCell>
+                  <TableCell>
+                    <span
+                      className={`px-3 py-1 rounded-full text-sm font-medium ${
+                        statusStyles[order.status].bg
+                      } ${statusStyles[order.status].text}`}
+                    >
+                      {order.status}
+                    </span>
+                  </TableCell>
+                  <TableCell className="rounded-r-lg">
+                    <Button
+                      variant="ghost"
+                      onClick={() => setSelectedOrder(order)}
+                      className="text-blue-500 hover:bg-blue-500/10"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
           </Table>
         </div>
       </div>
@@ -194,12 +201,12 @@ export const Orders = () => {
                 <Select
                   value={selectedOrder.status}
                   onValueChange={(val) =>
-                    setSelectedOrder({ ...selectedOrder, status: val })
+                    setSelectedOrder({ ...selectedOrder, status: val || '' })
                   }
                 >
                   <SelectTrigger className="w-full  text-white border-primary">
                     <SelectValue
-                      placeholder={selectedOrder.status }
+                      placeholder={selectedOrder.status}
                       className="text-primary"
                     />
                   </SelectTrigger>

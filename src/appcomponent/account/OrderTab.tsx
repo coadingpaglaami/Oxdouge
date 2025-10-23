@@ -16,6 +16,7 @@ export const OrderTab = () => {
   const [ratingDialog, setRatingDialog] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order>('' as unknown as Order);
   const [rating, setRating] = useState(0);
+  console.log(selectedOrder);
 
   const handleCancel = (order:Order) => {
     setSelectedOrder(order);

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useState } from "react";
 import { ArrowLeft, User, Lock, MapPin, Package } from "lucide-react";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
@@ -11,22 +11,33 @@ import { ShippingTab } from "./ShippingTab";
 import { OrderTab } from "./OrderTab";
 
 export const Account = () => {
-  const [activeTab, setActiveTab] = useState<"profile" | "password" | "shipping" | "order">("profile");
+  const [activeTab, setActiveTab] = useState<
+    "profile" | "password" | "shipping" | "order"
+  >("profile");
 
   const tabs = [
     { key: "profile", label: "Profile", icon: <User className="w-4 h-4" /> },
     { key: "password", label: "Security", icon: <Lock className="w-4 h-4" /> },
-    { key: "shipping", label: "Shipping", icon: <MapPin className="w-4 h-4" /> },
+    {
+      key: "shipping",
+      label: "Shipping",
+      icon: <MapPin className="w-4 h-4" />,
+    },
     { key: "order", label: "Order", icon: <Package className="w-4 h-4" /> },
   ];
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case "profile": return <ProfileTab />;
-      case "password": return <SecurityTab />;
-      case "shipping": return <ShippingTab />;
-      case "order": return <OrderTab />;
-      default: return null;
+      case "profile":
+        return <ProfileTab />;
+      case "password":
+        return <SecurityTab />;
+      case "shipping":
+        return <ShippingTab />;
+      case "order":
+        return <OrderTab />;
+      default:
+        return null;
     }
   };
 
@@ -51,21 +62,23 @@ export const Account = () => {
       <div className="hidden md:flex flex-col items-center justify-center">
         {/* Tabs Row */}
         <div className="w-4/5 flex justify-center">
-        <div className="w-full flex justify-around gap-10 mb-8 border border-primary p-4 rounded-lg">
-          {tabs.map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key as any)}
-              className={`flex items-center gap-2 transition-colors ${
-                activeTab === tab.key ? "text-primary" : "text-gray-400 hover:text-white"
-              }`}
-            >
-              {tab.icon}
-              <span>{tab.label}</span>
-            </button>
-          ))}
+          <div className="w-full flex justify-around gap-10 mb-8 border border-primary p-4 rounded-lg">
+            {tabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key as typeof activeTab)}
+                className={`flex items-center gap-2 transition-colors ${
+                  activeTab === tab.key
+                    ? "text-primary"
+                    : "text-gray-400 hover:text-white"
+                }`}
+              >
+                {tab.icon}
+                <span>{tab.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
-</div>
         {/* Active Tab Content */}
         <div className="w-4/5">{renderTabContent()}</div>
       </div>
@@ -78,12 +91,15 @@ export const Account = () => {
               Open Tabs
             </Button>
           </SheetTrigger>
-          <SheetContent side="bottom" className="bg-[#121212] text-white border-t border-gray-700">
+          <SheetContent
+            side="bottom"
+            className="bg-[#121212] text-white border-t border-gray-700"
+          >
             <div className="flex justify-around py-4">
               {tabs.map((tab) => (
                 <button
                   key={tab.key}
-                  onClick={() => setActiveTab(tab.key as any)}
+                  onClick={() => setActiveTab(tab.key as typeof activeTab)}
                   className={`flex flex-col items-center gap-1 ${
                     activeTab === tab.key ? "text-primary" : "text-gray-400"
                   }`}
@@ -96,7 +112,6 @@ export const Account = () => {
           </SheetContent>
         </Sheet>
 
-        {/* Active Tab Content */}
         <div className="w-full mt-6 px-4">{renderTabContent()}</div>
       </div>
     </div>

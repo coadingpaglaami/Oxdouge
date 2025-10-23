@@ -57,7 +57,7 @@ export const  Work=()=> {
                         />
  
                         {/* Step Number */}
-                        <h1 className="font-bold text-[#FFD34538] absolute top-[-10px] right-4 text-[48px] md:text-[64px] select-none">
+                        <h1 className="font-bold text-[#FFD34538] absolute -top-2.5 right-4 text-[48px] md:text-[64px] select-none">
                             0{card.id}
                         </h1>
  

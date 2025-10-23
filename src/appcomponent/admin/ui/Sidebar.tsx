@@ -3,7 +3,13 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Package, Settings, Users, ShoppingCart, MessageCircleMoreIcon } from "lucide-react";
+import {
+  Home,
+  Package,
+  Settings,
+  ShoppingCart,
+  MessageCircleMoreIcon,
+} from "lucide-react";
 
 interface SidebarItem {
   name: string;
@@ -21,7 +27,11 @@ export const Sidebar = () => {
       href: "/admin/orders",
       icon: <ShoppingCart size={20} />,
     },
-    { name: "Messages", href: "/admin/messages", icon: <MessageCircleMoreIcon size={20} /> },
+    {
+      name: "Messages",
+      href: "/admin/messages",
+      icon: <MessageCircleMoreIcon size={20} />,
+    },
     { name: "Settings", href: "/admin/settings", icon: <Settings size={20} /> },
   ];
 

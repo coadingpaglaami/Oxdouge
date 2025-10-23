@@ -1,5 +1,3 @@
-
-
 // export const WhyChoose = () => {
 //     const data=[
 //         {
@@ -40,6 +38,7 @@
 
 // };
 
+import Image from "next/image";
 import React from "react";
 
 export const WhyChoose = () => {
@@ -84,12 +83,8 @@ export const WhyChoose = () => {
       <div className="flex flex-col items-center text-center">
         {/* Header */}
         <div className="flex items-center gap-2 md:text-4xl text-2xl font-bold">
-          <h2 className="text-white  ">
-            Why choose
-          </h2>
-          <span className="text-primary">
-            Overland Tech
-          </span>
+          <h2 className="text-white  ">Why choose</h2>
+          <span className="text-primary">Overland Tech</span>
         </div>
 
         {/* Quote */}
@@ -116,7 +111,13 @@ export const WhyChoose = () => {
                 background: `linear-gradient(135deg, ${item.icongradinet1}, ${item.icongradinet2})`,
               }}
             >
-              <img src={item.icon} alt={item.title} className="w-8 h-8" />
+              <Image
+                src={item.icon}
+                alt={item.title}
+                height={40}
+                width={40}
+                className="w-8 h-8"
+              />
             </div>
 
             {/* Title */}
