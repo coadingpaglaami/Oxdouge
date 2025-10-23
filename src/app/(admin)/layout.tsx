@@ -1,0 +1,25 @@
+import { Navbar, Sidebar } from "@/appcomponent/admin";
+
+export default function AdminLayout({children}:{children:React.ReactNode}){
+    return (
+    <div className="flex min-h-screen bg-[#121212] text-white">
+      {/* Sidebar */}
+      <div className="w-64 h-screen sticky top-0 border-r border-primary/20">
+        <Sidebar />
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Navbar */}
+        <div className="h-16 ">
+          <Navbar />
+        </div>
+
+        {/* Scrollable Children */}
+        <div className="flex-1 overflow-y-auto p-6">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}

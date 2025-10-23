@@ -9,6 +9,7 @@ export const productPageData: DiselHeater[] = [
     description: "Compact yet powerful. Designed for travelers and small spaces where warmth meets portability.",
     price: "$299.99",
     availability: "In Stock",
+    category: "Portable Heater",
     quantity: 10,
     keyFeatures: [
       "Designed Exclusively for Starlink® Mini",
@@ -34,6 +35,7 @@ export const productPageData: DiselHeater[] = [
     description: "Higher output for vans and cabins. Quiet, efficient heat for cold nights.",
     price: "$399.99",
     availability: "In Stock",
+    category: "Portable Heater",
     quantity: 8,
     keyFeatures: [
       "High heat output for larger spaces",
@@ -59,6 +61,7 @@ export const productPageData: DiselHeater[] = [
     description: "Dual-outlet warmth for larger tents and mobile workshops.",
     price: "$499.99",
     availability: "In Stock",
+    category: "Portable Heater",
     quantity: 5,
     keyFeatures: [
       "Dual heating outlets",
@@ -84,6 +87,7 @@ export const productPageData: DiselHeater[] = [
     description: "Upgraded Mini with improved runtime and faster heat-up for quick comfort on the go.",
     price: "$329.99",
     availability: "In Stock",
+    category: "Portable Heater",
     quantity: 12,
     keyFeatures: [
       "Upgraded runtime",
@@ -109,6 +113,7 @@ export const productPageData: DiselHeater[] = [
     description: "High-capacity unit for extended off-grid trips. Built for endurance and steady performance.",
     price: "$449.99",
     availability: "In Stock",
+    category: "Portable Heater",
     quantity: 7,
     keyFeatures: [
       "High-capacity power output",
@@ -134,6 +139,7 @@ export const productPageData: DiselHeater[] = [
     description: "Top-tier model with advanced controls and maximum output for extreme conditions.",
     price: "$599.99",
     availability: "In Stock",
+    category: "Portable Heater",
     quantity: 3,
     keyFeatures: [
       "Advanced controls",
@@ -142,6 +148,32 @@ export const productPageData: DiselHeater[] = [
       "Portable and easy to setup",
       "Efficient and quiet operation",
       "Versatile power options",
+    ],
+    moreImages: [
+      "/product/moreimage1.png",
+      "/product/moreimage2.jpg",
+      "/product/moreimage3.jpg",
+      "/product/moreimage4.jpg",
+    ],
+    howToUseVideo: "https://www.youtube.com/shorts/d10umDxSN9c",
+  },
+  {
+    id: 7,
+    img: "/heaterimg/heater1.jpg",
+    subtitle: "Deiseal Heater",
+    title: "NOT Overland Elite",
+    description: "Premium portable heater with smart controls and extended runtime for serious adventurers.",
+    price: "$679.99",
+    availability: "In Stock",
+    category: "Portable Heater",
+    quantity: 4,
+    keyFeatures: [
+      "Smart thermostat and app control",
+      "Extended runtime with efficient battery",
+      "Rugged build for all-weather use",
+      "Fast heat-up technology",
+      "Multiple power inputs including solar",
+      "Compact but high output",
     ],
     moreImages: [
       "/product/moreimage1.png",
