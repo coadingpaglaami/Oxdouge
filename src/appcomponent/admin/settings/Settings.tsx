@@ -29,7 +29,7 @@ export const Settings = () => {
 
       <div className="flex flex-col gap-8 mt-6">
         {/* 1st Child: Admin Profile */}
-        <div className="flex flex-col gap-6 border border-primary rounded-md p-6 bg-[#121212] text-white">
+        <div className="flex flex-col gap-6 border border-primary/20 rounded-md p-6 bg-[#121212] text-white">
           {/* Header */}
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
@@ -67,7 +67,7 @@ export const Settings = () => {
             </div>
 
             {editProfile && (
-              <Button type="submit" className="w-1/3 self-start bg-primary hover:bg-primary/90 mt-2">
+              <Button type="submit" className="md:w-1/3 self-start bg-primary hover:bg-primary/90 mt-2">
                 Update Profile
               </Button>
             )}
@@ -75,7 +75,7 @@ export const Settings = () => {
         </div>
 
         {/* 2nd Child: Change Password */}
-        <div className="flex flex-col gap-6 border border-primary rounded-md p-6 bg-[#121212] text-white">
+        <div className="flex flex-col gap-6 border border-primary/20 rounded-md p-6 bg-[#121212] text-white">
           {/* Header */}
           <div className="flex items-center gap-3">
             <LockIcon className="w-6 h-6 text-primary" />
@@ -94,13 +94,13 @@ export const Settings = () => {
                 type={showCurrentPwd ? "text" : "password"}
                 value={passwords.current}
                 onChange={(e) => setPasswords({ ...passwords, current: e.target.value })}
-                className="bg-[#1E1E1E] text-white border border-primary pr-10"
+                className="bg-[#1E1E1E] text-white border border-primary/20 pr-10"
               />
               <span
-                className="absolute right-3 top-[35px] cursor-pointer text-gray-400"
+                className="absolute right-3 top-[55%] cursor-pointer text-gray-400"
                 onClick={() => setShowCurrentPwd(!showCurrentPwd)}
               >
-                {showCurrentPwd ? <EyeClosed className="text-primary"/> : <Eye className="text-primary"/>}
+                {showCurrentPwd ? <EyeClosed className="text-primary"/> : <Eye className="text-primary" size={16}/>}
               </span>
             </div>
 
@@ -111,13 +111,13 @@ export const Settings = () => {
                 type={showNewPwd ? "text" : "password"}
                 value={passwords.new}
                 onChange={(e) => setPasswords({ ...passwords, new: e.target.value })}
-                className="bg-[#1E1E1E] text-white border border-primary pr-10"
+                className="bg-[#1E1E1E] text-white border border-primary/20 pr-10"
               />
               <span
-                className="absolute right-3 top-[35px] cursor-pointer text-gray-400"
+                className="absolute right-3 top-[55%] cursor-pointer text-gray-400"
                 onClick={() => setShowNewPwd(!showNewPwd)}
               >
-                {showNewPwd ?<EyeClosed className="text-primary"/> : <Eye className="text-primary"/>}
+                {showNewPwd ?<EyeClosed className="text-primary" size={16}/> : <Eye className="text-primary" size={16}/>}
               </span>
             </div>
 
@@ -128,17 +128,17 @@ export const Settings = () => {
                 type={showConfirmPwd ? "text" : "password"}
                 value={passwords.confirm}
                 onChange={(e) => setPasswords({ ...passwords, confirm: e.target.value })}
-                className="bg-[#1E1E1E] text-white border border-primary pr-10"
+                className="bg-[#1E1E1E] text-white border border-primary/20 pr-10"
               />
               <span
-                className="absolute right-3 top-[35px] cursor-pointer text-gray-400"
+                className="absolute right-3 top-[55%] cursor-pointer text-gray-400"
                 onClick={() => setShowConfirmPwd(!showConfirmPwd)}
               >
-                {showConfirmPwd ? <EyeClosed className="text-primary"/> : <Eye className="text-primary"/>}
+                {showConfirmPwd ? <EyeClosed className="text-primary" size={16}/> : <Eye className="text-primary" size={16}/>}
               </span>
             </div>
 
-            <Button type="submit" className="w-1/3 self-start bg-primary hover:bg-primary/90 mt-2">
+            <Button type="submit" className="md:w-1/3 self-start bg-primary hover:bg-primary/90 mt-2">
               Change Password
             </Button>
           </form>

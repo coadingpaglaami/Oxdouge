@@ -2,7 +2,6 @@
 import Image from "next/image";
 import { Trash2 } from "lucide-react";
 
-
 interface CartItem {
   id: number;
   img: string;
@@ -16,11 +15,10 @@ interface CartLeftChildProps {
   setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
 }
 
-
-
-
-export const CartLeftChild = ({ cartItems, setCartItems }: CartLeftChildProps) => {
- 
+export const CartLeftChild = ({
+  cartItems,
+  setCartItems,
+}: CartLeftChildProps) => {
   // helper: parse price from string like "$299.99"
   const parsePrice = (price: string) => Number(price.replace("$", ""));
 
@@ -28,8 +26,7 @@ export const CartLeftChild = ({ cartItems, setCartItems }: CartLeftChildProps) =
     setCartItems((prev) =>
       prev.map((item) => {
         if (item.id === id) {
-          let newQty =
-            type === "inc" ? item.quantity + 1 : item.quantity - 1;
+          let newQty = type === "inc" ? item.quantity + 1 : item.quantity - 1;
           if (newQty < 1) newQty = 1; // prevent negative
           return { ...item, quantity: newQty };
         }
@@ -79,7 +76,7 @@ export const CartLeftChild = ({ cartItems, setCartItems }: CartLeftChildProps) =
 
                 {/* Price */}
                 <span className="text-sm text-gray-600">
-                   <span className="font-semibold ">{item.price}</span> each
+                  <span className="font-semibold ">{item.price}</span> each
                 </span>
 
                 {/* Quantity + Total */}
@@ -100,7 +97,9 @@ export const CartLeftChild = ({ cartItems, setCartItems }: CartLeftChildProps) =
                     </button>
                   </div>
 
-                  <p className="font-semibold text-primary">${total.toFixed(2)}</p>
+                  <p className="font-semibold text-primary">
+                    ${total.toFixed(2)}
+                  </p>
                 </div>
               </div>
             </div>

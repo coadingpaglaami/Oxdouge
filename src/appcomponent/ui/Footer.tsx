@@ -39,7 +39,9 @@ export const Footer = () => {
             height={60}
             className="w-32 h-32 self-center "
           />
-          <span className="font-bold text-lg">NOT <span className="text-primary">Overland</span> Tech</span>
+          <span className="font-bold text-lg">
+            NOT <span className="text-primary">Overland</span> Tech
+          </span>
           <p className=" text-sm">
             Portable power solutions for adventurers who demand reliability.
             Stay charged, stay connected, stay exploring.

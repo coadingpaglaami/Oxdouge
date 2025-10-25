@@ -50,7 +50,7 @@ export const Cart = () => {
           <CartLeftChild cartItems={cartItems} setCartItems={setCartItems} />
         </div>
         <div className="md:w-[40%] w-full">
-          <CartRightChild cartItems={cartItems} setCartItems={setCartItems} />
+          <CartRightChild cartItems={cartItems}  />
         </div>
       </div>
     </div>

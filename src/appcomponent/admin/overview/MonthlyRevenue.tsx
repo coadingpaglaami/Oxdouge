@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -28,6 +28,14 @@ const monthlyData = [
 
 export const Revenue = () => {
   const [viewType] = useState("Monthly");
+  const [isMoble, setMobile] = useState(false);
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setMobile(true);
+    } else {
+      setMobile(false);
+    }
+  }, []);
 
   return (
     <div className="lg:col-span-2 bg-zinc-800 rounded-lg p-6">
@@ -38,7 +46,7 @@ export const Revenue = () => {
         </button>
       </div>
 
-      <ResponsiveContainer width="100%" height={400}>
+      <ResponsiveContainer width="100%" height={isMoble ? 200 : 400}>
         <LineChart
           data={monthlyData}
           margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
