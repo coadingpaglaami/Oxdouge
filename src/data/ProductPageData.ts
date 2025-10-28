@@ -3,7 +3,7 @@ import { DiselHeater } from "@/interfaces";
 export const productPageData: DiselHeater[] = [
   {
     id: 1,
-    img: "/heaterimg/heater1.jpg",
+    main_image_upload: "/heaterimg/heater1.jpg",
     subtitle: "Deiseal Heater",
     title: "NOT Overland Mini",
     description: "Compact yet powerful. Designed for travelers and small spaces where warmth meets portability.",

@@ -1,0 +1,1 @@
+export const baseUrl = 'https://px6r97t4-8002.inc1.devtunnels.ms/api/'

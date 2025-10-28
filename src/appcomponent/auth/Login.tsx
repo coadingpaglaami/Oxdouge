@@ -5,6 +5,9 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useLoginMutation } from "@/api/authApi";
+import { setAuthTokens } from "@/lib/token";
+import { useRouter } from "next/navigation";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,11 +16,13 @@ export const Login = () => {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {}
   );
+  const [login, { isLoading }] = useLoginMutation();
+  const router = useRouter();
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&]).{8,}$/;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: { email?: string; password?: string } = {};
 
@@ -37,11 +42,18 @@ export const Login = () => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("password", password);
+      try {
+        const res = await login(formData).unwrap();
+        console.log("Login successful", res);
+        setAuthTokens(res.token.access, res.token.refresh);
+        router.push("/");
+      } catch (err) {
+        console.error("Login failed", err);
+      }
       // Demo: simulate login success
-      alert("Login successful!");
-      setEmail("");
-      setPassword("");
-      setErrors({});
     }
   };
 
@@ -97,7 +109,11 @@ export const Login = () => {
                   className="absolute right-3 top-2 cursor-pointer"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <EyeOff className="text-primary" /> : <Eye className="text-primary" />}
+                  {showPassword ? (
+                    <EyeOff className="text-primary" />
+                  ) : (
+                    <Eye className="text-primary" />
+                  )}
                 </span>
               </div>
               <Link href="/forget-password" className="text-primary text-sm">
@@ -109,7 +125,11 @@ export const Login = () => {
             </div>
 
             {/* Submit */}
-            <Button type="submit" className="mt-2 self-center w-fit">
+            <Button
+              type="submit"
+              className="mt-2 self-center w-fit disabled:cursor-none disabled:opacity-25"
+              disabled={isLoading}
+            >
               Login
             </Button>
           </form>

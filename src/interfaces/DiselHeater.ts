@@ -1,6 +1,6 @@
 export interface DiselHeater {
   id?: number;                  // optional index/id for routing
-  img: string;                  // main product image
+  main_image_upload: string;                  // main product image
   subtitle: string;
   title: string;
   description: string;

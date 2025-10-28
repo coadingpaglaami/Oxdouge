@@ -20,20 +20,50 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Edit2, Trash2, Search, Plus, X, Video } from "lucide-react";
+import {
+  useAddCategoryMutation,
+  useAddProductMutation,
+  useGetCategoryQuery,
+  useGetProductDetailsQuery,
+  useGetProductQuery,
+  useEditProductMutation,
+  useDelteteProductMutation,
+} from "@/api/productApi";
+import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ProductResponse } from "@/interfaces/api";
 
 type Product = (typeof initialProducts)[number];
 
 export const Prodcuts = () => {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [open, setOpen] = useState(false);
-  const [editing, setEditing] = useState<Product | null>(null);
+  const [editing, setEditing] = useState<ProductResponse | null>(null);
+  const [addProduct, { isLoading }] = useAddProductMutation();
+  const [editProduct, { isLoading: loadingEdit }] = useEditProductMutation();
+  const { data: cateogries, isLoading: categoryLoading } =
+    useGetCategoryQuery();
+  const [addcategory, { isLoading: cateLoading }] = useAddCategoryMutation();
+  const { data: productDetails } = useGetProductDetailsQuery(1);
+  const { data: allProduct, isLoading: productLoad } = useGetProductQuery();
+  const [deleteProduct, { isLoading: deleting }] = useDelteteProductMutation();
+  const [selected, setSelected] = useState<string | undefined>();
 
   // Form state
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState<number | "">("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState<number>(0);
+  const [discount, setDiscount] = useState<number>(0);
+  const [colors, setColors] = useState<string[]>([""]);
   const [mainImageFile, setMainImageFile] = useState<File | null>(null);
   const [mainImagePreview, setMainImagePreview] = useState<string | null>(null);
   const [moreImageFiles, setMoreImageFiles] = useState<File[]>([]);
@@ -53,6 +83,8 @@ export const Prodcuts = () => {
     setPrice("");
     setDescription("");
     setQuantity(0);
+    setDiscount(0);
+    setColors([""]);
     setMainImageFile(null);
     setMainImagePreview(null);
     setMoreImageFiles([]);
@@ -61,20 +93,22 @@ export const Prodcuts = () => {
     setVideoPreview(null);
     setKeyFeatures([""]);
     setEditing(null);
+    setSelected(undefined);
   };
 
   // Populate form when editing
   useEffect(() => {
     if (editing) {
       setTitle(editing.title);
-      setCategory(editing.category ?? "");
+      setCategory(Number(editing.category) ?? "");
+      setSelected(String(editing.category));
       setPrice(editing.price);
       setDescription(editing.description);
-      setQuantity(editing.quantity ?? 0);
-      setMainImagePreview(editing.img ?? null);
-      setMoreImagePreviews(editing.moreImages ?? []);
-      setVideoPreview(editing.howToUseVideo ?? null);
-      setKeyFeatures(editing.keyFeatures?.length ? editing.keyFeatures : [""]);
+      setQuantity(editing.available_stock ?? 0);
+      setMainImagePreview(editing.main_image ?? null);
+      setMoreImagePreviews(editing.images ?? []);
+      setVideoPreview(editing.video ?? null);
+      setKeyFeatures(editing.features?.length ? editing.features : [""]);
     }
   }, [editing]);
 
@@ -82,7 +116,6 @@ export const Prodcuts = () => {
   useEffect(() => {
     if (mainImageFile) {
       const url = URL.createObjectURL(mainImageFile);
-      console.log("Generated main image URL:", url);
       setMainImagePreview(url);
       return () => URL.revokeObjectURL(url);
     }
@@ -94,6 +127,8 @@ export const Prodcuts = () => {
       const urls = moreImageFiles.map((f) => URL.createObjectURL(f));
       setMoreImagePreviews(urls);
       return () => urls.forEach((u) => URL.revokeObjectURL(u));
+    } else {
+      setMoreImagePreviews([]);
     }
   }, [moreImageFiles]);
 
@@ -110,20 +145,40 @@ export const Prodcuts = () => {
   const handleMainDrop: React.DragEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files?.[0] ?? null;
-    if (file) setMainImageFile(file);
+    if (file && file.type.startsWith("image/")) {
+      setMainImageFile(file);
+    }
   };
 
   const handleMoreDrop: React.DragEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
     const files = e.dataTransfer.files ? Array.from(e.dataTransfer.files) : [];
-    if (files.length) setMoreImageFiles((cur) => [...cur, ...files]);
+    const imageFiles = files.filter((f) => f.type.startsWith("image/"));
+    if (imageFiles.length) setMoreImageFiles((cur) => [...cur, ...imageFiles]);
   };
 
   const handleVideoDrop: React.DragEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files?.[0] ?? null;
-    if (file) setVideoFile(file);
+    if (file && file.type.startsWith("video/")) {
+      setVideoFile(file);
+    }
   };
+
+  // handle category select
+  const handleSelect = (value: string) => {
+    setSelected(value);
+    const id = Number(value);
+    setCategory(id);
+  };
+
+  // Color handlers
+  const updateColor = (index: number, value: string) => {
+    setColors((prev) => prev.map((v, i) => (i === index ? value : v)));
+  };
+  const addColor = () => setColors((prev) => [...prev, ""]);
+  const removeColor = (index: number) =>
+    setColors((prev) => prev.filter((_, i) => i !== index));
 
   // Key features handlers
   const updateFeature = (index: number, value: string) => {
@@ -134,34 +189,89 @@ export const Prodcuts = () => {
     setKeyFeatures((prev) => prev.filter((_, i) => i !== index));
 
   // Add / Update Product
-  const handleSubmit = (e?: React.FormEvent) => {
+  const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
 
-    const newProduct: Product = {
-      id: editing?.id ?? Math.max(0, ...products.map((p) => p.id ?? 0)) + 1,
-      img: mainImagePreview ?? "/heaterimg/heater1.jpg",
-      subtitle: "Deiseal Heater",
-      title,
-      description,
-      price,
-      availability: quantity > 0 ? "In Stock" : "Out of Stock",
-      category,
-      quantity,
-      keyFeatures: keyFeatures.filter((k) => k.trim() !== ""),
-      moreImages: moreImagePreviews.length ? moreImagePreviews : [],
-      howToUseVideo: videoPreview ?? undefined,
-    };
-
-    if (editing) {
-      setProducts((prev) =>
-        prev.map((p) => (p.id === editing.id ? newProduct : p))
-      );
-    } else {
-      setProducts((prev) => [newProduct, ...prev]);
+    // Validation
+    if (!title.trim()) {
+      toast.error("Product title is required");
+      return;
+    }
+    if (!category) {
+      toast.error("Please select a category");
+      return;
+    }
+    if (!price.trim()) {
+      toast.error("Price is required");
+      return;
+    }
+    if (!mainImageFile && !editing) {
+      toast.error("Main image is required");
+      return;
     }
 
-    setOpen(false);
-    resetForm();
+    // Create FormData
+    const formData = new FormData();
+
+    // Add text fields
+    formData.append("title", title);
+    formData.append("category", String(category));
+    formData.append("price", price);
+    formData.append("description", description);
+    formData.append("available_stock", String(quantity));
+    formData.append("discount", String(discount));
+
+    // Add colors array (filter out empty values)
+    const validColors = colors.filter((c) => c.trim() !== "");
+    validColors.forEach((color) => {
+      formData.append("colors", color);
+    });
+
+    // Add features array (filter out empty values)
+    const validFeatures = keyFeatures.filter((k) => k.trim() !== "");
+    validFeatures.forEach((feature) => {
+      formData.append("features", feature);
+    });
+
+    // Add main image
+    if (mainImageFile) {
+      formData.append("main_image_upload", mainImageFile);
+    }
+
+    // Add multiple images
+    moreImageFiles.forEach((file) => {
+      formData.append("images", file);
+    });
+
+    // Add video if exists
+    if (videoFile) {
+      formData.append("video_upload", videoFile);
+    }
+
+    try {
+      if (editing?.id) {
+        const response = await editProduct({ id: editing.id, formData });
+        if (response.data) {
+          toast.success("Product updated successfully");
+          setOpen(false);
+          resetForm();
+        } else if (response.error) {
+          toast.error("Failed to update product");
+        }
+      } else {
+        const response = await addProduct(formData);
+        if (response.data) {
+          toast.success("Product added successfully");
+          setOpen(false);
+          resetForm();
+        } else if (response.error) {
+          toast.error("Failed to add product");
+        }
+      }
+    } catch (error) {
+      console.error("Error submitting product:", error);
+      toast.error("An error occurred while saving the product");
+    }
   };
 
   const openAdd = () => {
@@ -170,13 +280,19 @@ export const Prodcuts = () => {
     setOpen(true);
   };
 
-  const openEdit = (p: Product) => {
+  const openEdit = (p: ProductResponse) => {
     setEditing(p);
     setOpen(true);
   };
 
-  const removeProduct = (id: number) =>
-    setProducts((prev) => prev.filter((p) => p.id !== id));
+  const removeProduct = async (id: number) => {
+    try {
+      await deleteProduct(id);
+      toast.success("Product deleted successfully");
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
 
   const removeMorePreview = (index: number) => {
     setMoreImagePreviews((prev) => prev.filter((_, i) => i !== index));
@@ -218,7 +334,7 @@ export const Prodcuts = () => {
 
       {/* Table */}
       <div className="overflow-x-auto bg-transparent">
-        <Table className="">
+        <Table>
           <TableHeader>
             <TableRow className="border-none">
               <TableHead className="text-white">Image</TableHead>
@@ -230,12 +346,12 @@ export const Prodcuts = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filtered.map((item) => (
+            {allProduct?.results.map((item) => (
               <TableRow key={item.id} className="border-none rounded-lg mb-3">
                 <TableCell className="bg-[#18181B]">
                   <div className="w-20 h-20 relative">
                     <Image
-                      src={item.img}
+                      src={item.main_image}
                       alt={item.title}
                       fill
                       className="object-cover rounded"
@@ -310,26 +426,35 @@ export const Prodcuts = () => {
                     required
                   />
                 </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm text-gray-300">Category</label>
-                  <input
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    className="p-2 rounded border border-primary/20 bg-transparent text-white"
-                    placeholder="Category"
-                  />
-                </div>
-                <div className="flex gap-2">
-                  <div className="flex-1 flex flex-col gap-1">
+
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex w-full flex-col gap-1">
                     <label className="text-sm text-gray-300">Price</label>
                     <input
                       value={price}
                       onChange={(e) => setPrice(e.target.value)}
                       className="p-2 rounded border border-primary/20 bg-transparent text-white"
-                      placeholder="$299.99"
+                      placeholder="299.99"
+                      required
                     />
                   </div>
-                  <div className="w-36 flex flex-col gap-1">
+
+                  <div className="flex w-full flex-col gap-1">
+                    <label className="text-sm text-gray-300">
+                      Discount (%)
+                    </label>
+                    <input
+                      type="number"
+                      value={discount}
+                      onChange={(e) => setDiscount(Number(e.target.value))}
+                      className="p-2 rounded border border-primary/20 bg-transparent text-white w-full"
+                      placeholder="0"
+                      min="0"
+                      max="100"
+                    />
+                  </div>
+
+                  <div className="flex w-full flex-col gap-1">
                     <label className="text-sm text-gray-300">
                       Stock Quantity
                     </label>
@@ -338,9 +463,33 @@ export const Prodcuts = () => {
                       value={quantity}
                       onChange={(e) => setQuantity(Number(e.target.value))}
                       className="p-2 rounded border border-primary/20 bg-transparent text-white w-full"
+                      required
                     />
                   </div>
+
+                  <div className="flex flex-col w-full gap-1">
+                    <label className="text-sm text-gray-300">Category</label>
+                    <Select value={selected} onValueChange={handleSelect}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {cateogries?.results?.map((cat) => (
+                            <SelectItem
+                              className="text-white bg-black"
+                              key={cat.id}
+                              value={String(cat.id)}
+                            >
+                              {cat.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
+
                 <div className="flex flex-col gap-1">
                   <label className="text-sm text-gray-300">Description</label>
                   <textarea
@@ -357,12 +506,12 @@ export const Prodcuts = () => {
               <div className="flex flex-col gap-3">
                 {/* Main Image */}
                 <div>
-                  <label className="text-sm text-gray-300">Main Image</label>
+                  <label className="text-sm text-gray-300">Main Image *</label>
                   <div
                     onDrop={handleMainDrop}
                     onDragOver={(e) => e.preventDefault()}
                     onClick={() => mainInputRef.current?.click()}
-                    className="mt-2 border border-primary/20 rounded p-3 flex items-center gap-4 cursor-pointer"
+                    className="mt-2 border border-primary/20 rounded p-3 flex items-center gap-4 cursor-pointer hover:border-primary/40 transition"
                     style={{ minHeight: 120 }}
                   >
                     <input
@@ -375,12 +524,26 @@ export const Prodcuts = () => {
                       }
                     />
                     {mainImagePreview ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={mainImagePreview}
-                        alt="main preview"
-                        className="object-cover w-24 h-24 rounded"
-                      />
+                      <div className="relative">
+                        <img
+                          src={mainImagePreview}
+                          alt="main preview"
+                          className="object-cover w-24 h-24 rounded"
+                        />
+                        {mainImageFile && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setMainImageFile(null);
+                              setMainImagePreview(null);
+                            }}
+                            className="absolute -top-2 -right-2 bg-red-600 rounded-full p-1"
+                          >
+                            <X size={14} />
+                          </button>
+                        )}
+                      </div>
                     ) : (
                       <div className="w-24 h-24 rounded bg-[#0B0B0B] flex items-center justify-center text-gray-400">
                         <Plus />
@@ -402,7 +565,7 @@ export const Prodcuts = () => {
                     onDrop={handleMoreDrop}
                     onDragOver={(e) => e.preventDefault()}
                     onClick={() => moreInputRef.current?.click()}
-                    className="mt-2 border border-primary/20 rounded p-3 min-h-20 flex flex-col gap-2 cursor-pointer"
+                    className="mt-2 border border-primary/20 rounded p-3 min-h-20 flex flex-col gap-2 cursor-pointer hover:border-primary/40 transition"
                   >
                     <input
                       ref={moreInputRef}
@@ -520,22 +683,62 @@ export const Prodcuts = () => {
                           className="flex-1 p-2 rounded border border-primary/20 bg-transparent text-white"
                           placeholder={`Feature ${i + 1}`}
                         />
-                        <button
-                          type="button"
-                          onClick={() => removeFeature(i)}
-                          className="p-2 rounded bg-red-600 text-white"
-                          aria-label="Remove feature"
-                        >
-                          <X size={14} />
-                        </button>
+                        {keyFeatures.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removeFeature(i)}
+                            className="p-2 rounded bg-red-600 text-white"
+                            aria-label="Remove feature"
+                          >
+                            <X size={14} />
+                          </button>
+                        )}
                       </div>
                     ))}
                     <Button
+                      type="button"
                       variant="outline"
                       onClick={addFeature}
                       className="self-start"
                     >
                       <Plus size={14} /> Add Feature
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Colors */}
+                <div className="border border-primary/20 p-2 rounded-lg">
+                  <label className="text-sm text-gray-300">
+                    Available Colors
+                  </label>
+                  <div className="flex flex-col gap-2 mt-2">
+                    {colors.map((color, i) => (
+                      <div key={i} className="flex gap-2 items-center">
+                        <input
+                          value={color}
+                          onChange={(e) => updateColor(i, e.target.value)}
+                          className="flex-1 p-2 rounded border border-primary/20 bg-transparent text-white"
+                          placeholder={`Color ${i + 1} (e.g., Red, Blue)`}
+                        />
+                        {colors.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removeColor(i)}
+                            className="p-2 rounded bg-red-600 text-white"
+                            aria-label="Remove color"
+                          >
+                            <X size={14} />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={addColor}
+                      className="self-start"
+                    >
+                      <Plus size={14} /> Add Color
                     </Button>
                   </div>
                 </div>
@@ -545,6 +748,7 @@ export const Prodcuts = () => {
             {/* Dialog actions */}
             <div className="flex items-center justify-center gap-4 mt-4">
               <Button
+                type="button"
                 variant="outline"
                 onClick={() => {
                   setOpen(false);
@@ -553,8 +757,12 @@ export const Prodcuts = () => {
               >
                 Cancel
               </Button>
-              <Button type="submit">
-                {editing ? "Update Product" : "Upload Product"}
+              <Button type="submit" disabled={isLoading || loadingEdit}>
+                {isLoading || loadingEdit
+                  ? "Saving..."
+                  : editing
+                  ? "Update Product"
+                  : "Upload Product"}
               </Button>
             </div>
           </form>

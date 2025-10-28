@@ -1,5 +1,6 @@
 import { Footer, NavBar } from "@/appcomponent/ui";
 import { Noto_Sans } from "next/font/google";
+import UserLayout from "./UserLayOut";
 
 const myFont = Noto_Sans({
   subsets: ["latin"],
@@ -16,7 +17,9 @@ export default function MainLayout({
         <NavBar />
       </div>
 
-      <main>{children}</main>
+      <main>
+        <UserLayout>{children}</UserLayout>
+      </main>
       <Footer />
     </div>
   );

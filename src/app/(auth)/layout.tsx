@@ -1,6 +1,6 @@
 import { NavBar } from "@/appcomponent/ui";
 import { Noto_Sans } from "next/font/google";
-
+import UserLayout from "../(main)/UserLayOut";
 const myFont = Noto_Sans({
   subsets: ["latin"],
 });
@@ -15,7 +15,9 @@ export default function AuthLayOut({
       <div className="sticky top-0 bg-[#73737321] z-50 ">
         <NavBar />
       </div>
-      <main className="">{children}</main>
+      <main>
+        <UserLayout>{children}</UserLayout>
+      </main>
     </div>
   );
 }
