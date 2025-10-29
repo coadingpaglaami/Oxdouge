@@ -1,23 +1,24 @@
-'use client';
+"use client";
 import { DiselHeater } from "@/interfaces";
 import { ShoppingCart, Star } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { ProductResponse } from "@/interfaces/api";
 
 interface ProductRightProps {
-  product: DiselHeater;
+  product: ProductResponse | undefined;
 }
 
 export const ProductRightChild = ({ product }: ProductRightProps) => {
   const [quantity, setQuantity] = useState(1);
+  if (!product) return <div>Product not found</div>;
 
-  // convert price string like "$299.99" to number
-  const unitPrice = parseFloat(product.price.replace("$", ""));
-  const totalPrice = (unitPrice * quantity).toFixed(2);
+  const unitPrice = product.price;
+  const totalPrice = (parseFloat(product.price) * quantity).toFixed(2);
 
   const increase = () => {
-    if (product.quantity && quantity < product.quantity) {
+    if (product.available_stock && quantity < product.available_stock) {
       setQuantity(quantity + 1);
     }
   };
@@ -38,28 +39,33 @@ export const ProductRightChild = ({ product }: ProductRightProps) => {
       </div>
 
       {/* Subtitle */}
-      <p className="text-sm text-[#BAB8B8]">{product.subtitle}</p>
+      <p className="text-sm text-[#BAB8B8]">{product.category.name}</p>
 
       {/* Title */}
       <h1 className="text-3xl font-bold text-white">{product.title}</h1>
 
       {/* Price */}
-      <p className="text-2xl font-semibold text-primary">${unitPrice.toFixed(2)}</p>
+      <p className="text-2xl font-semibold text-primary">
+        ${parseFloat(unitPrice).toFixed(2)}
+      </p>
 
       {/* Description */}
       <p className="text-[#C2C2C2]">{product.description}</p>
 
       {/* Key Features */}
-      {product.keyFeatures && (
+      {product.features && (
         <div className="flex flex-col gap-2">
           <h3 className="text-primary font-semibold">Key Features</h3>
           <div className="flex flex-col gap-1 border border-primary rounded">
-            {product.keyFeatures.map((feature, idx) => (
-              <div
-                key={idx}
-                className="flex items-center gap-2   p-2"
-              >
-                <Image src="/product/sign.svg" alt="icon" height={40} width={40} className="w-5 h-5" />
+            {product.features.map((feature, idx) => (
+              <div key={idx} className="flex items-center gap-2   p-2">
+                <Image
+                  src="/product/sign.svg"
+                  alt="icon"
+                  height={40}
+                  width={40}
+                  className="w-5 h-5"
+                />
                 <span className="text-[#C2C2C2]">{feature}</span>
               </div>
             ))}
@@ -68,15 +74,15 @@ export const ProductRightChild = ({ product }: ProductRightProps) => {
       )}
 
       {/* Availability */}
-      {product.availability && (
+      {product.available_stock && (
         <div className="flex items-center gap-2">
           <span className="font-semibold text-white">Availability:</span>
           <span
             className={
-              product.availability === "In Stock" ? "text-green-500" : "text-primary"
+              product.available_stock > 0 ? "text-green-500" : "text-primary"
             }
           >
-            {product.availability}
+            {product.available_stock > 0 ? "In Stock" : "Out of Stock"}
           </span>
         </div>
       )}
@@ -112,7 +118,9 @@ export const ProductRightChild = ({ product }: ProductRightProps) => {
       </div>
 
       {/* Add to Cart Button */}
-      <Button className="w-full mt-4"><ShoppingCart /> Add To Cart</Button>
+      <Button className="w-full mt-4">
+        <ShoppingCart /> Add To Cart
+      </Button>
     </div>
   );
 };

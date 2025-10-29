@@ -1,6 +1,7 @@
 import { authApi } from "@/api/authApi";
 import { cartApi } from "@/api/cartApi";
 import { couponApi } from "@/api/couponApi";
+import { dashboardApi } from "@/api/dashboard";
 import { ordersApi } from "@/api/ordersApi";
 import { productApi } from "@/api/productApi";
 import { shippingApi } from "@/api/shippingApi";
@@ -14,9 +15,10 @@ export const store = configureStore({
     [couponApi.reducerPath]: couponApi.reducer,
     [shippingApi.reducerPath]:shippingApi.reducer,
     [ordersApi.reducerPath]: ordersApi.reducer,
+  [dashboardApi.reducerPath]: dashboardApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authApi.middleware, productApi.middleware,cartApi.middleware,couponApi.middleware,shippingApi.middleware,ordersApi.middleware),
+    getDefaultMiddleware().concat(authApi.middleware, productApi.middleware,cartApi.middleware,couponApi.middleware,shippingApi.middleware,ordersApi.middleware,dashboardApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,6 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import rawBaseQuery from "./api";
 import { PaginatedProductsResponse, ProductResponse } from "@/interfaces/api";
+import { ProductDetails } from "@/appcomponent/products";
 
 const admin = "/admin/";
 
@@ -74,6 +75,21 @@ export const productApi = createApi({
         body: name,
       }),
     }),
+    ProductDetails: builder.query<ProductResponse, number>({
+      query: (id: number) => `products/${id}/`,
+      providesTags: ["UserProduct"],
+    }),
+    reviewProduct: builder.mutation<
+      void,
+      { productId: number; rating: number; comment: string }
+    >({
+      query: ({ productId, rating, comment }) => ({
+        url: `product/${productId}/reviews/`,
+        method: "POST",
+        body: { rating, comment },
+      }),
+      invalidatesTags: ["UserProduct"],
+    }),
   }),
 });
 
@@ -85,5 +101,7 @@ export const {
   useDelteteProductMutation,
   useGetCategoryQuery,
   useEditProductMutation,
-  useAddCategoryMutation
+  useAddCategoryMutation,
+  useProductDetailsQuery,
+  useReviewProductMutation,
 } = productApi;

@@ -1,24 +1,27 @@
-'use client';
+"use client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { productPageData } from "@/data";
 import { Heater } from "../reusable";
+import { useGetProductUserQuery } from "@/api/productApi";
 
 export const Products = () => {
   const [activeTab, setActiveTab] = useState("All");
+  const { data, isLoading } = useGetProductUserQuery();
 
-  const filteredProducts =
-    activeTab === "All"
-      ? productPageData
-      : productPageData.filter((item) =>
-          item.subtitle.toLowerCase().includes("heater")
-        );
+const filteredProducts =
+  activeTab === "All"
+    ? data?.results ?? []
+    : data?.results?.filter((item) =>
+        activeTab === "Heater" ? item.category.name === "Heater" : true
+      ) ?? [];
 
   return (
     <div className="flex flex-col gap-10 w-full py-20">
       {/* Header Section */}
       <div className="flex flex-col items-center text-center px-4">
-        <h2 className="text-3xl md:text-4xl font-semibold text-white">Our Products</h2>
+        <h2 className="text-3xl md:text-4xl font-semibold text-white">
+          Our Products
+        </h2>
         <p className="mt-4 max-w-3xl text-[#BEBABA]">
           We{"'"}re committed to providing outdoor enthusiasts with reliable,
           portable power solutions that keep you connected and powered wherever

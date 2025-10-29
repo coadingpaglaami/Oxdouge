@@ -59,7 +59,7 @@ export const HeroSection = () => {
           {/* Column 4: Buttons */}
           <div className="flex flex-row gap-4 mt-4">
             <Button
-              className="flex items-center gap-2 px-6 py-4"
+              className="flex items-center gap-2 px-6 py-4 text-primary"
               variant="defaultGradient"
               onClick={() => router.push('/products')}
             >

@@ -1,9 +1,10 @@
+'use client';
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { ProductLeftChild } from "./ProductLeftchild";
-import { productPageData } from "@/data";
 import { ProductRightChild } from "./ProductRightChild";
 import { Heater } from "../reusable";
+import { useGetProductUserQuery, useProductDetailsQuery } from "@/api/productApi";
 
 interface ProductDetailsProps {
   id: number;
@@ -11,9 +12,10 @@ interface ProductDetailsProps {
 }
 
 export const ProductDetails = ({ id }: ProductDetailsProps) => {
-  const product = productPageData.find((p) => p.id === id);
+  const{data,isLoading}=useProductDetailsQuery(id);
+  const{data:productData,isLoading:productDataLoading}=useGetProductUserQuery();
 
-  const related = productPageData.filter((p) => p.id !== id).slice(0, 3); // get 3 related products excluding current
+  const related = productData?.results?.filter((p) => p.id !== id).slice(0, 4) || []; // get 3 related products excluding current
   return (
     <>
       <div className="flex flex-col gap-6 p-6">
@@ -21,7 +23,7 @@ export const ProductDetails = ({ id }: ProductDetailsProps) => {
         <div>
           <Link
             href="/products"
-            className="flex items-center gap-2 text-primary font-medium"
+            className="flex items-center gap-2 text-white font-medium"
           >
             <ArrowLeft /> Back to Products
           </Link>
@@ -30,17 +32,17 @@ export const ProductDetails = ({ id }: ProductDetailsProps) => {
         {/* Main Content Row */}
         <div className="flex flex-col md:flex-row md:justify-between gap-8">
           {/* Left Child */}
-          <ProductLeftChild product={product} />
+          <ProductLeftChild product={data} />
 
           {/* Right Child placeholder */}
           <div className="w-full md:w-1/2 md:flex md:justify-center">
-            <ProductRightChild product={product!} />
+            <ProductRightChild product={data} />
           </div>
         </div>
         <div className="flex flex-col gap-3 ">
           <h4 className="text-white text-lg font-medium">Related Products</h4>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
             {related.map((item, index) => (
               <Heater key={index} {...item} />
             ))}

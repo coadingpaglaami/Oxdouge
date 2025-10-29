@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
-import { Trash2, Check, Delete } from "lucide-react";
+import { Trash2, Check } from "lucide-react";
 import { CartItemResponse } from "@/interfaces/api/AddToCart";
-import { useDeleteCartMutation } from "@/api/cartApi";
+import { useDeleteCartMutation, useUpdateCartMutation } from "@/api/cartApi";
 import { toast } from "sonner";
-import { DialogFooter, DialogTrigger } from "@/components/ui/dialog";
+import { useEffect, useRef } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,26 +31,75 @@ export const CartLeftChild = ({
   selectedItems,
   setSelectedItems,
 }: CartLeftChildProps) => {
-  const [cartDelete, { isLoading }] = useDeleteCartMutation();
+  const [cartDelete] = useDeleteCartMutation();
+  const [updateCart] = useUpdateCartMutation();
+  
+  // Debounce timer refs for each cart item
+  const debounceTimers = useRef<{ [key: number]: NodeJS.Timeout }>({});
+
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      Object.values(debounceTimers.current).forEach(timer => clearTimeout(timer));
+    };
+  }, []);
+
   const updateQuantity = (id: number, type: "inc" | "dec") => {
+    const currentItem = cartItems.find((item) => item.id === id);
+    if (!currentItem) return;
+
+    let newQty = type === "inc" ? currentItem.quantity + 1 : currentItem.quantity - 1;
+    if (newQty < 1) newQty = 1;
+
+    // Immediately update UI for instant feedback
     setCartItems((prev) =>
       prev.map((item) => {
         if (item.id === id) {
-          let newQty = type === "inc" ? item.quantity + 1 : item.quantity - 1;
-          if (newQty < 1) newQty = 1;
           return { ...item, quantity: newQty };
         }
         return item;
       })
     );
+
+    // Clear existing timer for this item
+    if (debounceTimers.current[id]) {
+      clearTimeout(debounceTimers.current[id]);
+    }
+
+    // Set new timer - API call after 800ms of no changes
+    debounceTimers.current[id] = setTimeout(async () => {
+      try {
+        await updateCart({
+          id: id,
+          product_id: currentItem.product,
+          quantity: newQty,
+        }).unwrap();
+        console.log(`Quantity updated for item ${id}: ${newQty}`);
+      } catch (error) {
+        console.error("Failed to update quantity:", error);
+        toast.error("Failed to update quantity");
+        // Revert on error
+        setCartItems((prev) =>
+          prev.map((item) => {
+            if (item.id === id) {
+              return { ...item, quantity: currentItem.quantity };
+            }
+            return item;
+          })
+        );
+      }
+    }, 800);
   };
 
   const removeItem = async (id: number) => {
-    await cartDelete(id).unwrap();
-    console.log("Item removed from cart:", id);
-    toast.success("Item removed from cart");
-    // setCartItems((prev) => prev.filter((item) => item.id !== id));
-    // setSelectedItems((prev) => prev.filter((itemId) => itemId !== id));
+    try {
+      await cartDelete(id).unwrap();
+      console.log("Item removed from cart:", id);
+      toast.success("Item removed from cart");
+    } catch (error) {
+      console.error("Failed to remove item:", error);
+      toast.error("Failed to remove item");
+    }
   };
 
   const toggleSelection = (id: number) => {
@@ -104,9 +153,14 @@ export const CartLeftChild = ({
                 {/* Title + Delete */}
                 <div className="flex justify-between items-start">
                   <p className="font-medium text-white">{item?.product_name}</p>
-                  <AlertDialog >
+                  <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button className="bg-transparent"><Trash2 className="text-red-500 hover:bg-transparent" size={24} /></Button>
+                      <Button className="bg-transparent">
+                        <Trash2
+                          className="text-red-500 hover:bg-transparent"
+                          size={24}
+                        />
+                      </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent className="bg-black">
                       <AlertDialogHeader>
@@ -115,13 +169,14 @@ export const CartLeftChild = ({
                         </AlertDialogTitle>
                         <AlertDialogDescription className="text-white">
                           This action cannot be undone. This will permanently
-                          delete your account and remove your data from our
-                          servers.
+                          delete your cart item.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={()=>removeItem(item.id)}>Delete</AlertDialogAction>
+                        <AlertDialogAction onClick={() => removeItem(item.id)}>
+                          Delete
+                        </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
@@ -137,14 +192,14 @@ export const CartLeftChild = ({
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => updateQuantity(item?.id, "dec")}
-                      className="px-2 py-1 rounded bg-primary/20 text-primary"
+                      className="px-2 py-1 rounded bg-primary/20 text-primary hover:bg-primary/30 transition-colors"
                     >
                       -
                     </button>
-                    <span className="text-white">{item?.quantity}</span>
+                    <span className="text-white min-w-8 text-center">{item?.quantity}</span>
                     <button
                       onClick={() => updateQuantity(item?.id, "inc")}
-                      className="px-2 py-1 rounded bg-primary/20 text-primary"
+                      className="px-2 py-1 rounded bg-primary/20 text-primary hover:bg-primary/30 transition-colors"
                     >
                       +
                     </button>

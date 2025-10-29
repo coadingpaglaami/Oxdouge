@@ -1,6 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQuery from "./api";
-import { CheckoutRequest, CheckOutResponse } from "@/interfaces/api/Orders";
+import { CheckoutRequest, CheckOutResponse, OrderDetailsResponse, OrderListResponse, UserOrderListResponse } from "@/interfaces/api/Orders";
+
 const orders = "order/";
 const admin = "admin/";
 interface Search {
@@ -9,7 +10,7 @@ interface Search {
 export const ordersApi = createApi({
   reducerPath: "ordersApi",
   baseQuery,
-  tagTypes: ["Orders"],
+  tagTypes: ["Orders",'UserOrders'],
   endpoints: (builder) => ({
     buyNow: builder.mutation<void, void>({
       query: (formData) => ({
@@ -19,11 +20,11 @@ export const ordersApi = createApi({
       }),
       invalidatesTags: ["Orders"],
     }),
-    updateStatus: builder.mutation<void, { id: number; status: string }>({
-      query: ({ id, status }) => ({
+    updateStatus: builder.mutation<void, { id: number; order_status: string }>({
+      query: ({ id, order_status }) => ({
         url: `${admin}orders/${id}/status/`,
         method: "PATCH",
-        body: { status },
+        body: { order_status },
       }),
       invalidatesTags: ["Orders"],
     }),
@@ -34,12 +35,12 @@ export const ordersApi = createApi({
       }),
       invalidatesTags: ["Orders"],
     }),
-    getAllOrders: builder.query<void, void>({
-      query: () => `${orders}`,
+    getAllOrders: builder.query<OrderListResponse, void>({
+      query: () => `orders/`,
       providesTags: ["Orders"],
     }),
     orderDetails: builder.query<void, number>({
-      query: () => `${orders}hstory/`,
+      query: () => `${orders}history/`,
       providesTags: ["Orders"],
     }),
     searchOrders: builder.query<void, Search>({
@@ -61,6 +62,22 @@ export const ordersApi = createApi({
         method:"POST",
         body
       })
+    }),
+    myOrder:builder.query<OrderDetailsResponse,{id:number}>({
+     query: ({ id }) => `my-orders/${id}/`,
+    }),
+    allMyOrder:builder.query<UserOrderListResponse,void>({
+      query: () => `my-orders/`,
+      providesTags: ['UserOrders'],
+    }),
+    cancellMyOrder:builder.mutation<void,{id:number}>({
+      query: ({id})=>(
+        {
+          url:`my-orders/${id}/cancel/`,
+          method:"POST",
+        }
+      )
+  
     })
   }),
 });
@@ -73,5 +90,8 @@ export const{
   useOrderDetailsQuery,
   useSearchOrdersQuery,
   usePlaceOrderMutation,
-  useChekOutSessionMutation
+  useChekOutSessionMutation,
+  useMyOrderQuery,
+  useAllMyOrderQuery,
+  useCancellMyOrderMutation
 }=ordersApi;

@@ -3,9 +3,10 @@ import { DiselHeater } from '@/interfaces';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import { useRef, useState } from 'react';
+import { ProductResponse } from '@/interfaces/api';
 
 interface ProductLeftProps {
-  product?: DiselHeater;
+  product?: ProductResponse;
 }
 
 export const ProductLeftChild = ({ product }: ProductLeftProps) => {
@@ -28,7 +29,7 @@ export const ProductLeftChild = ({ product }: ProductLeftProps) => {
     <div className="flex flex-col gap-6 w-full md:w-1/2">
       {/* Main Image */}
       <div className="w-full md:h-[500px] relative">
-        <Image src={product.img} alt={product.title} fill className="object-cover rounded-lg w-full" />
+        <Image src={product.main_image || ''} alt={product.title} fill className="object-cover rounded-lg w-full" />
       </div>
 
       {/* More Images with Chevron */}
@@ -38,7 +39,7 @@ export const ProductLeftChild = ({ product }: ProductLeftProps) => {
             <ChevronLeft />
           </button>
           <div ref={scrollRef} className="flex gap-4 overflow-x-auto scrollbar-none px-2">
-            {product.moreImages?.map((img, idx) => (
+            {product.images?.map((img, idx) => (
               <div key={idx} className="shrink-0 w-28 h-28 relative rounded-lg border border-primary/30">
                 <Image src={img} alt={`more-${idx}`} fill className="object-cover rounded-lg" />
               </div>
@@ -62,9 +63,9 @@ export const ProductLeftChild = ({ product }: ProductLeftProps) => {
               <Play className="text-white" />
             </button>
           )}
-          {isVideoPlaying && product.howToUseVideo && (
+          {isVideoPlaying && product.video && (
             <iframe
-              src={product.howToUseVideo + '?autoplay=1'}
+              src={product.video + '?autoplay=1'}
               title="How to Use Video"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
