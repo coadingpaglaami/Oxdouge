@@ -20,10 +20,10 @@ export const Footer = () => {
   ];
 
   const resourcesLinks = [
-    { name: "Blog", href: "/blog" },
-    { name: "Support", href: "/support" },
+    { name: "Shipping Policy", href: "/shipping-policy" },
+    { name: "Return Policy", href: "/return-policy" },
+    { name: "Terms and Conditions", href: "/terms" },
     { name: "FAQ", href: "/faq" },
-    { name: "Privacy Policy", href: "/privacy" },
   ];
 
   return (
