@@ -33,6 +33,7 @@ export const Sidebar = () => {
       icon: <MessageCircleMoreIcon size={20} />,
     },
     { name: "Settings", href: "/admin/settings", icon: <Settings size={20} /> },
+    { name: "Coupons", href: "/admin/coupon", icon: <Package size={20} /> },
   ];
 
   return (

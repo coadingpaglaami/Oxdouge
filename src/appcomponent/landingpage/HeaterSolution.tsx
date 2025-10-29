@@ -1,10 +1,11 @@
 "use client";
-import { landingPageData } from "@/data";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { Heater } from "../reusable";
+import { useGetProductUserQuery } from "@/api/productApi";
 
 export const HeaterSolution = () => {
+ const{data:product, isLoading}= useGetProductUserQuery();
   const router = useRouter();
   return (
     <div className="flex flex-col">
@@ -24,14 +25,14 @@ export const HeaterSolution = () => {
 
       {/* ----------- Card Section ----------- */}
       <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 ">
-        {landingPageData.map((item, index) => (
+        {product?.results.map((item) => (
           <Heater
-            img={item.img}
+            main_image={item.main_image}
             description={item.description}
             price={item.price}
-            subtitle={item.subtitle}
+            category={item.category}
             title={item.title}
-            key={index}
+            key={item.id}
             id={item.id}
           />
         ))}

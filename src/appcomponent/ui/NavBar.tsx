@@ -17,7 +17,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@radix-ui/react-popover";
+} from "@/components/ui/popover";
 
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -103,7 +103,7 @@ export const NavBar = () => {
 
       {/* Desktop Icons */}
       <div className="max-md:hidden flex items-center gap-5">
-        <Popover >
+        <Popover>
           <PopoverTrigger asChild>
             <button>
               <User className="cursor-pointer text-white" />

@@ -45,8 +45,8 @@ export const productApi = createApi({
       query: (id: number) => `${admin}products/${id}/`,
       providesTags: ["Product"],
     }),
-    getProductUser: builder.query<ProductResponse[], void>({
-      query: () => `user/products/`,
+    getProductUser: builder.query<PaginatedProductsResponse, void>({
+      query: () => `products/`,
       providesTags: ["UserProduct"],
     }),
     delteteProduct: builder.mutation<{ message: string }, number>({

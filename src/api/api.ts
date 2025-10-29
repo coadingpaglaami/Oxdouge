@@ -24,7 +24,12 @@ const rawBaseQuery = fetchBaseQuery({
 
     return headers;
   },
-  validateStatus: (response) => response.status >= 200 && response.status < 400,
+  // validateStatus: (response) => response.status >= 200 && response.status < 400,
+  validateStatus: (response, result) => {
+    console.log("status", response.status);
+    console.log("result", result); // <-- this is the body
+    return response.status >= 200 && response.status < 300;
+  },
 });
 
 export default rawBaseQuery;

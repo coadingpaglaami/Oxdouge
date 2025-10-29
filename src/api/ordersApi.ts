@@ -1,6 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQuery from "./api";
-const orders = "orders/";
+import { CheckoutRequest, CheckOutResponse } from "@/interfaces/api/Orders";
+const orders = "order/";
 const admin = "admin/";
 interface Search {
   query: string;
@@ -45,8 +46,32 @@ export const ordersApi = createApi({
       query: ({ query }) => `${admin}orders/status/?search=${query}`,
       providesTags: ["Orders"],
     }),
-    placeOrder: builder.mutation<void, void>({
-      query: () => `${orders}place/`,
+    placeOrder: builder.mutation<CheckOutResponse, CheckoutRequest>({
+      query: (body) => (
+        {
+          url: `${orders}place/`,
+          method: "POST",
+          body
+        }
+      ),
     }),
+    chekOutSession: builder.mutation({
+      query:(body)=>({
+        url:`payment/create-checkout-session/`,
+        method:"POST",
+        body
+      })
+    })
   }),
 });
+
+export const{
+  useBuyNowMutation,
+  useUpdateStatusMutation,
+  useDeleteOrderMutation,
+  useGetAllOrdersQuery,
+  useOrderDetailsQuery,
+  useSearchOrdersQuery,
+  usePlaceOrderMutation,
+  useChekOutSessionMutation
+}=ordersApi;

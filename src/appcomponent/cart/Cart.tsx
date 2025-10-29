@@ -3,33 +3,27 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { CartLeftChild } from "./CartLeftChild";
 import { CartRightChild } from "./CartRightChild";
-import { ShoppingCartItem } from "@/interfaces/ShoppingCartItem";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { CartItemResponse } from "@/interfaces/api/AddToCart";
+import { useGetCartQuery } from "@/api/cartApi";
 
 export const Cart = () => {
-  const [cartItems, setCartItems] = useState<ShoppingCartItem[]>([
-    {
-      id: 1,
-      img: "/heaterimg/heater1.jpg",
-      title: "NOT Overland Mini",
-      price: "$299.99",
-      quantity: 1,
-    },
-    {
-      id: 2,
-      img: "/heaterimg/heater2.jpg",
-      title: "NOT Overland Max",
-      price: "$399.99",
-      quantity: 2,
-    },
-    {
-      id: 3,
-      img: "/heaterimg/heater3.jpg",
-      title: "NOT Overland Pro Duo",
-      price: "$499.99",
-      quantity: 1,
-    },
-  ]);
+  const { data: cartData, isLoading } = useGetCartQuery();
+  const [cartItems, setCartItems] = useState<CartItemResponse[]>([]);
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
+
+  // Initialize cart items and select first item by default
+  useEffect(() => {
+    if (cartData) {
+      setCartItems(cartData);
+      // Select first item by default
+      if (cartData.length > 0) {
+        setSelectedItems([cartData[0].id]);
+      }
+    }
+  }, [cartData]);
+
+  console.log("Cart Data:", cartData);
 
   return (
     <div className="flex flex-col gap-6 p-6">
@@ -47,10 +41,15 @@ export const Cart = () => {
       <div className="flex flex-col md:flex-row md:justify-between gap-6">
         {/* Left Child */}
         <div className="md:w-[60%] w-full">
-          <CartLeftChild cartItems={cartItems} setCartItems={setCartItems} />
+          <CartLeftChild
+            cartItems={cartItems}
+            setCartItems={setCartItems}
+            selectedItems={selectedItems}
+            setSelectedItems={setSelectedItems}
+          />
         </div>
         <div className="md:w-[40%] w-full">
-          <CartRightChild cartItems={cartItems}  />
+          <CartRightChild cartItems={cartItems} selectedItems={selectedItems} />
         </div>
       </div>
     </div>

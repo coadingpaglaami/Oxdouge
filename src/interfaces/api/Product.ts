@@ -1,18 +1,18 @@
 export interface ProductResponse {
   id: number;
   title: string;
-  product_code: string;
-  category: number;
-  colors: string[]; // Array of hex color codes
-  available_stock: number;
+  product_code?: string;
+  category: CategoryResponse;
+  colors?: string[]; // Array of hex color codes
+  available_stock?: number;
   price: string; // Keeping as string to match API
-  discount: number;
-  discounted_price: number;
-  description: string;
-  images: string[] | null; // Array of image URLs or null
+  discount?: number;
+  discounted_price?: number;
+  description?: string;
+  images?: string[] | null; // Array of image URLs or null
   main_image: string | null; // Nullable string for main image URL
-  features: string[]; // Array of features
-  video: string | null; // Nullable string for video URL
+  features?: string[]; // Array of features
+  video?: string | null; // Nullable string for video URL
 }
 
 export interface PaginatedProductsResponse {

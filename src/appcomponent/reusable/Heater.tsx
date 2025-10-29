@@ -1,42 +1,69 @@
+"use client";
+import { useAddToCartMutation } from "@/api/cartApi";
 import { Button } from "@/components/ui/button";
-import { DiselHeater } from "@/interfaces";
+import { ProductResponse } from "@/interfaces/api";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export const Heater = ({
   id,
-  img,
+  main_image,
   title,
-  subtitle,
+  category,
   description,
   price,
-}: DiselHeater) => (
-  <Link
-    href={`/products/${id}`}
-    className="hover:sccale-105 transition-transform duration-200"
-  >
-    <div className="flex flex-col bg-[#121212] border border-primary rounded-lg overflow-hidden gap-4 ">
-      <div className="relative aspect-[3.9/2.2]">
-        <Image
-          src={img}
-          alt={title}
-          fill
-          className="w-full h-56 object-cover"
-        />
-      </div>
+}: ProductResponse) => {
+  const [cart, { isLoading }] = useAddToCartMutation();
 
-      <div className="flex flex-col p-6 gap-3">
-        <p className="text-sm text-[#9C9C9C]">{subtitle}</p>
-        <h3 className="text-xl font-semibold text-white">{title}</h3>
-        <p className="text-gray-400 text-sm line-clamp-2 min-h-16">
-          {description}
-        </p>
-        <p className="text-lg font-semibold text-white mt-2">{price}</p>
-        <Button className="mt-3 flex items-center justify-center gap-2">
-          <ShoppingCart className="w-4 h-4" /> Add to Cart
-        </Button>
+  async function addToCart(id: number) {
+    try {
+      const res= await cart({ product_id: id, quantity: 1 }).unwrap();
+      console.log("Product added to cart",res);
+      toast.success("Product added to cart");
+    } catch (error) {
+      console.error("Failed to add to cart:", error);
+      toast.error("Failed to add to cart");
+    }
+  }
+
+  return (
+    <Link
+      href={`/products/${id}`}
+      className="hover:sccale-105 transition-transform duration-200"
+    >
+      <div className="flex flex-col bg-[#121212] border border-primary rounded-lg overflow-hidden gap-4 ">
+        <div className="relative aspect-[3.9/2.2]">
+          <Image
+            src={main_image || "/placeholder.png"}
+            alt={title}
+            fill
+            className="w-full h-56 object-cover"
+          />
+        </div>
+
+        <div className="flex flex-col p-6 gap-3">
+          <p className="text-sm text-[#9C9C9C]">{category.name}</p>
+          <h3 className="text-xl font-semibold text-white">{title}</h3>
+          <p className="text-gray-400 text-sm line-clamp-2 min-h-16">
+            {description}
+          </p>
+          <p className="text-lg font-semibold text-white mt-2">{price}</p>
+          <Button
+            onClick={(e) => {
+              e.preventDefault(); // stop <Link> from triggering
+              e.stopPropagation(); // stop bubbling to parent
+              addToCart(id);
+              console.log("Added to cart"); // here call your add-to-cart api
+            }}
+            className="mt-3 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isLoading}
+          >
+            <ShoppingCart className="w-4 h-4" /> Add to Cart
+          </Button>
+        </div>
       </div>
-    </div>
-  </Link>
-);
+    </Link>
+  );
+};
