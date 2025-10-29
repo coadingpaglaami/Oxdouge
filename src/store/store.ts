@@ -4,6 +4,7 @@ import { couponApi } from "@/api/couponApi";
 import { ordersApi } from "@/api/ordersApi";
 import { productApi } from "@/api/productApi";
 import { shippingApi } from "@/api/shippingApi";
+import { profileApi } from "@/api/profileApi"; // Import the profile API
 import { configureStore } from "@reduxjs/toolkit";
 
 export const store = configureStore({
@@ -12,11 +13,20 @@ export const store = configureStore({
     [productApi.reducerPath]: productApi.reducer,
     [cartApi.reducerPath]: cartApi.reducer,
     [couponApi.reducerPath]: couponApi.reducer,
-    [shippingApi.reducerPath]:shippingApi.reducer,
+    [shippingApi.reducerPath]: shippingApi.reducer,
     [ordersApi.reducerPath]: ordersApi.reducer,
+    [profileApi.reducerPath]: profileApi.reducer, 
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authApi.middleware, productApi.middleware,cartApi.middleware,couponApi.middleware,shippingApi.middleware,ordersApi.middleware),
+    getDefaultMiddleware().concat(
+      authApi.middleware, 
+      productApi.middleware,
+      cartApi.middleware,
+      couponApi.middleware,
+      shippingApi.middleware,
+      ordersApi.middleware,
+      profileApi.middleware
+    ),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
