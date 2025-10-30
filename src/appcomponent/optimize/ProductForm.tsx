@@ -52,31 +52,64 @@ export const ProductForm = ({ editing, onClose }: Props) => {
   const { data: categories } = useGetCategoryQuery();
   const [addCategory, { isLoading: categoryLoading }] =
     useAddCategoryMutation();
-    console.log(categoryLoading,selected)
+  console.log(categoryLoading, selected);
   const [addProduct, { isLoading }] = useAddProductMutation();
   const [editProduct, { isLoading: loadingEdit }] = useEditProductMutation();
   const [inputValue, setInputValue] = useState("");
 
   const handleSelect = (id: number) => {
     setSelectedCategoryId(id);
+    setCategory(id);
     const selected = categories?.results.find((c) => c.id === id);
     if (selected) setInputValue(selected.name);
+  };
+
+  const convertUrlsToFiles = async (urls: string[] | undefined) => {
+    if (!urls) return [];
+    const filePromises = urls.map(async (url, index) => {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      // You can provide a default filename or extract from URL
+      const filename = url.split("/").pop() || `image-${index}.jpg`;
+      return new File([blob], filename, { type: blob.type });
+    });
+
+    return Promise.all(filePromises);
   };
 
   // Populate form on edit
   useEffect(() => {
     if (editing) {
+      console.log("Editing product:", editing);
       setTitle(editing.title);
-      setCategory(Number(editing.category_detail) ?? "");
-      setSelected(String(editing.category_detail));
+      setSelectedCategoryId(Number(editing.category) ?? null);
+      setCategory(Number(editing.category) ?? "");
+      // Set the inputValue to show previously selected category
+      setInputValue(editing.category_detail?.name || "");
       setPrice(editing.price);
       setDescription(editing.description || "");
       setQuantity(editing.available_stock ?? 0);
       setColors(editing.colors?.length ? editing.colors : [""]);
       setKeyFeatures(editing.features?.length ? editing.features : [""]);
       setMainFile(null);
-      setMoreFiles([]);
-      setVideoFile(null);
+
+      // Convert image URLs to File objects
+      convertUrlsToFiles(editing?.images || []).then((files) =>
+        setMoreFiles(files)
+      );
+
+      // Convert video URL to File object if available
+      if (editing.video) {
+        fetch(editing.video)
+          .then((res) => res.blob())
+          .then((blob) => {
+            const filename = editing.video?.split("/").pop() || "video.mp4";
+            const file = new File([blob], filename, { type: blob.type });
+            setVideoFile(file);
+          });
+      } else {
+        setVideoFile(null);
+      }
     } else {
       resetForm();
     }
@@ -104,6 +137,11 @@ export const ProductForm = ({ editing, onClose }: Props) => {
 
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
+    console.log("Submitting product:", {
+      title,
+      category,
+      price,
+    });
     if (!title.trim() || !category || !price.trim()) {
       toast.error("Please fill all required fields");
       return;
@@ -147,7 +185,7 @@ export const ProductForm = ({ editing, onClose }: Props) => {
     }
   };
 
-  const createCategory = async (name:string) => {
+  const createCategory = async (name: string) => {
     const res = await addCategory({ name });
     if (res.data) {
       toast.success("Category created");
@@ -386,7 +424,8 @@ export const ProductForm = ({ editing, onClose }: Props) => {
                         className="text-green-400"
                       >
                         Create {'"'}
-                        {inputValue}{'"'} category
+                        {inputValue}
+                        {'"'} category
                       </CommandItem>
                     )}
                 </Command>

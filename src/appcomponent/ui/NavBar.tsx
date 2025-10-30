@@ -9,7 +9,14 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
-import { User, ShoppingCart, Menu, UserCheck2, LogIn, LogOut } from "lucide-react";
+import {
+  User,
+  ShoppingCart,
+  Menu,
+  UserCheck2,
+  LogIn,
+  LogOut,
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -19,6 +26,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { removeAuthTokens } from "@/lib/token";
+import { baseUrl } from "@/lib/config";
+import { useGetCartQuery } from "@/api/cartApi";
 
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,6 +37,18 @@ export const NavBar = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const { data: cartData, isLoading, isError, refetch } = useGetCartQuery();
+  const [cartCount, setCartCount] = useState<number>(0);
+
+  useEffect(() => {
+    if (cartData && Array.isArray(cartData)) {
+      setCartCount(cartData.length);
+    }
+  }, [cartData]);
+
+  useEffect(() => {
+    refetch();
+  }, [pathname]);
 
   // read cookies client side
   useEffect(() => {
@@ -41,7 +62,7 @@ export const NavBar = () => {
       ?.split("=")[1];
 
     console.log("Access Cookie:", access);
-      console.log("Role Cookie:", role);
+    console.log("Role Cookie:", role);
 
     setIsLoggedIn(!!access);
     setIsAdmin(role === "admin");
@@ -62,7 +83,7 @@ export const NavBar = () => {
     { name: "About Us", href: "/about" },
     { name: "Contact Us", href: "/contact" },
   ];
-  const handleLogOut = async() => {
+  const handleLogOut = async () => {
     // Clear cookies by setting their expiration date to the past
     removeAuthTokens();
     console.log("Logged out, cookies cleared.");
@@ -122,22 +143,36 @@ export const NavBar = () => {
           <PopoverContent className="w-32 bg-[#040403] p-2 rounded-md shadow-lg">
             <div className="flex flex-col gap-2">
               {!isLoggedIn && (
-                <Link href="/login" className="flex items-center gap-2 text-white">
+                <Link
+                  href="/login"
+                  className="flex items-center gap-2 text-white"
+                >
                   <LogIn /> Login
                 </Link>
               )}
 
               {isLoggedIn && (
                 <>
-                  <Link href="/profile" className="flex items-center gap-2 text-white">
-                  <User /> Profile
-                </Link>
-                  <button className="text-white flex justify-start items-center gap-2 mt-1" onClick={()=>handleLogOut()}><LogOut /> Logout</button>
+                  <Link
+                    href="/profile"
+                    className="flex items-center gap-2 text-white"
+                  >
+                    <User /> Profile
+                  </Link>
+                  <button
+                    className="text-white flex justify-start items-center gap-2 mt-1"
+                    onClick={() => handleLogOut()}
+                  >
+                    <LogOut /> Logout
+                  </button>
                 </>
               )}
 
               {isAdmin && (
-                <Link href="/admin" className="flex items-center gap-2 text-white">
+                <Link
+                  href="/admin"
+                  className="flex items-center gap-2 text-white"
+                >
                   <UserCheck2 /> Admin
                 </Link>
               )}
@@ -145,9 +180,20 @@ export const NavBar = () => {
           </PopoverContent>
         </Popover>
 
-        {isLoggedIn && (
+        {/* {isLoggedIn && (
           <Link href="/cart">
             <ShoppingCart className="cursor-pointer text-white" />
+          </Link>
+        )} */}
+        {isLoggedIn && (
+          <Link href="/cart" className="relative">
+            <ShoppingCart className="cursor-pointer text-white" />
+
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-primary text-black text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                {cartCount > 99 ? "99+" : cartCount}
+              </span>
+            )}
           </Link>
         )}
       </div>
@@ -230,15 +276,14 @@ export const NavBar = () => {
             )}
 
             {isLoggedIn && (
-              <button
-                onClick={() => {
-                  router.push("/cart");
-                  setIsOpen(false);
-                }}
-                className="flex items-center gap-2"
-              >
-                <ShoppingCart /> Cart
-              </button>
+              <Link href="/cart" className="relative">
+                <ShoppingCart className="cursor-pointer text-white" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-primary text-black text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                    {cartCount > 99 ? "99+" : cartCount}
+                  </span>
+                )}
+              </Link>
             )}
           </div>
         </SheetContent>

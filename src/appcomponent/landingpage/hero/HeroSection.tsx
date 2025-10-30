@@ -61,16 +61,15 @@ export const HeroSection = () => {
             <Button
               className="flex items-center gap-2 px-6 py-4 text-black"
               variant="defaultGradient"
-              onClick={() => router.push('/products')}
+              onClick={() => router.push("/products")}
             >
-              Buy Now
+              Explore Product
               <ArrowRight className="w-5 h-5" />
             </Button>
             <Button
               variant="outline"
               className="text-white flex items-center gap-2 px-6 py-4"
-              onClick={()=>router.push('/about')}
-
+              onClick={() => router.push("/about")}
             >
               Learn More
               <Image

@@ -46,7 +46,7 @@ import {
 } from "@/components/ui/alert-dialog";
 export const Orders = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
-  const [page, setPage] = useState<number | undefined>(undefined);
+  const [page, setPage] = useState<number | undefined>(1);
   const [selectedOrder, setSelectedOrder] =
     useState<OrderDetailsResponse | null>(null);
   const { data: order, isLoading } = useOrderStatusQuery({
@@ -225,7 +225,10 @@ export const Orders = () => {
             </TableBody>
             <div className="flex justify-center items-center gap-2 mt-4">
               {order?.previous && (
-                <Button onClick={() => handlePageChange(page || 0 - 1 )}>Prev</Button>
+
+                <Button onClick={() => {
+                  if(page=== undefined) return;
+                  handlePageChange(page  - 1 )}}>Prev</Button>
               )}
 
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
@@ -240,7 +243,9 @@ export const Orders = () => {
               ))}
 
               {order?.next && (
-                <Button onClick={() => handlePageChange(page || 0 + 1)}>Next</Button>
+                <Button onClick={() => {
+                  if(page=== undefined) return;
+                  handlePageChange(page  + 1)}}>Next</Button>
               )}
             </div>
           </Table>

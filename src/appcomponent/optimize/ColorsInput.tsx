@@ -61,7 +61,11 @@ export const ColorsInput = ({ colors, setColors }: Props) => {
 
         <button
           type="button"
-          onClick={addColor}
+          onClick={(e) => {
+            e.preventDefault(); // stop <Link> from triggering
+            e.stopPropagation(); // stop bubbling to parent
+            addColor();
+          }}
           className="text-primary hover:underline"
         >
           + Add

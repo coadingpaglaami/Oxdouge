@@ -13,14 +13,14 @@ export default function MainLayout({
 }) {
   return (
     <div className={`bg-[#040403] ${myFont.className}`}>
-      <div className="sticky top-0 bg-[#73737321] z-50 ">
-        <NavBar />
-      </div>
+      <UserLayout>
+        <div className="sticky top-0 bg-[#73737321] z-50 ">
+          <NavBar />
+        </div>
 
-      <main>
-        <UserLayout>{children}</UserLayout>
-      </main>
-      <Footer />
+        <main>{children}</main>
+        <Footer />
+      </UserLayout>
     </div>
   );
 }

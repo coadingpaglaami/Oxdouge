@@ -19,7 +19,7 @@ export const Heater = ({
 }: ProductResponse) => {
   const [cart, { isLoading }] = useAddToCartMutation();
   const route = useRouter();
-
+  
   async function addToCart(id: number) {
     // const token =  await cookieStore.get("token");
     // if (!token) {
