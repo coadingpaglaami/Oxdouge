@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import rawBaseQuery from "./api";
-import { CreateUserResponse, LoginResponse } from "@/interfaces/api";
+import { CreateUserResponse, LoginResponse, GoogleLoginResponse } from "@/interfaces/api";
 import { ChangePasswordPayload } from "@/interfaces/api/User";
 
 export const authApi = createApi({
@@ -25,6 +25,21 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["Auth"],
     }),
+
+    // Google OAuth endpoints
+    googleLogin: builder.query<{ auth_url: string }, void>({
+      query: () => "google/login/",
+    }),
+
+    googleExchange: builder.mutation<GoogleLoginResponse, { code: string }>({
+      query: (body) => ({
+        url: "google/exchange/",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Auth"],
+    }),
+
     changePasswordUser: builder.mutation<void, ChangePasswordPayload>({
       query: (body) => ({
         url: "update-password/",
@@ -45,4 +60,12 @@ export const authApi = createApi({
   }),
 });
 
-export const { useSignupMutation, useLoginMutation,useChangePasswordUserMutation, useEmailSecurityQuery, useUpdateEmailSecurityMutation } = authApi;
+export const { 
+  useSignupMutation, 
+  useLoginMutation, 
+  useGoogleLoginQuery,
+  useGoogleExchangeMutation,
+  useChangePasswordUserMutation, 
+  useEmailSecurityQuery, 
+  useUpdateEmailSecurityMutation 
+} = authApi;

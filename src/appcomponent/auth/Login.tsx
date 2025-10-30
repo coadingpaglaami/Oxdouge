@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useLoginMutation } from "@/api/authApi";
+import { useLoginMutation, useGoogleLoginQuery, useGoogleExchangeMutation } from "@/api/authApi";
 import { setAuthTokens } from "@/lib/token";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,10 +17,36 @@ export const Login = () => {
     {}
   );
   const [login, { isLoading }] = useLoginMutation();
+  const { data: googleAuthData, refetch: initiateGoogleLogin } = useGoogleLoginQuery();
+  const [googleExchange, { isLoading: isGoogleLoading }] = useGoogleExchangeMutation();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const error = searchParams.get("error")
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&]).{8,}$/;
+
+  // Handle Google OAuth callback
+  useEffect(() => {
+    const handleGoogleCallback = async () => {
+      const code = searchParams.get('code');
+      
+      if (code) {
+        try {
+          const res = await googleExchange({ code }).unwrap();
+          console.log("Google login successful", res);
+          setAuthTokens(res.access, res.refresh, res.user.role);
+          router.push("/");
+        } catch (err) {
+          console.error("Google login failed", err);
+          // Handle error - show error message to user
+        }
+      }
+    };
+
+    handleGoogleCallback();
+  }, [searchParams, googleExchange, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +79,20 @@ export const Login = () => {
       } catch (err) {
         console.error("Login failed", err);
       }
-      // Demo: simulate login success
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      // Trigger the Google OAuth flow
+      const response = await initiateGoogleLogin().unwrap();
+      
+      if (response?.auth_url) {
+        // Redirect to Google OAuth page
+        window.location.href = response.auth_url;
+      }
+    } catch (err) {
+      console.error("Failed to initiate Google login", err);
     }
   };
 
@@ -74,7 +113,10 @@ export const Login = () => {
         <div className="w-1/2 flex flex-col justify-center text-white gap-4 ">
           {/* HEADER */}
           <h2 className="text-3xl font-semibold text-primary">Login</h2>
-
+           {error == 'google_login_failed' && (
+            <p className="text-red-400 text-center">Google login/signup failed</p>
+          )}
+         
           {/* FORM */}
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             {/* Email */}
@@ -122,7 +164,9 @@ export const Login = () => {
               {errors.password && (
                 <span className="text-xs text-red-500">{errors.password}</span>
               )}
+              
             </div>
+            
 
             {/* Submit */}
             <Button
@@ -130,14 +174,19 @@ export const Login = () => {
               className="mt-2 self-center w-fit disabled:cursor-none disabled:opacity-25"
               disabled={isLoading}
             >
-              Login
+              {isLoading ? "Logging in..." : "Login"}
             </Button>
           </form>
 
           {/* OR + Google */}
           <div className="flex flex-col items-center gap-3 ">
             <span className="text-gray-400">OR</span>
-            <Button variant="outline" className="flex gap-2">
+            <Button 
+              variant="outline" 
+              className="flex gap-2"
+              onClick={handleGoogleLogin}
+              disabled={isGoogleLoading}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 533.5 544.3"
@@ -161,7 +210,7 @@ export const Login = () => {
                   d="M272 107.1c38.9-0.6 76.2 13.9 104.4 40.4l78.1-78.1C406.5 24 344.8-0.3 272 0 167.3 0 74.8 61.7 30.1 150l89.9 70.5c21.5-64.4 81.3-112.2 152-112.2z"
                 />
               </svg>
-              Continue with Google
+              {isGoogleLoading ? "Redirecting..." : "Continue with Google"}
             </Button>
           </div>
 

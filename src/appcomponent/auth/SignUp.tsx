@@ -5,13 +5,14 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useSignupMutation } from "@/api/authApi";
+import { useGoogleExchangeMutation, useGoogleLoginQuery, useSignupMutation } from "@/api/authApi";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showCPassword, setShowCPassword] = useState(false);
+  const [googleExchange, { isLoading: isGoogleLoading }] = useGoogleExchangeMutation();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -24,6 +25,7 @@ export const SignUp = () => {
     cPassword?: string;
   }>({});
   const formData = new FormData();
+    const { data: googleAuthData, refetch: initiateGoogleLogin } = useGoogleLoginQuery();
   const [signup, { isLoading }] = useSignupMutation();
   const router = useRouter();
   const nameRegex = /^[A-Za-z\s]{1,50}$/;
@@ -87,6 +89,20 @@ export const SignUp = () => {
         });
       }
       // Submit the form (e.g., send data to server)
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      // Trigger the Google OAuth flow
+      const response = await initiateGoogleLogin().unwrap();
+      
+      if (response?.auth_url) {
+        // Redirect to Google OAuth page
+        window.location.href = response.auth_url;
+      }
+    } catch (err) {
+      console.error("Failed to initiate Google login", err);
     }
   };
 
@@ -213,7 +229,8 @@ export const SignUp = () => {
           {/* OR + Google */}
           <div className="flex flex-col items-center gap-3 w-4/5">
             <span className="text-gray-400">OR</span>
-            <Button variant="outline" className="flex gap-2">
+            <Button onClick={handleGoogleLogin}
+              disabled={isGoogleLoading} variant="outline" className="flex gap-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 533.5 544.3"
