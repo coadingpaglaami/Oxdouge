@@ -456,12 +456,12 @@ const handleSubmit = async () => {
                     <div
                       key={product.id}
                       className="flex items-center space-x-2 py-1 hover:bg-primary/10 px-2 rounded cursor-pointer"
-                      onClick={() => toggleProduct(product.id)}
+                      onClick={() => toggleProduct(product.id || 0)}
                     >
                       <input
                         type="checkbox"
-                        checked={formData.products.includes(product.id)}
-                        onChange={() => toggleProduct(product.id)}
+                        checked={formData.products.includes(product.id || 0)}
+                        onChange={() => toggleProduct(product.id || 0)}
                         className="cursor-pointer"
                       />
                       <span className="text-white text-sm">

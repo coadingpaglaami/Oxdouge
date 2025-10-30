@@ -1,7 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import rawBaseQuery from "./api";
 import { PaginatedProductsResponse, ProductResponse } from "@/interfaces/api";
-import { ProductDetails } from "@/appcomponent/products";
+
 
 const admin = "/admin/";
 
@@ -25,7 +25,7 @@ export interface PaginatedCategories {
 export const productApi = createApi({
   reducerPath: "productApi",
   baseQuery: rawBaseQuery,
-  tagTypes: ["Product", "UserProduct"],
+  tagTypes: ["Product", "UserProduct","Category"],
   endpoints: (builder) => ({
     addProduct: builder.mutation<ProductResponse, FormData>({
       query: (formData) => ({
@@ -59,6 +59,7 @@ export const productApi = createApi({
     }),
     getCategory: builder.query<PaginatedCategories, void>({
       query: () => `${admin}categories/`,
+      providesTags: ["Category"],
     }),
     editProduct: builder.mutation<ProductResponse, EditProductArgs>({
       query: ({ id, formData }) => ({
@@ -69,11 +70,12 @@ export const productApi = createApi({
       invalidatesTags: ["Product"],
     }),
     addCategory: builder.mutation<CategoryResponse, CategoryRequest>({
-      query: ({ name }) => ({
+      query: (body) => ({
         url: `${admin}categories/`,
         method: "POST",
-        body: name,
+        body
       }),
+      invalidatesTags: ["Category"],
     }),
     ProductDetails: builder.query<ProductResponse, number>({
       query: (id: number) => `products/${id}/`,

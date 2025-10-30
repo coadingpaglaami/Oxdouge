@@ -3,7 +3,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Breadcrumb } from "@/appcomponent/reusable";
-import { productPageData as initialProducts } from "@/data/ProductPageData";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -39,8 +38,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { PaginatedProductsResponse, ProductResponse } from "@/interfaces/api";
-
-
 
 export const Prodcuts = () => {
   const [page, setPage] = useState(1);
@@ -372,7 +369,7 @@ export const Prodcuts = () => {
                   {item.title}
                 </TableCell>
                 <TableCell className="max-w-[120px] truncate bg-[#18181B]">
-                  {item.category.name}
+                  {item.category_detail.name}
                 </TableCell>
                 <TableCell className="max-w-[100px] bg-[#18181B]">
                   {item.price}

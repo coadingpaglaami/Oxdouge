@@ -1,5 +1,4 @@
 'use client';
-import { DiselHeater } from '@/interfaces';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';

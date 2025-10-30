@@ -2,7 +2,8 @@ export interface ProductResponse {
   id: number | undefined;
   title: string;
   product_code?: string;
-  category: CategoryResponse;
+  category_detail: CategoryResponse;
+  category?:string;
   colors?: string[]; // Array of hex color codes
   available_stock?: number;
   price: string; // Keeping as string to match API

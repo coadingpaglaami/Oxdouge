@@ -226,12 +226,22 @@ export const Settings = () => {
 
       toast.success("Profile updated successfully");
       setEditProfile(false);
-    } catch (error: any) {
-      const errorMessage =
-        error?.data?.message ||
-        error?.data?.error ||
-        "Failed to update profile";
-      toast.error(errorMessage);
+    } catch (error: unknown) {
+      console.error("Failed to place order:", error);
+
+      // Type-safe access
+      const err = error as {
+        data?: { detail?: string; message?: string };
+        message?: string;
+      };
+
+      const message =
+        err?.data?.detail ||
+        err?.data?.message ||
+        err?.message ||
+        "Failed to place order";
+
+      toast.error(message);
     }
   };
 
@@ -280,12 +290,22 @@ export const Settings = () => {
       setShowCurrentPwd(false);
       setShowNewPwd(false);
       setShowConfirmPwd(false);
-    } catch (error: any) {
-      const errorMessage =
-        error?.data?.message ||
-        error?.data?.error ||
-        "Failed to change password";
-      toast.error(errorMessage);
+    } catch (error: unknown) {
+      console.error("Failed to place order:", error);
+
+      // Type-safe access
+      const err = error as {
+        data?: { detail?: string; message?: string };
+        message?: string;
+      };
+
+      const message =
+        err?.data?.detail ||
+        err?.data?.message ||
+        err?.message ||
+        "Failed to place order";
+
+      toast.error(message);
     }
   };
 

@@ -6,8 +6,8 @@ import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { escape } from "querystring";
 import { toast } from "sonner";
+import Cookies from "js-cookie";
 
 export const Heater = ({
   id,
@@ -21,11 +21,19 @@ export const Heater = ({
   const route = useRouter();
 
   async function addToCart(id: number) {
-    const token = await cookieStore.get("access");
+    // const token =  await cookieStore.get("token");
+    // if (!token) {
+    //   toast.error("You need to login first");
+    //   setTimeout(() => {
+    //     route.push("/login");
+    //   }, 1000);
+    //   return;
+    // }
+    const token = Cookies.get("access"); // get token from cookies
     if (!token) {
       toast.error("You need to login first");
       setTimeout(() => {
-         route.push("/login");
+        route.push("/login");
       }, 1000);
       return;
     }
@@ -55,7 +63,7 @@ export const Heater = ({
         </div>
 
         <div className="flex flex-col p-6 gap-3">
-          <p className="text-sm text-[#9C9C9C]">{category.name}</p>
+          <p className="text-sm text-[#9C9C9C]">{category}</p>
           <h3 className="text-xl font-semibold text-white">{title}</h3>
           <p className="text-gray-400 text-sm line-clamp-2 min-h-16">
             {description}

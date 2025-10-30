@@ -1,16 +1,18 @@
 "use client";
-import { shippingAddresses } from "@/data/ShippingAddressData";
 import { useState } from "react";
 import { ShippingAddressSelector } from "../reusable/ShippingAddressTwo";
+import { useGetShippingsQuery } from "@/api/shippingApi";
 
 export const ShippingTab = () => {
-  const [selectedAddress, setSelectedAddress] = useState<number>(
-    shippingAddresses.find((a) => a.isDefault)?.id ?? shippingAddresses[0].id
-  );
+  const { data, isLoading: shipLoading } = useGetShippingsQuery();
+  const [selectedAddress, setSelectedAddress] = useState<number>(0);
+
   return (
     <ShippingAddressSelector
       selectedAddress={selectedAddress}
       setSelectedAddress={setSelectedAddress}
+      data={data}
+      shipLoading={shipLoading}
     />
   );
 };

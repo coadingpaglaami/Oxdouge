@@ -1,5 +1,10 @@
 import { Cart } from "@/appcomponent/cart";
+import { Suspense } from "react";
 
 export default function CartPage() {
-    return (<Cart />)
+  return (
+    <Suspense>
+      <Cart />
+    </Suspense>
+  );
 }

@@ -3,7 +3,32 @@
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 
-const shippingData = {
+export interface NestedContent {
+  type: "nested";
+  title: string;
+  items: string[];
+}
+
+export type SectionContent = string | NestedContent;
+
+export interface Section {
+  id: string;
+  title: string;
+  content: SectionContent[];
+}
+
+export interface ShippingPolicy {
+  title: string;
+  description: string;
+  sections: Section[];
+}
+
+export interface ShippingData {
+  shippingPolicy: ShippingPolicy;
+}
+
+
+const shippingData: ShippingData  = {
   "shippingPolicy": {
     "title": "Shipping Policy",
     "description": "Thank you for shopping with us! This Shipping Policy explains how and when your order will be processed, shipped, and delivered.",
@@ -91,7 +116,7 @@ export default function ShippingPolicyPage () {
     element?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const renderContent = (content: any[]) => {
+  const renderContent = (content: SectionContent[]) => {
     return content.map((item, index) => {
       if (typeof item === 'string') {
         return (

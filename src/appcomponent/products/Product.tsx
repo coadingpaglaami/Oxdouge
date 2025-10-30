@@ -12,7 +12,7 @@ const filteredProducts =
   activeTab === "All"
     ? data?.results ?? []
     : data?.results?.filter((item) =>
-        activeTab === "Heater" ? item.category.name === "Heater" : true
+        activeTab === "Heater" ? item.category === "Heater" : true
       ) ?? [];
 
   return (
@@ -48,7 +48,7 @@ const filteredProducts =
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-6">
         {filteredProducts.map((item, index) => (
-          <Heater key={index} {...item} />
+          <Heater key={item.id} {...item}  />
         ))}
       </div>
     </div>

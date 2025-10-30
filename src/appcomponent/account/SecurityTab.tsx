@@ -111,8 +111,22 @@ export const SecurityTab = () => {
       await changePassword(formData).unwrap();
       toast.success("Password updated successfully");
       resetForm();
-    } catch (error) {
-      toast.error(error);
+    } catch (error: unknown) {
+      console.error("Failed to place order:", error);
+
+      // Type-safe access
+      const err = error as {
+        data?: { detail?: string; message?: string };
+        message?: string;
+      };
+
+      const message =
+        err?.data?.detail ||
+        err?.data?.message ||
+        err?.message ||
+        "Failed to place order";
+
+      toast.error(message);
     }
   };
 

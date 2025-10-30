@@ -2,17 +2,17 @@
 
 import React, { useState } from "react";
 import { Breadcrumb } from "@/appcomponent/reusable";
-import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ProductForm } from "./ProductForm";
 import { ProductTable } from "./ProductTable";
-import { ProductResponse, PaginatedProductsResponse } from "@/interfaces/api";
+import { ProductResponse } from "@/interfaces/api";
 
 export const Products = () => {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<ProductResponse | null>(null);
 
   const openAdd = () => {
+    console.log("Open Add Product Dialog");
     setEditing(null);
     setOpen(true);
   };

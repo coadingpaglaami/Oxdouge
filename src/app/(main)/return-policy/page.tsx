@@ -3,7 +3,31 @@
 import { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 
-const returnPolicyData = {
+export interface NestedContent {
+  type: "nested";
+  title: string;
+  items: string[];
+}
+
+export type SectionContent = string | NestedContent;
+
+export interface Section {
+  id: string;
+  title: string;
+  content: SectionContent[];
+}
+
+export interface ReturnPolicy {
+  title: string;
+  description: string;
+  sections: Section[];
+}
+
+export interface ReturnPolicyData {
+  returnPolicy: ReturnPolicy;
+}
+
+const returnPolicyData: ReturnPolicyData  = {
   "returnPolicy": {
     "title": "Return Policy",
     "description": "We want you to be completely satisfied with your purchase. Please read our return policy carefully to understand our terms and conditions.",
@@ -139,7 +163,7 @@ export default function ReturnPolicyPage() {
     element?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const renderContent = (content: any[]) => {
+  const renderContent = (content: SectionContent[]) => {
     return content.map((item, index) => {
       if (typeof item === 'string') {
         return (

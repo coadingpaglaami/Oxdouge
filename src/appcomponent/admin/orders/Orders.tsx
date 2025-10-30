@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { Breadcrumb } from "@/appcomponent/reusable";
-import { adminOrder } from "@/data/AdminOrderData";
 import {
   Table,
   TableBody,
@@ -27,11 +26,10 @@ import {
 import { Eye, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { OrderData } from "@/interfaces/OrderData";
 import { OrderDetailsResponse } from "@/interfaces/api/Orders";
 import {
   useDeleteOrderMutation,
-  useGetAllOrdersQuery,
+  useOrderStatusQuery,
   useUpdateStatusMutation,
 } from "@/api/ordersApi";
 import { toast } from "sonner";
@@ -47,11 +45,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 export const Orders = () => {
-  const [selectedStatus, setSelectedStatus] = useState("All Orders");
-  const [page, setPage] = useState(1);
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [page, setPage] = useState<number | undefined>(undefined);
   const [selectedOrder, setSelectedOrder] =
     useState<OrderDetailsResponse | null>(null);
-  const { data: order, isLoading } = useGetAllOrdersQuery(page);
+  const { data: order, isLoading } = useOrderStatusQuery({
+    page,
+    status: selectedStatus,
+  });
   const totalPages = order ? Math.ceil(order.count / 10) : 1;
   const [statusUpdate, { isLoading: statusUpdating }] =
     useUpdateStatusMutation();
@@ -88,7 +89,7 @@ export const Orders = () => {
 
   // Filter orders by status
   const filteredOrders =
-    selectedStatus === "All Orders"
+    selectedStatus === ""
       ? order?.results || []
       : order?.results.filter((o) => o.order_status === selectedStatus) || [];
 
@@ -101,17 +102,20 @@ export const Orders = () => {
         <div className="flex justify-start">
           <Select
             value={selectedStatus}
-            onValueChange={(value: string) => setSelectedStatus(value)}
+            onValueChange={(value: string) => {
+              setSelectedStatus(value);
+              setPage(1);
+            }}
           >
             <SelectTrigger className="w-[200px] bg-transparent text-white border-primary">
               <SelectValue placeholder="All Orders" />
             </SelectTrigger>
             <SelectContent className="bg-neutral-900 text-white">
-              <SelectItem value="All Orders">All Orders</SelectItem>
-              <SelectItem value="Pending">Pending</SelectItem>
-              <SelectItem value="Delivered">Delivered</SelectItem>
-              <SelectItem value="Shipping">Shipping</SelectItem>
-              <SelectItem value="Cancelled">Cancelled</SelectItem>
+              <SelectItem value="ALL">All Orders</SelectItem>
+              <SelectItem value="PENDING">Pending</SelectItem>
+              <SelectItem value="DELIVERED">Delivered</SelectItem>
+              <SelectItem value="SHIPPED">Shipped</SelectItem>
+              <SelectItem value="CANCELLED">Cancelled</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -166,17 +170,16 @@ export const Orders = () => {
                     {order.created_at}
                   </TableCell>
                   <TableCell>
-                    <TableCell>
-                      <span
-                        className={`px-3 py-1 rounded-full text-sm font-medium 
+                    <span
+                      className={`px-3 py-1 rounded-full text-sm font-medium 
       ${getStatusStyle(order.order_status).bg} ${
-                          getStatusStyle(order.order_status).text
-                        }`}
-                      >
-                        {order.order_status}
-                      </span>
-                    </TableCell>
+                        getStatusStyle(order.order_status).text
+                      }`}
+                    >
+                      {order.order_status}
+                    </span>
                   </TableCell>
+
                   <TableCell className="rounded-r-lg">
                     <div className="flex items-center gap-2">
                       <Button
@@ -222,7 +225,7 @@ export const Orders = () => {
             </TableBody>
             <div className="flex justify-center items-center gap-2 mt-4">
               {order?.previous && (
-                <Button onClick={() => handlePageChange(page - 1)}>Prev</Button>
+                <Button onClick={() => handlePageChange(page || 0 - 1 )}>Prev</Button>
               )}
 
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
@@ -237,7 +240,7 @@ export const Orders = () => {
               ))}
 
               {order?.next && (
-                <Button onClick={() => handlePageChange(page + 1)}>Next</Button>
+                <Button onClick={() => handlePageChange(page || 0 + 1)}>Next</Button>
               )}
             </div>
           </Table>

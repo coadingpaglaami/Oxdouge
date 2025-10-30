@@ -6,7 +6,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   useCreateShippingMutation,
   useDeleteShippingMutation,
-  useGetShippingsQuery,
 } from "@/api/shippingApi";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
@@ -21,15 +20,19 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { ShippingAddressResponse } from "@/interfaces/api/ShippingAddress";
 
 interface ShippingAddressSelectorProps {
   selectedAddress: number;
   setSelectedAddress: (val: number) => void;
+  data: ShippingAddressResponse[] | undefined;
+  shipLoading: boolean;
 }
 
 export const ShippingAddressSelector = ({
   selectedAddress,
   setSelectedAddress,
+  data
 }: ShippingAddressSelectorProps) => {
   const [showAddAddress, setShowAddAddress] = useState(false);
   const [shipping, { isLoading }] = useCreateShippingMutation();
@@ -41,7 +44,6 @@ export const ShippingAddressSelector = ({
   const [floor, setFloor] = useState("");
   const [city, setCity] = useState("");
   const [zipcode, setZipcode] = useState("");
-  const { data, isLoading: shipLoading } = useGetShippingsQuery();
   const [shippDelete, { isLoading: deleting }] = useDeleteShippingMutation();
 
   const handleSaveAddress = async () => {

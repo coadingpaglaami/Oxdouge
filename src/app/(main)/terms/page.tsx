@@ -3,7 +3,34 @@
 import { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 
-const termsData = {
+
+export interface NestedContent {
+  type: "nested";
+  title: string;
+  items: string[];
+}
+
+export type SectionContent = string | NestedContent;
+
+export interface Section {
+  id: string;
+  title: string;
+  content: SectionContent[];
+}
+
+export interface TermsOfService {
+  title: string;
+  description: string;
+  lastUpdated: string;
+  sections: Section[];
+}
+
+export interface TermsData {
+  termsOfService: TermsOfService;
+}
+
+
+const termsData:TermsData = {
   "termsOfService": {
     "title": "Terms of Service",
     "description": "Please read these terms of service carefully before using our website and purchasing our products.",
@@ -175,7 +202,7 @@ export default function TermsOfServicePage() {
     element?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const renderContent = (content: any[]) => {
+  const renderContent = (content:SectionContent[] ) => {
     return content.map((item, index) => {
       if (typeof item === 'string') {
         return (

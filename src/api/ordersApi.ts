@@ -1,6 +1,12 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQuery from "./api";
-import { CheckoutRequest, CheckOutResponse, OrderDetailsResponse, OrderListResponse, UserOrderListResponse } from "@/interfaces/api/Orders";
+import {
+  CheckoutRequest,
+  CheckOutResponse,
+  OrderDetailsResponse,
+  OrderListResponse,
+  UserOrderListResponse,
+} from "@/interfaces/api/Orders";
 
 const orders = "order/";
 const admin = "admin/";
@@ -10,7 +16,7 @@ interface Search {
 export const ordersApi = createApi({
   reducerPath: "ordersApi",
   baseQuery,
-  tagTypes: ["Orders",'UserOrders'],
+  tagTypes: ["Orders", "UserOrders"],
   endpoints: (builder) => ({
     buyNow: builder.mutation<void, void>({
       query: (formData) => ({
@@ -48,41 +54,48 @@ export const ordersApi = createApi({
       providesTags: ["Orders"],
     }),
     placeOrder: builder.mutation<CheckOutResponse, CheckoutRequest>({
-      query: (body) => (
-        {
-          url: `${orders}place/`,
-          method: "POST",
-          body
-        }
-      ),
+      query: (body) => ({
+        url: `${orders}place/`,
+        method: "POST",
+        body,
+      }),
+    }),
+    orderStatus: builder.query<OrderListResponse, { status?: string; page?: number }>({
+      query: ({ status, page }) => {
+        const params = new URLSearchParams();
+
+        if (status) params.append("order_status", status);
+        if (page) params.append("page", String(page));
+
+        const queryString = params.toString();
+        return `${admin}orders/status/${queryString ? `?${queryString}` : ""}`;
+      },
+      providesTags: ["Orders"],
     }),
     chekOutSession: builder.mutation({
-      query:(body)=>({
-        url:`payment/create-checkout-session/`,
-        method:"POST",
-        body
-      })
+      query: (body) => ({
+        url: `payment/create-checkout-session/`,
+        method: "POST",
+        body,
+      }),
     }),
-    myOrder:builder.query<OrderDetailsResponse,{id:number}>({
-     query: ({ id }) => `my-orders/${id}/`,
+    myOrder: builder.query<OrderDetailsResponse, { id: number }>({
+      query: ({ id }) => `my-orders/${id}/`,
     }),
-    allMyOrder:builder.query<UserOrderListResponse,void>({
+    allMyOrder: builder.query<UserOrderListResponse, void>({
       query: () => `my-orders/`,
-      providesTags: ['UserOrders'],
+      providesTags: ["UserOrders"],
     }),
-    cancellMyOrder:builder.mutation<void,{id:number}>({
-      query: ({id})=>(
-        {
-          url:`my-orders/${id}/cancel/`,
-          method:"POST",
-        }
-      )
-  
-    })
+    cancellMyOrder: builder.mutation<void, { id: number }>({
+      query: ({ id }) => ({
+        url: `my-orders/${id}/cancel/`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
-export const{
+export const {
   useBuyNowMutation,
   useUpdateStatusMutation,
   useDeleteOrderMutation,
@@ -93,5 +106,6 @@ export const{
   useChekOutSessionMutation,
   useMyOrderQuery,
   useAllMyOrderQuery,
-  useCancellMyOrderMutation
-}=ordersApi;
+  useCancellMyOrderMutation,
+  useOrderStatusQuery
+} = ordersApi;

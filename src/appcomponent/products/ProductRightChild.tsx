@@ -1,5 +1,4 @@
 "use client";
-import { DiselHeater } from "@/interfaces";
 import { ShoppingCart, Star } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -16,14 +15,17 @@ interface ProductRightProps {
 export const ProductRightChild = ({ product }: ProductRightProps) => {
   const [quantity, setQuantity] = useState(1);
   const [cart, { isLoading }] = useAddToCartMutation();
-  if (!product) return <div>Product not found</div>;
   const router = useRouter();
+  if (!product) return <div>Product not found</div>;
+  
 
   const unitPrice = product.price;
   const totalPrice = (parseFloat(product.price) * quantity).toFixed(2);
 
   const increase = () => {
+    console.log("Available Stock:", product.available_stock);
     if (product.available_stock && quantity < product.available_stock) {
+      console.log("Increasing quantity");
       setQuantity(quantity + 1);
     }
   };
@@ -68,7 +70,7 @@ export const ProductRightChild = ({ product }: ProductRightProps) => {
       </div>
 
       {/* Subtitle */}
-      <p className="text-sm text-[#BAB8B8]">{product.category.name}</p>
+      <p className="text-sm text-[#BAB8B8]">{product.category_detail.name}</p>
 
       {/* Title */}
       <h1 className="text-3xl font-bold text-white">{product.title}</h1>

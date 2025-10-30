@@ -21,7 +21,7 @@ import { ProductResponse } from "@/interfaces/api";
 
 interface Props {
   onEdit: (product: ProductResponse) => void;
-  openAdd: (product: ProductResponse) => void;
+  openAdd: () => void;
 }
 
 export const ProductTable = ({ onEdit, openAdd }: Props) => {
@@ -39,7 +39,7 @@ export const ProductTable = ({ onEdit, openAdd }: Props) => {
   const filteredProducts = useMemo(
     () =>
       allProduct?.results.filter((p) =>
-        `${p.title} ${p.category?.name} ${p.description}`
+        `${p.title} ${p.category_detail?.name} ${p.description}`
           .toLowerCase()
           .includes(search.toLowerCase())
       ),
@@ -72,7 +72,7 @@ export const ProductTable = ({ onEdit, openAdd }: Props) => {
           />
         </div>
         <div className="flex py-4">
-          <Button onClick={() => openAdd}>Add Products</Button>
+          <Button onClick={() => openAdd()}>Add Products</Button>
         </div>
       </div>
 
@@ -83,7 +83,9 @@ export const ProductTable = ({ onEdit, openAdd }: Props) => {
             <TableHead className="text-white">Name</TableHead>
             <TableHead className="text-white">Category</TableHead>
             <TableHead className="text-white">Price</TableHead>
-            <TableHead className="text-white">Description</TableHead>
+            <TableHead className="text-white w-[150px] overflow-hidden">
+              Description
+            </TableHead>
             <TableHead className="text-white">Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -103,9 +105,13 @@ export const ProductTable = ({ onEdit, openAdd }: Props) => {
                 </div>
               </TableCell>
               <TableCell>{item.title}</TableCell>
-              <TableCell>{item.category.name}</TableCell>
+              <TableCell>
+                <div className="text-white">{item.category_detail.name}</div>
+              </TableCell>
               <TableCell>{item.price}</TableCell>
-              <TableCell className="line-clamp-2">{item.description}</TableCell>
+              <TableCell className="line-clamp-2 px-2 ">
+                {item.description?.slice(0, 30)}...
+              </TableCell>
               <TableCell>
                 <div className="flex gap-2 items-center">
                   <Button

@@ -102,7 +102,9 @@ export const ContactForm = () => {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
 
     // Validation
@@ -140,13 +142,16 @@ export const ContactForm = () => {
       formDataToSend.append("subject", formData.subject);
       formDataToSend.append("message", formData.message);
       await submitContact(formDataToSend).unwrap();
-      toast.success("Message sent successfully! We'll get back to you within 24 hours.");
+      toast.success(
+        "Message sent successfully! We'll get back to you within 24 hours."
+      );
       resetForm();
-    } catch (error: any) {
+    } catch (err: unknown) {
+      // safely type cast
+      const error = err as Error; // or more strictly if you know the shape
       const errorMessage =
-        error?.data?.message ||
-        error?.data?.error ||
-        "Failed to send message. Please try again.";
+        error?.message || "Failed to send message. Please try again later.";
+
       toast.error(errorMessage);
     }
   };

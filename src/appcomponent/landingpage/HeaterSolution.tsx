@@ -35,7 +35,7 @@ export const HeaterSolution = () => {
                 main_image={item.main_image}
                 description={item.description}
                 price={item.price}
-                category={item.category}
+                category_detail={item.category_detail}
                 title={item.title}
                 key={item.id}
                 id={item.id}
