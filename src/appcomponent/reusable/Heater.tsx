@@ -5,6 +5,8 @@ import { ProductResponse } from "@/interfaces/api";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { escape } from "querystring";
 import { toast } from "sonner";
 
 export const Heater = ({
@@ -16,11 +18,20 @@ export const Heater = ({
   price,
 }: ProductResponse) => {
   const [cart, { isLoading }] = useAddToCartMutation();
+  const route = useRouter();
 
   async function addToCart(id: number) {
+    const token = await cookieStore.get("access");
+    if (!token) {
+      toast.error("You need to login first");
+      setTimeout(() => {
+         route.push("/login");
+      }, 1000);
+      return;
+    }
     try {
-      const res= await cart({ product_id: id, quantity: 1 }).unwrap();
-      console.log("Product added to cart",res);
+      const res = await cart({ product_id: id, quantity: 1 }).unwrap();
+      console.log("Product added to cart", res);
       toast.success("Product added to cart");
     } catch (error) {
       console.error("Failed to add to cart:", error);
@@ -54,8 +65,9 @@ export const Heater = ({
             onClick={(e) => {
               e.preventDefault(); // stop <Link> from triggering
               e.stopPropagation(); // stop bubbling to parent
+
               addToCart(id);
-              console.log("Added to cart"); // here call your add-to-cart api
+              console.log("Added to cart"); // here call your add-to-cart ap
             }}
             className="mt-3 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isLoading}

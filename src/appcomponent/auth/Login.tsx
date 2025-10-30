@@ -48,7 +48,7 @@ export const Login = () => {
       try {
         const res = await login(formData).unwrap();
         console.log("Login successful", res);
-        setAuthTokens(res.token.access, res.token.refresh);
+        setAuthTokens(res.token.access, res.token.refresh, res.user.role);
         router.push("/");
       } catch (err) {
         console.error("Login failed", err);

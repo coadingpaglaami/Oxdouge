@@ -24,6 +24,13 @@ export interface UpdateProfileRequest {
   profile_image?: File;
 }
 
+export interface ContactFormPayload {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
 const profileEndpoint = "profile/";
 
 export const profileApi = createApi({
@@ -47,10 +54,18 @@ export const profileApi = createApi({
       }),
       invalidatesTags: ["Profile"],
     }),
+    contactUs: builder.mutation<void, FormData>({
+      query: (body) => ({
+        url: `send/message/`, 
+        method: "POST",
+        body
+      })
+    })
   }),
 });
 
 export const {
   useGetProfileQuery,
   useUpdateProfileMutation,
+  useContactUsMutation,
 } = profileApi;
