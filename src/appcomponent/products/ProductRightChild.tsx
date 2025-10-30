@@ -5,6 +5,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { ProductResponse } from "@/interfaces/api";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useAddToCartMutation } from "@/api/cartApi";
 
 interface ProductRightProps {
   product: ProductResponse | undefined;
@@ -12,7 +15,9 @@ interface ProductRightProps {
 
 export const ProductRightChild = ({ product }: ProductRightProps) => {
   const [quantity, setQuantity] = useState(1);
+  const [cart, { isLoading }] = useAddToCartMutation();
   if (!product) return <div>Product not found</div>;
+  const router = useRouter();
 
   const unitPrice = product.price;
   const totalPrice = (parseFloat(product.price) * quantity).toFixed(2);
@@ -28,6 +33,30 @@ export const ProductRightChild = ({ product }: ProductRightProps) => {
       setQuantity(quantity - 1);
     }
   };
+
+  async function addToCart() {
+    const token = await cookieStore.get("access");
+    if (!token) {
+      toast.error("You need to login first");
+      setTimeout(() => {
+        router.push("/login");
+      }, 1000);
+      return;
+    }
+    try {
+      if (!product?.id) {
+        toast.error("Invalid product");
+        return;
+      }
+      const res = await cart({ product_id: product?.id, quantity }).unwrap();
+      console.log("Product added to cart", res);
+      toast.success("Product added to cart");
+      router.push("/cart");
+    } catch (error) {
+      console.error("Failed to add to cart:", error);
+      toast.error("Failed to add to cart");
+    }
+  }
 
   return (
     <div className="flex flex-col gap-6 w-full md:w-1/2">
@@ -118,8 +147,12 @@ export const ProductRightChild = ({ product }: ProductRightProps) => {
       </div>
 
       {/* Add to Cart Button */}
-      <Button className="w-full mt-4">
-        <ShoppingCart /> Add To Cart
+      <Button
+        className="w-full mt-4 disabled:cursor-not-allowed disabled:opacity-50"
+        disabled={isLoading}
+        onClick={addToCart}
+      >
+        <ShoppingCart /> {isLoading ? "Adding..." : "Add to Cart"}
       </Button>
     </div>
   );

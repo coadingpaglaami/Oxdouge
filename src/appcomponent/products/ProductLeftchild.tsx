@@ -2,7 +2,7 @@
 import { DiselHeater } from '@/interfaces';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ProductResponse } from '@/interfaces/api';
 
 interface ProductLeftProps {
@@ -11,7 +11,36 @@ interface ProductLeftProps {
 
 export const ProductLeftChild = ({ product }: ProductLeftProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [thumbnail, setThumbnail] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Generate thumbnail from first frame
+  useEffect(() => {
+    const video = document.createElement("video");
+    video.src = product?.video || "";
+    video.crossOrigin = "anonymous"; // needed if CORS video
+    video.muted = true;
+
+    const captureThumbnail = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageUrl = canvas.toDataURL("image/png");
+        setThumbnail(imageUrl);
+      }
+    };
+
+    video.addEventListener("loadeddata", captureThumbnail);
+    return () => {
+      video.removeEventListener("loadeddata", captureThumbnail);
+    };
+  }, [product?.video]);
+
+  console.log("Thumbnail URL:", thumbnail);
 
   if (!product) return <div>Product not found</div>;
 
@@ -53,26 +82,35 @@ export const ProductLeftChild = ({ product }: ProductLeftProps) => {
 
       {/* How to Use Video */}
       <div className="flex flex-col gap-2">
-        <h3 className="text-lg font-semibold">How to Use</h3>
+        <h3 className="text-lg font-semibold text-white">How to Use</h3>
         <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
-          {!isVideoPlaying && (
-            <button
-              onClick={() => setIsVideoPlaying(true)}
-              className="absolute inset-0 m-auto w-16 h-16 flex items-center justify-center bg-primary/50 rounded-full"
-            >
-              <Play className="text-white" />
-            </button>
-          )}
-          {isVideoPlaying && product.video && (
-            <iframe
-              src={product.video + '?autoplay=1'}
-              title="How to Use Video"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full"
-            ></iframe>
-          )}
+           {!isVideoPlaying && (
+        <>
+          <Image
+            src={thumbnail || "/placeholder.png"} // fallback while thumbnail loads
+            alt="Video thumbnail"
+            fill
+            className="w-full h-full object-cover"
+          />
+          <button
+            onClick={() => setIsVideoPlaying(true)}
+            className="absolute inset-0 m-auto w-16 h-16 flex items-center justify-center bg-primary/50 rounded-full"
+          >
+            <Play className="text-white" />
+          </button>
+        </>
+      )}
+
+      {/* Video player */}
+      {isVideoPlaying && product.video && (
+        <video
+          ref={videoRef}
+          src={product.video}
+          controls
+          autoPlay
+          className="w-full h-full"
+        />
+      )}
         </div>
       </div>
     </div>

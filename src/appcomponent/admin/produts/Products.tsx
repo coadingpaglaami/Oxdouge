@@ -38,12 +38,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ProductResponse } from "@/interfaces/api";
+import { PaginatedProductsResponse, ProductResponse } from "@/interfaces/api";
 
-type Product = (typeof initialProducts)[number];
+
 
 export const Prodcuts = () => {
-  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [page, setPage] = useState(1);
+  const { data: allProduct, isLoading: productLoad } = useGetProductQuery(page);
+  const [products, setProducts] = useState<PaginatedProductsResponse>();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<ProductResponse | null>(null);
   const [addProduct, { isLoading }] = useAddProductMutation();
@@ -52,7 +54,7 @@ export const Prodcuts = () => {
     useGetCategoryQuery();
   const [addcategory, { isLoading: cateLoading }] = useAddCategoryMutation();
   const { data: productDetails } = useGetProductDetailsQuery(1);
-  const { data: allProduct, isLoading: productLoad } = useGetProductQuery();
+  // const { data: allProduct, isLoading: productLoad } = useGetProductQuery(page);
   const [deleteProduct, { isLoading: deleting }] = useDelteteProductMutation();
   const [selected, setSelected] = useState<string | undefined>();
 
@@ -76,6 +78,13 @@ export const Prodcuts = () => {
   const moreInputRef = useRef<HTMLInputElement | null>(null);
   const videoInputRef = useRef<HTMLInputElement | null>(null);
 
+  const totalPages = allProduct ? Math.ceil(allProduct.count / 10) : 1;
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setPage(newPage);
+    }
+  };
   // Reset form
   const resetForm = () => {
     setTitle("");
@@ -103,7 +112,7 @@ export const Prodcuts = () => {
       setCategory(Number(editing.category) ?? "");
       setSelected(String(editing.category));
       setPrice(editing.price);
-      setDescription(editing.description);
+      setDescription(editing.description || "");
       setQuantity(editing.available_stock ?? 0);
       setMainImagePreview(editing.main_image ?? null);
       setMoreImagePreviews(editing.images ?? []);
@@ -301,7 +310,7 @@ export const Prodcuts = () => {
 
   // Search filter
   const [search, setSearch] = useState("");
-  const filtered = products.filter((p) =>
+  const filtered = products?.results.filter((p) =>
     `${p.title} ${p.category} ${p.description}`
       .toLowerCase()
       .includes(search.toLowerCase())
@@ -351,7 +360,7 @@ export const Prodcuts = () => {
                 <TableCell className="bg-[#18181B]">
                   <div className="w-20 h-20 relative">
                     <Image
-                      src={item.main_image}
+                      src={item.main_image || ""}
                       alt={item.title}
                       fill
                       className="object-cover rounded"
@@ -363,7 +372,7 @@ export const Prodcuts = () => {
                   {item.title}
                 </TableCell>
                 <TableCell className="max-w-[120px] truncate bg-[#18181B]">
-                  {item.category}
+                  {item.category.name}
                 </TableCell>
                 <TableCell className="max-w-[100px] bg-[#18181B]">
                   {item.price}
@@ -397,6 +406,26 @@ export const Prodcuts = () => {
               </TableRow>
             ))}
           </TableBody>
+          <div className="flex justify-center items-center gap-2 mt-4">
+            {allProduct?.previous && (
+              <Button onClick={() => handlePageChange(page - 1)}>Prev</Button>
+            )}
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <Button
+                key={p}
+                variant={p == page ? "default" : "outline"}
+                className={p === page ? "bg-primary " : ""}
+                onClick={() => handlePageChange(p)}
+              >
+                {p}
+              </Button>
+            ))}
+
+            {allProduct?.next && (
+              <Button onClick={() => handlePageChange(page + 1)}>Next</Button>
+            )}
+          </div>
         </Table>
       </div>
 

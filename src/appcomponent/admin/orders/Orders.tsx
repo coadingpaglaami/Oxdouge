@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Breadcrumb } from "@/appcomponent/reusable";
 import { adminOrder } from "@/data/AdminOrderData";
 import {
@@ -48,9 +48,11 @@ import {
 } from "@/components/ui/alert-dialog";
 export const Orders = () => {
   const [selectedStatus, setSelectedStatus] = useState("All Orders");
+  const [page, setPage] = useState(1);
   const [selectedOrder, setSelectedOrder] =
     useState<OrderDetailsResponse | null>(null);
-  const { data: order, isLoading } = useGetAllOrdersQuery();
+  const { data: order, isLoading } = useGetAllOrdersQuery(page);
+  const totalPages = order ? Math.ceil(order.count / 10) : 1;
   const [statusUpdate, { isLoading: statusUpdating }] =
     useUpdateStatusMutation();
   const [orderDelete, { isLoading: Delting }] = useDeleteOrderMutation();
@@ -64,7 +66,11 @@ export const Orders = () => {
       toast.error("Failed to delete order");
     }
   };
-
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setPage(newPage);
+    }
+  };
   // Add a default fallback style
   const statusStyles: Record<string, { bg: string; text: string }> = {
     PENDING: { bg: "bg-primary/30", text: "text-primary" },
@@ -84,8 +90,7 @@ export const Orders = () => {
   const filteredOrders =
     selectedStatus === "All Orders"
       ? order?.results || []
-      : order?.results.filter((orde) => orde.order_status === selectedStatus) ||
-        [];
+      : order?.results.filter((o) => o.order_status === selectedStatus) || [];
 
   return (
     <>
@@ -215,6 +220,26 @@ export const Orders = () => {
                 </TableRow>
               ))}
             </TableBody>
+            <div className="flex justify-center items-center gap-2 mt-4">
+              {order?.previous && (
+                <Button onClick={() => handlePageChange(page - 1)}>Prev</Button>
+              )}
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                <Button
+                  key={p}
+                  variant={p == page ? "default" : "outline"}
+                  className={p === page ? "bg-primary " : ""}
+                  onClick={() => handlePageChange(p)}
+                >
+                  {p}
+                </Button>
+              ))}
+
+              {order?.next && (
+                <Button onClick={() => handlePageChange(page + 1)}>Next</Button>
+              )}
+            </div>
           </Table>
         </div>
       </div>
@@ -259,9 +284,9 @@ export const Orders = () => {
                 <div className="flex flex-col gap-2.5">
                   <Label className="text-gray-400">Current Status</Label>
                   <span
-                    className={`px-3 py-1 rounded-full text-sm font-medium w-fit ${getStatusStyle(selectedOrder.order_status).bg} ${
-                          getStatusStyle(selectedOrder.order_status).text
-                        }`}
+                    className={`px-3 py-1 rounded-full text-sm font-medium w-fit ${
+                      getStatusStyle(selectedOrder.order_status).bg
+                    } ${getStatusStyle(selectedOrder.order_status).text}`}
                   >
                     {selectedOrder.order_status}
                   </span>
@@ -304,7 +329,6 @@ export const Orders = () => {
                       className="text-primary"
                       defaultValue={selectedOrder.order_status.toUpperCase()}
                     />
-                    {console.log("Selected Order Status:", selectedOrder.order_status)}
                   </SelectTrigger>
                   <SelectContent className="w-full bg-neutral-900 text-white">
                     {Object.keys(statusStyles)

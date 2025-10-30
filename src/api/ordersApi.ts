@@ -35,8 +35,8 @@ export const ordersApi = createApi({
       }),
       invalidatesTags: ["Orders"],
     }),
-    getAllOrders: builder.query<OrderListResponse, void>({
-      query: () => `orders/`,
+    getAllOrders: builder.query<OrderListResponse, number | void>({
+      query: (page = 1) => `orders/?page=${page}`,
       providesTags: ["Orders"],
     }),
     orderDetails: builder.query<void, number>({

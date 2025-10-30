@@ -1,5 +1,5 @@
 export interface ProductResponse {
-  id: number;
+  id: number | undefined;
   title: string;
   product_code?: string;
   category: CategoryResponse;

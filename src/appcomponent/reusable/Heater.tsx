@@ -66,7 +66,7 @@ export const Heater = ({
               e.preventDefault(); // stop <Link> from triggering
               e.stopPropagation(); // stop bubbling to parent
 
-              addToCart(id);
+              addToCart(id!);
               console.log("Added to cart"); // here call your add-to-cart ap
             }}
             className="mt-3 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"

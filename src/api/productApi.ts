@@ -35,9 +35,9 @@ export const productApi = createApi({
       }),
       invalidatesTags: ["Product"],
     }),
-    getProduct: builder.query<PaginatedProductsResponse, void>({
-      query: () => ({
-        url: `${admin}products/`,
+    getProduct: builder.query<PaginatedProductsResponse, void | number>({
+      query: (page=1) => ({
+        url: `${admin}products/?page=${page}`,
         method: "GET",
       }),
       providesTags: ["Product"],

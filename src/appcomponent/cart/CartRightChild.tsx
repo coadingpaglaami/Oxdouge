@@ -10,7 +10,11 @@ import { useApplyCouponMutation } from "@/api/couponApi";
 import { toast } from "sonner";
 import { ApplyCouponResponse } from "@/interfaces/api/Coupon";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { useChekOutSessionMutation, usePlaceOrderMutation } from "@/api/ordersApi";
+import {
+  useChekOutSessionMutation,
+  usePlaceOrderMutation,
+} from "@/api/ordersApi";
+import { useSearchParams } from "next/navigation";
 
 interface CartRightChildProps {
   cartItems: CartItemResponse[];
@@ -21,6 +25,7 @@ export const CartRightChild = ({
   cartItems,
   selectedItems,
 }: CartRightChildProps) => {
+  const searchParam = useSearchParams();
   const [selectedAddress, setSelectedAddress] = useState<number>(
     shippingAddresses.find((a) => a.isDefault)?.id ?? shippingAddresses[0].id
   );
@@ -32,7 +37,7 @@ export const CartRightChild = ({
   const [placeOrder, { isLoading: placing }] = usePlaceOrderMutation();
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"COD" | "ONLINE" | "">("");
-  const [checkOut,{isLoading:checking}]=useChekOutSessionMutation();
+  const [checkOut, { isLoading: checking }] = useChekOutSessionMutation();
 
   // Filter only selected items
   const selectedCartItems = cartItems.filter((item) =>
@@ -74,9 +79,11 @@ export const CartRightChild = ({
         coupon_code: couponCode,
       }).unwrap();
       console.log("Order placed successfully:", res);
-      if(paymentMethod==="ONLINE"){
-        const checkoutRes=await checkOut({order_id:res.order_id}).unwrap();
-        window.location.href=checkoutRes.url;
+      if (paymentMethod === "ONLINE") {
+        const checkoutRes = await checkOut({ order_id: res.order_id }).unwrap();
+        window.location.href = checkoutRes.url;
+      } else {
+        window.location.href = `/cart?order_id=${res.order_id}`;
       }
       toast.success("Order placed successfully");
     } catch (error) {
@@ -84,7 +91,6 @@ export const CartRightChild = ({
       toast.error("Failed to place order");
     }
   };
-
 
   return (
     <div className="flex flex-col border border-primary p-6 gap-6 w-full rounded-lg">
