@@ -112,7 +112,7 @@ export const SignUp = () => {
     <div className="flex justify-center items-center min-h-[91vh] max-w-[80vw] mx-auto">
       <div className="flex items-stretch w-full h-full bg-[#121212] rounded-lg overflow-hidden gap-10 p-6">
         {/* LEFT IMAGE */}
-        <div className="w-1/2 relative" style={{ aspectRatio: "3/3.1" }}>
+        <div className="w-1/2 relative md:hidden" style={{ aspectRatio: "3/3.1" }}>
           <Image
             src="/auth/signup.png"
             alt="Signup"
