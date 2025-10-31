@@ -112,7 +112,7 @@ export const SecurityTab = () => {
       toast.success("Password updated successfully");
       resetForm();
     } catch (error: unknown) {
-      console.error("Failed to place order:", error);
+      console.error("Failed To Update Password", error);
 
       // Type-safe access
       const err = error as {
@@ -124,7 +124,7 @@ export const SecurityTab = () => {
         err?.data?.detail ||
         err?.data?.message ||
         err?.message ||
-        "Failed to place order";
+        "Password change failed";
 
       toast.error(message);
     }

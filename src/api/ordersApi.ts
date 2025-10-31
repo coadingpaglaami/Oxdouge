@@ -91,6 +91,7 @@ export const ordersApi = createApi({
         url: `my-orders/${id}/cancel/`,
         method: "POST",
       }),
+      invalidatesTags: ["UserOrders"],
     }),
   }),
 });

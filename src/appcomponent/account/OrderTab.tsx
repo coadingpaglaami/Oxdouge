@@ -172,25 +172,11 @@ import {
 } from "@/components/ui/dialog";
 import { useAllMyOrderQuery, useCancellMyOrderMutation } from "@/api/ordersApi";
 import { useReviewProductMutation } from "@/api/productApi";
-import { ProductResponse } from "@/interfaces/api";
-import { OrderDetailsResponse, OrderListResponse, UserOrderItemSummary, UserOrderSummary } from "@/interfaces/api/Orders";
+import {   UserOrderItemSummary, UserOrderSummary } from "@/interfaces/api/Orders";
 import { toast } from "sonner";
 
-interface OrderItem {
-  product: string;
-  quantity: number;
-  price: number;
-}
 
-interface Order {
-  id: number;
-  order_number: string;
-  user_email: string;
-  order_status: "PENDING" | "SHIPPED" | "DELIVERED" | "CANCELLED";
-  total_amount: string;
-  created_at: string;
-  order_items: OrderItem[];
-}
+
 
 export const OrderTab = () => {
   const [cancelDialog, setCancelDialog] = useState(false);

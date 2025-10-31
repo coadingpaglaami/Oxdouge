@@ -227,7 +227,7 @@ export const Settings = () => {
       toast.success("Profile updated successfully");
       setEditProfile(false);
     } catch (error: unknown) {
-      console.error("Failed to place order:", error);
+      console.error("Failed To Update Profile", error);
 
       // Type-safe access
       const err = error as {
@@ -239,7 +239,7 @@ export const Settings = () => {
         err?.data?.detail ||
         err?.data?.message ||
         err?.message ||
-        "Failed to place order";
+        "Password change failed";
 
       toast.error(message);
     }
@@ -291,7 +291,7 @@ export const Settings = () => {
       setShowNewPwd(false);
       setShowConfirmPwd(false);
     } catch (error: unknown) {
-      console.error("Failed to place order:", error);
+      console.error("Password Changed Fail:", error);
 
       // Type-safe access
       const err = error as {
@@ -303,7 +303,7 @@ export const Settings = () => {
         err?.data?.detail ||
         err?.data?.message ||
         err?.message ||
-        "Failed to place order";
+        "Password change failed";
 
       toast.error(message);
     }

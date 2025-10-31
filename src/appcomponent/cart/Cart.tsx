@@ -467,14 +467,14 @@ export const Cart = () => {
                   <div className="text-right">
                     {item.product_discount > 0 && (
                       <p className="text-sm text-white line-through">
-                        ৳{item.product.price}
+                        ${item.product.price} 
                       </p>
                     )}
                     <p className="font-semibold text-white">
-                      ৳{item.final_price}
+                      ${item.final_price}
                     </p>
                     <p className="text-sm text-white">
-                      Total: ৳{item.line_total}
+                      Total: ${item.line_total}
                     </p>
                   </div>
                 </div>
