@@ -122,7 +122,7 @@ export const SignUp = () => {
         </div>
 
         {/* RIGHT CONTENT */}
-        <div className="w-1/2 flex flex-col justify-center text-white gap-4">
+        <div className="md:w-1/2 w-full flex flex-col justify-center text-white gap-4">
           {/* HEADER */}
           <h2 className="text-3xl font-semibold text-primary">
             Create Account
