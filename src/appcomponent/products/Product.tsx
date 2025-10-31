@@ -144,7 +144,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Heater } from "../reusable";
-import { useGetCategoryQuery, useGetProductUserQuery } from "@/api/productApi";
+import {  useGetProductUserQuery, useGetUserCategoryQuery } from "@/api/productApi";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 
 export const Products = () => {
@@ -163,7 +163,7 @@ export const Products = () => {
     data: categoryData,
     isLoading: categoryLoading,
     isFetching,
-  } = useGetCategoryQuery({ page });
+  } = useGetUserCategoryQuery({ page });
 
   const limit = 10;
   const categories = categoryData?.results || [];

@@ -39,7 +39,7 @@ export const Sidebar = () => {
   return (
     <div className="flex flex-col h-full p-6 gap-8 bg-[#121212]">
       {/* Logo */}
-      <Link href='/admin' className="flex justify-center">
+      <Link href='/' className="flex justify-center">
         <Image
           src="/landing/logo.svg"
           alt="Logo"

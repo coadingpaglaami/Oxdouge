@@ -82,9 +82,16 @@ export const WhyChoose = () => {
       {/* ---------- Top Section ---------- */}
       <div className="flex flex-col items-center text-center">
         {/* Header */}
-        <div className="flex items-center gap-2 md:text-4xl text-2xl font-bold">
+        <div className="flex items-center gap-2 md:text-4xl text-2xl font-bold relative">
           <h2 className="text-white  ">Why choose</h2>
           <span className="text-primary">Overland Tech</span>
+          <Image
+            src="/landing/quotation.svg"
+            alt="line"
+            width={50}
+            height={20}
+            className="absolute -right-16 -top-7 md:block hidden"
+          />
         </div>
 
         {/* Quote */}

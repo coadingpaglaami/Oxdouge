@@ -71,6 +71,10 @@ export const productApi = createApi({
       query: ({ page }) => `${admin}categories/${page ? `?page=${page}` : ""}`,
       providesTags: ["Category"],
     }),
+        getUserCategory: builder.query<PaginatedCategories, { page?: number }>({
+      query: ({ page }) => `categories/${page ? `?page=${page}` : ""}`,
+      providesTags: ["Category"],
+    }),
     editProduct: builder.mutation<ProductResponse, EditProductArgs>({
       query: ({ id, formData }) => ({
         url: `${admin}products/${id}/`,
@@ -128,4 +132,5 @@ export const {
   useReviewProductMutation,
   useCategoryDeleteMutation,
   useReviewListQuery,
+  useGetUserCategoryQuery
 } = productApi;
