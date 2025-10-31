@@ -13,7 +13,7 @@ interface ProductDetailsProps {
 
 export const ProductDetails = ({ id }: ProductDetailsProps) => {
   const{data,isLoading}=useProductDetailsQuery(id);
-  const{data:productData,isLoading:productDataLoading}=useGetProductUserQuery();
+  const{data:productData,isLoading:productDataLoading}=useGetProductUserQuery({});
   console.log(isLoading,productDataLoading)
 
   const related = productData?.results?.filter((p) => p.id !== id).slice(0, 4) || []; // get 3 related products excluding current

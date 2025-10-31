@@ -70,7 +70,7 @@ export const ProductRightChild = ({ product }: ProductRightProps) => {
       </div>
 
       {/* Subtitle */}
-      <p className="text-sm text-[#BAB8B8]">{product.category_detail.name}</p>
+      <p className="text-sm text-[#BAB8B8]">{product.category_detail?.name}</p>
 
       {/* Title */}
       <h1 className="text-3xl font-bold text-white">{product.title}</h1>
