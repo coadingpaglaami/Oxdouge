@@ -1,4 +1,5 @@
-import { Products } from "@/appcomponent/optimize"
+
+import { Products } from "@/appcomponent/products/Product"
 
 export default function ProductsPage() {
     return <Products />

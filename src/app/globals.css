@@ -157,7 +157,7 @@
 
   /* ✅ Primary: #FFD345 */
   /* OKLCH approx: oklch(0.92 0.12 90) */
-  --primary: oklch(0.92 0.12 90);
+  --primary: #FFD345;
   --primary-foreground: oklch(0.15 0 0); /* black text on yellow */
 
   /* ✅ Secondary (solid fill button): #FFDF76 */
