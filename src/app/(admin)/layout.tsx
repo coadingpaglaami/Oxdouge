@@ -28,9 +28,7 @@ export default function AdminLayout({
         </div>
 
         {/* Scrollable Children */}
-        <div className="flex-1 overflow-y-auto p-6">
-          <UserLayout>{children}</UserLayout>
-        </div>
+        <div className="flex-1 overflow-y-auto p-6">{children}</div>
       </div>
     </div>
   );

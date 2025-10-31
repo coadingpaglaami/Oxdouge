@@ -12,4 +12,6 @@ export interface CartItemResponse {
   price: number;
   total_price: number;
   image: string;
+  error?:string;
 }
+

@@ -40,10 +40,13 @@ export const Heater = ({
     try {
       const res = await cart({ product_id: id, quantity: 1 }).unwrap();
       console.log("Product added to cart", res);
-      toast.success("Product added to cart");
+      
+        toast.success("Product added to cart");
+      
     } catch (error) {
-      console.error("Failed to add to cart:", error);
-      toast.error("Failed to add to cart");
+      const err = error as Error
+      console.error("Failed to add to cart:", err);
+      toast.error(err.message || "Failed to add to cart");
     }
   }
 

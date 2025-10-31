@@ -1,16 +1,18 @@
-"use client";
-import { store } from "@/store/store";
-import { Provider } from "react-redux";
-import { Toaster } from "sonner";
+'use client'
+import { useRef } from 'react'
+import { Provider } from 'react-redux'
+import { store, AppStore } from '@/store/store'
+
 export default function UserLayout({
-  children,
+  children
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
-  return (
-    <Provider store={store}>
-      {children}
-      <Toaster position="top-center" />
-    </Provider>
-  );
+  const storeRef = useRef<AppStore | null>(null)
+  if (!storeRef.current) {
+    // Create the store instance the first time this renders
+    storeRef.current = store()
+  }
+
+  return <Provider store={storeRef.current}>{children}</Provider>
 }

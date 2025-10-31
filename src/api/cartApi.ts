@@ -16,7 +16,7 @@ export const cartApi = createApi({
     }),
 
     // ✅ ADD item to cart  (POST)
-    addToCart: builder.mutation<void, AddToCartRequest>({
+    addToCart: builder.mutation<CartItemResponse, AddToCartRequest>({
       query: (body) => ({
         url: endpoint,
         method: "POST",

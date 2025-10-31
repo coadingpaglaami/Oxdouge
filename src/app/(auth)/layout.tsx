@@ -23,10 +23,7 @@ export default function AuthLayOut({
         <NavBar />
       </div>
       <main>
-        <UserLayout>
           {children}
-
-        </UserLayout>
       </main>
     </div>
   );

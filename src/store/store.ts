@@ -8,7 +8,8 @@ import { shippingApi } from "@/api/shippingApi";
 import { profileApi } from "@/api/profileApi"; // Import the profile API
 import { configureStore } from "@reduxjs/toolkit";
 
-export const store = configureStore({
+export const store = ()=>{
+return configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
     [productApi.reducerPath]: productApi.reducer,
@@ -31,6 +32,8 @@ export const store = configureStore({
       dashboardApi.middleware
     ),
 });
+}
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<AppStore['getState']>
+export type AppDispatch = AppStore['dispatch']
+export type AppStore = ReturnType<typeof store>
