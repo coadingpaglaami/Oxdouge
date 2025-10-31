@@ -2,8 +2,8 @@ export interface ProductResponse {
   id: number | undefined;
   title: string;
   product_code?: string;
-  category_detail: CategoryResponse;
-  category?:string;
+  category_detail?: CategoryResponse;
+  category?:number | string;
   colors?: string[]; // Array of hex color codes
   available_stock?: number;
   price: string; // Keeping as string to match API
@@ -52,4 +52,15 @@ export interface PaginatedCategories {
 export interface CategoryResponse {
   id: number;
   name: string;
+}
+
+export interface ProductReviewResponse {
+  id: number;
+  product: string;
+  user: string;
+  name: string;
+  rating: string; // comes as string ("5.0", "4.0"), not number
+  user_image: string | null;
+  comment: string;
+  created_at: string;
 }

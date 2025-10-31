@@ -14,8 +14,8 @@ export const dashboardApi = createApi({
       }),
       providesTags: ["Dashboard"],
     }),
-    getContacts: builder.query<ContactListResponse, void>({
-      query: () => "contact/admin/", // replace with your actual endpoint
+    getContacts: builder.query<ContactListResponse, { page: number }>({
+      query: ({page}) => `contact/admin/${page ? `?page=${page | 1}` : ""}`, // replace with your actual endpoint
     }),
     replyMessage: builder.mutation<void, { id: number; admin_reply: string }>({
       query: ({ id, admin_reply }) => ({
@@ -28,9 +28,14 @@ export const dashboardApi = createApi({
       query: (id) => ({
         url: `contact/admin/${id}/`,
         method: "DELETE",
-      })
-    })
+      }),
+    }),
   }),
 });
 
-export const { useGetDashboardOverviewQuery,useDeleteMessageMutation,useGetContactsQuery,useReplyMessageMutation } = dashboardApi;
+export const {
+  useGetDashboardOverviewQuery,
+  useDeleteMessageMutation,
+  useGetContactsQuery,
+  useReplyMessageMutation,
+} = dashboardApi;

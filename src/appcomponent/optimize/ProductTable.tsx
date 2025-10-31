@@ -27,7 +27,10 @@ interface Props {
 export const ProductTable = ({ onEdit, openAdd }: Props) => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const { data: allProduct } = useGetProductQuery(page);
+  const { data: allProduct } = useGetProductQuery({
+    page,
+    search,
+  });
   const [deleteProduct] = useDelteteProductMutation();
 
   const totalPages = allProduct ? Math.ceil(allProduct.count / 10) : 1;
@@ -66,7 +69,10 @@ export const ProductTable = ({ onEdit, openAdd }: Props) => {
           </span>
           <input
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
             placeholder="Search products..."
             className="w-full pl-10 pr-3 py-2 rounded bg-[#121212] border border-primary/20 text-white outline-none"
           />
@@ -106,7 +112,7 @@ export const ProductTable = ({ onEdit, openAdd }: Props) => {
               </TableCell>
               <TableCell>{item.title}</TableCell>
               <TableCell>
-                <div className="text-white">{item.category_detail.name}</div>
+                <div className="text-white">{item.category_detail?.name}</div>
               </TableCell>
               <TableCell>{item.price}</TableCell>
               <TableCell className="line-clamp-2 px-2 ">

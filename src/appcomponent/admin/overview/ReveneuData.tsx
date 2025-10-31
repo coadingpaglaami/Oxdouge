@@ -21,7 +21,7 @@ export const RevenueData = ({ data }: RevenueDataProps) => {
     <div className="space-y-6">
       <div className="bg-zinc-800 rounded-lg p-6">
         <h3 className="text-sm text-zinc-400 mb-2">Total Revenue</h3>
-        <p className="text-3xl font-bold text-white">৳{totalRevenue.toFixed(2)}</p>
+        <p className="text-3xl font-bold text-white">${totalRevenue.toFixed(2)}</p>
       </div>
       
       <div className="bg-zinc-800 rounded-lg p-6">

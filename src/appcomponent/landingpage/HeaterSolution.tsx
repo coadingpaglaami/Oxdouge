@@ -6,7 +6,7 @@ import { useGetProductUserQuery } from "@/api/productApi";
 import { ProductCardSkeleton } from "../skeleton/ProductCardSkeleton";
 
 export const HeaterSolution = () => {
-  const { data: product, isLoading } = useGetProductUserQuery();
+  const { data: product, isLoading } = useGetProductUserQuery({});
   const router = useRouter();
   return (
     <div className="flex flex-col">
@@ -30,17 +30,9 @@ export const HeaterSolution = () => {
           ? Array(4)
               .fill(0)
               .map((_, index) => <ProductCardSkeleton key={index} />)
-          : product?.results.map((item) => (
-              <Heater
-                main_image={item.main_image}
-                description={item.description}
-                price={item.price}
-                category_detail={item.category_detail}
-                title={item.title}
-                key={item.id}
-                id={item.id}
-              />
-            ))}
+          : product?.results
+              .slice(0, 4)
+              .map((item) => <Heater key={item.id} {...item} />)}
       </div>
       <Button
         variant="outline"

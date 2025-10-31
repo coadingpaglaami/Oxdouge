@@ -13,11 +13,12 @@ export const Heater = ({
   id,
   main_image,
   title,
-  category,
   description,
+  category_detail,
   price,
 }: ProductResponse) => {
   const [cart, { isLoading }] = useAddToCartMutation();
+  
   const route = useRouter();
   
   async function addToCart(id: number) {
@@ -49,6 +50,7 @@ export const Heater = ({
       toast.error(err.message || "Failed to add to cart");
     }
   }
+  console.log("Rendering Heater component for product ID:", id);
 
   return (
     <Link
@@ -66,7 +68,7 @@ export const Heater = ({
         </div>
 
         <div className="flex flex-col p-6 gap-3">
-          <p className="text-sm text-[#9C9C9C]">{category}</p>
+          <p className="text-sm text-[#9C9C9C]">{category_detail?.name}</p>
           <h3 className="text-xl font-semibold text-white">{title}</h3>
           <p className="text-gray-400 text-sm line-clamp-2 min-h-16">
             {description}

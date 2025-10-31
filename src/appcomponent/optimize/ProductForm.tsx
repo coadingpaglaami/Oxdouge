@@ -22,10 +22,12 @@ import { VideoUploader } from "./VideoUploader";
 import {
   useAddCategoryMutation,
   useAddProductMutation,
+  useCategoryDeleteMutation,
   useEditProductMutation,
   useGetCategoryQuery,
 } from "@/api/productApi";
 import { ProductResponse } from "@/interfaces/api";
+import { Loader2, XIcon } from "lucide-react";
 
 interface Props {
   editing: ProductResponse | null;
@@ -48,20 +50,44 @@ export const ProductForm = ({ editing, onClose }: Props) => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     null
   );
-
-  const { data: categories } = useGetCategoryQuery();
+  const [categoryPage, setCategoryPage] = useState(1);
+  const { data: categories, isFetching } = useGetCategoryQuery({
+    page: categoryPage,
+  });
   const [addCategory, { isLoading: categoryLoading }] =
     useAddCategoryMutation();
   console.log(categoryLoading, selected);
   const [addProduct, { isLoading }] = useAddProductMutation();
   const [editProduct, { isLoading: loadingEdit }] = useEditProductMutation();
+  const [deleteCategory, { isLoading: categoryDeleting }] =
+    useCategoryDeleteMutation();
   const [inputValue, setInputValue] = useState("");
+
+  const filteredCategories =
+    categories?.results?.filter((cat) =>
+      cat.name.toLowerCase().includes(inputValue.toLowerCase())
+    ) || [];
+
+  const hasMorePages =
+    categories?.next !== null && categories?.next !== undefined;
+  const hasPreviousPages =
+    categories?.previous !== null && categories?.previous !== undefined;
 
   const handleSelect = (id: number) => {
     setSelectedCategoryId(id);
     setCategory(id);
     const selected = categories?.results.find((c) => c.id === id);
     if (selected) setInputValue(selected.name);
+  };
+
+  const handleDeleteCategory = async (id: number) => {
+    try {
+      await deleteCategory(id);
+      toast.success("Category deleted successfully");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to delete category");
+    }
   };
 
   const convertUrlsToFiles = async (urls: string[] | undefined) => {
@@ -381,7 +407,7 @@ export const ProductForm = ({ editing, onClose }: Props) => {
                 </Button>
               </PopoverTrigger>
 
-              <PopoverContent className="w-64 p-0 bg-[#121212] border border-primary">
+              {/* <PopoverContent className="w-64 p-0 bg-[#121212] border border-primary">
                 <Command>
                   <CommandInput
                     placeholder="Search or type new category..."
@@ -428,6 +454,101 @@ export const ProductForm = ({ editing, onClose }: Props) => {
                         {'"'} category
                       </CommandItem>
                     )}
+                </Command>
+              </PopoverContent> */}
+              <PopoverContent className="w-64 p-0 bg-[#121212] border border-primary">
+                <Command>
+                  {/* Search */}
+                  <CommandInput
+                    placeholder="Search or type new category..."
+                    value={inputValue}
+                    onValueChange={setInputValue}
+                    className="bg-black text-white"
+                  />
+
+                  <CommandEmpty>No category found.</CommandEmpty>
+
+                  {/* Category List */}
+                  <CommandGroup className="max-h-64 overflow-y-auto">
+                    {isFetching ? (
+                      <div className="flex justify-center py-4">
+                        <Loader2
+                          className="animate-spin text-white"
+                          size={20}
+                        />
+                      </div>
+                    ) : (
+                      filteredCategories.map((cat) => (
+                        <CommandItem
+                          key={cat.id}
+                          onSelect={() => handleSelect(cat.id)}
+                          className={`flex justify-between items-center cursor-pointer ${
+                            selectedCategoryId === cat.id
+                              ? "bg-primary text-black "
+                              : "text-white"
+                          }`}
+                        >
+                          <span>{cat.name}</span>
+
+                          {/* Delete Icon */}
+                          <button
+                            className="p-1 hover:text-red-400"
+                            onClick={(e) => {
+                              e.stopPropagation(); // prevent selecting while deleting
+                              handleDeleteCategory(cat.id);
+                            }}
+                            disabled={categoryDeleting}
+                          >
+                            {categoryDeleting ? (
+                              <Loader2 className="animate-spin" size={14} />
+                            ) : (
+                              <XIcon size={14} />
+                            )}
+                          </button>
+                        </CommandItem>
+                      ))
+                    )}
+                  </CommandGroup>
+
+                  {/* "Create new" option */}
+                  {inputValue &&
+                    !categories?.results?.some(
+                      (cat) =>
+                        cat.name.toLowerCase() === inputValue.toLowerCase()
+                    ) && (
+                      <CommandItem
+                        onSelect={() => createCategory(inputValue)}
+                        className="text-green-400"
+                      >
+                        Create {'"'}
+                        {inputValue}
+                        {'"'} category
+                      </CommandItem>
+                    )}
+
+                  {/* Pagination Controls */}
+                  <div className="flex justify-between items-center p-2 border-t border-primary text-sm text-gray-400" style={{display:hasMorePages? 'none':''}}>
+                    {hasPreviousPages ? (
+                      <button
+                        onClick={() =>
+                          setCategoryPage((p) => Math.max(p - 1, 1))
+                        }
+                        className="hover:text-white"
+                      >
+                        ← Show Earlier Categories
+                      </button>
+                    ) : (
+                      <span></span>
+                    )}
+                    {hasMorePages && (
+                      <button
+                        onClick={() => setCategoryPage((p) => p + 1)}
+                        className="hover:text-white text-center"
+                      >
+                        See More Categories →
+                      </button>
+                    )}
+                  </div>
                 </Command>
               </PopoverContent>
             </Popover>

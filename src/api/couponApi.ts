@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import baseQuery from './api';
-import { ApplyCouponRequest, ApplyCouponResponse, CouponPayload } from '@/interfaces/api/Coupon';
+import { ApplyCouponRequest, ApplyCouponResponse, CouponListResponse, CouponPayload } from '@/interfaces/api/Coupon';
 
 const admin = 'admin/';
 const coupons = 'coupons/';
@@ -12,8 +12,8 @@ export const couponApi = createApi({
   endpoints: (builder) => ({
 
     // ✅ Admin Get All Coupons
-    getCoupons: builder.query({
-      query: () => `${admin}${coupons}`,
+    getCoupons: builder.query<CouponListResponse,{page:number}>({
+      query: ({page}) => `${admin}${coupons}` + `?page=${page}`,
       providesTags: ['Coupon'],
     }),
 

@@ -1,7 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import rawBaseQuery from "./api";
-import { PaginatedProductsResponse, ProductResponse } from "@/interfaces/api";
-
+import { PaginatedProductsResponse, ProductResponse, ProductReviewResponse } from "@/interfaces/api";
 
 const admin = "/admin/";
 
@@ -25,7 +24,7 @@ export interface PaginatedCategories {
 export const productApi = createApi({
   reducerPath: "productApi",
   baseQuery: rawBaseQuery,
-  tagTypes: ["Product", "UserProduct","Category"],
+  tagTypes: ["Product", "UserProduct", "Category"],
   endpoints: (builder) => ({
     addProduct: builder.mutation<ProductResponse, FormData>({
       query: (formData) => ({
@@ -35,9 +34,14 @@ export const productApi = createApi({
       }),
       invalidatesTags: ["Product"],
     }),
-    getProduct: builder.query<PaginatedProductsResponse, void | number>({
-      query: (page=1) => ({
-        url: `${admin}products/?page=${page}`,
+    getProduct: builder.query<
+      PaginatedProductsResponse,
+      { page?: number; search?: string }
+    >({
+      query: ({ page, search }) => ({
+        url: `${admin}products/?page=${page}${
+          search ? `&search=${search}` : ""
+        }`,
         method: "GET",
       }),
       providesTags: ["Product"],
@@ -46,8 +50,14 @@ export const productApi = createApi({
       query: (id: number) => `${admin}products/${id}/`,
       providesTags: ["Product"],
     }),
-    getProductUser: builder.query<PaginatedProductsResponse, void>({
-      query: () => `products/`,
+    getProductUser: builder.query<
+      PaginatedProductsResponse,
+      { category?: number; productPage?: number }
+    >({
+      query: ({ category, productPage }) =>
+        `products/${productPage ? `?page=${productPage}` : ""}${
+          category ? `&category=${category}` : ""
+        }`,
       providesTags: ["UserProduct"],
     }),
     delteteProduct: builder.mutation<{ message: string }, number>({
@@ -57,8 +67,8 @@ export const productApi = createApi({
       }),
       invalidatesTags: ["Product"],
     }),
-    getCategory: builder.query<PaginatedCategories, void>({
-      query: () => `${admin}categories/`,
+    getCategory: builder.query<PaginatedCategories, { page?: number }>({
+      query: ({ page }) => `${admin}categories/${page ? `?page=${page}` : ""}`,
       providesTags: ["Category"],
     }),
     editProduct: builder.mutation<ProductResponse, EditProductArgs>({
@@ -73,7 +83,14 @@ export const productApi = createApi({
       query: (body) => ({
         url: `${admin}categories/`,
         method: "POST",
-        body
+        body,
+      }),
+      invalidatesTags: ["Category"],
+    }),
+    categoryDelete: builder.mutation<{ message: string }, number>({
+      query: (id: number) => ({
+        url: `${admin}categories/${id}/`,
+        method: "DELETE",
       }),
       invalidatesTags: ["Category"],
     }),
@@ -92,6 +109,9 @@ export const productApi = createApi({
       }),
       invalidatesTags: ["UserProduct"],
     }),
+    reviewList: builder.query<ProductReviewResponse[],void>({
+      query: () => `top/reviews/`,
+    })
   }),
 });
 
@@ -106,4 +126,6 @@ export const {
   useAddCategoryMutation,
   useProductDetailsQuery,
   useReviewProductMutation,
+  useCategoryDeleteMutation,
+  useReviewListQuery,
 } = productApi;

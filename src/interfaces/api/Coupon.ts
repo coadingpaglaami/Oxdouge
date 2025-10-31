@@ -15,8 +15,8 @@ export interface Coupon {
   products: number[];
   categories: number[];
   code: string;
-  discount_type?: "percentage" | "fixed"; // optional if you want
-  discount_value: string; // comes from backend as string "50.00"
+  discount_type?: "percentage" | "fixed";
+  discount_value: string;
   description?: string;
   active: boolean;
   valid_from: string;
@@ -29,6 +29,7 @@ export interface CouponListResponse {
   previous: string | null;
   results: Coupon[];
 }
+
 
 export interface AppliedProduct {
   id: number;

@@ -47,8 +47,9 @@ export const Prodcuts = () => {
   const [editing, setEditing] = useState<ProductResponse | null>(null);
   const [addProduct, { isLoading }] = useAddProductMutation();
   const [editProduct, { isLoading: loadingEdit }] = useEditProductMutation();
-  const { data: cateogries, isLoading: categoryLoading } =
-    useGetCategoryQuery();
+  const { data: cateogries, isLoading: categoryLoading } = useGetCategoryQuery(
+    {}
+  );
   const [addcategory, { isLoading: cateLoading }] = useAddCategoryMutation();
   const { data: productDetails } = useGetProductDetailsQuery(1);
   // const { data: allProduct, isLoading: productLoad } = useGetProductQuery(page);
@@ -307,12 +308,6 @@ export const Prodcuts = () => {
 
   // Search filter
   const [search, setSearch] = useState("");
-  const filtered = products?.results.filter((p) =>
-    `${p.title} ${p.category} ${p.description}`
-      .toLowerCase()
-      .includes(search.toLowerCase())
-  );
-
   return (
     <div className="p-6">
       <Breadcrumb title="Products" subtitle="Manage your product catalog" />
@@ -369,7 +364,7 @@ export const Prodcuts = () => {
                   {item.title}
                 </TableCell>
                 <TableCell className="max-w-[120px] truncate bg-[#18181B]">
-                  {item.category_detail.name}
+                  {item.category_detail?.name}
                 </TableCell>
                 <TableCell className="max-w-[100px] bg-[#18181B]">
                   {item.price}
@@ -551,7 +546,7 @@ export const Prodcuts = () => {
                     />
                     {mainImagePreview ? (
                       <div className="relative">
-                        <img
+                        <Image
                           src={mainImagePreview}
                           alt="main preview"
                           className="object-cover w-24 h-24 rounded"
