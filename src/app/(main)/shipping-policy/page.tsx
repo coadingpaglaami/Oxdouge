@@ -152,7 +152,7 @@ export default function ShippingPolicyPage () {
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-6">
+          <h1 className="text-5xl md:text-6xl font-bold bg-linear-to-r from-white to-gray-400 bg-clip-text text-transparent mb-6">
             {title}
           </h1>
           <p className="text-lg md:text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">

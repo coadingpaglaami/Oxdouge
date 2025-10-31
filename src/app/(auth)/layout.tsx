@@ -1,9 +1,16 @@
+"use client"
 import { NavBar } from "@/appcomponent/ui";
 import { Noto_Sans } from "next/font/google";
-import UserLayout from "../(main)/UserLayOut";
+import NextDynamic from "next/dynamic";
 const myFont = Noto_Sans({
   subsets: ["latin"],
 });
+
+
+const UserLayout = NextDynamic(
+  () => import("@/app/(main)/UserLayOut").then(mod => mod.default),
+  { ssr: false }
+);
 
 export default function AuthLayOut({
   children,
@@ -16,7 +23,10 @@ export default function AuthLayOut({
         <NavBar />
       </div>
       <main>
-        <UserLayout>{children}</UserLayout>
+        <UserLayout>
+          {children}
+
+        </UserLayout>
       </main>
     </div>
   );

@@ -25,7 +25,9 @@ export const SignUp = () => {
     cPassword?: string;
   }>({});
   const formData = new FormData();
-    const { data: googleAuthData, refetch: initiateGoogleLogin } = useGoogleLoginQuery();
+    const { data: googleAuthData, refetch: initiateGoogleLogin } = useGoogleLoginQuery(undefined, {
+  skip: true, // Don't run on mount
+});
   const [signup, { isLoading }] = useSignupMutation();
   const router = useRouter();
   const nameRegex = /^[A-Za-z\s]{1,50}$/;

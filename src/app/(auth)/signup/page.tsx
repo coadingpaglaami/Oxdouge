@@ -1,3 +1,4 @@
+"use client"
 import { SignUp } from "@/appcomponent/auth";
 import { Suspense } from "react";
 

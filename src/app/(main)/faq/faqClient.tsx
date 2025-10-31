@@ -96,7 +96,7 @@ export default function FaqPage() {
                 <span className="text-lg font-semibold pr-4">
                   {faq.question}
                 </span>
-                <div className="flex-shrink-0 transition-transform duration-300">
+                <div className="shrink-0 transition-transform duration-300">
                   {openItems.includes(faq.id) ? (
                     <ChevronUp className="w-5 h-5 text-primary" />
                   ) : (
@@ -132,7 +132,7 @@ export default function FaqPage() {
           </p>
           <Button
             asChild
-            className="bg-gradient-to-r from-primary to-[#FFBB28] hover:from-[#FFDF76] hover:to-purple-600/90 text-black px-8 py-6 text-md rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+            className="bg-linear-to-r from-primary to-[#FFBB28] hover:from-[#FFDF76] hover:to-purple-600/90 text-black px-8 py-6 text-md rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl"
           >
             <Link href="/contact" className="flex items-center gap-2">
               Contact Us

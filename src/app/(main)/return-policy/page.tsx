@@ -168,7 +168,7 @@ export default function ReturnPolicyPage() {
       if (typeof item === 'string') {
         return (
           <div key={index} className="flex gap-3 group">
-            <span className=" mt-1 flex-shrink-0 group-hover:scale-110 transition-transform">•</span>
+            <span className=" mt-1 shrink-0 group-hover:scale-110 transition-transform">•</span>
             <p className="group-hover:text-gray-200 transition-colors">{item}</p>
           </div>
         );
@@ -176,13 +176,13 @@ export default function ReturnPolicyPage() {
         return (
           <div key={index} className="space-y-3">
             <div className="flex gap-3 group">
-              <span className=" mt-1 flex-shrink-0 group-hover:scale-110 transition-transform">•</span>
+              <span className=" mt-1 shrink-0 group-hover:scale-110 transition-transform">•</span>
               <p className="group-hover:text-gray-200 transition-colors">{item.title}</p>
             </div>
             <div className="space-y-2 ml-6">
               {item.items.map((nestedItem: string, nestedIndex: number) => (
                 <div key={nestedIndex} className="flex gap-3 group">
-                  <span className="text-gray-400 mt-1 flex-shrink-0 group-hover:text-primary transition-colors">-</span>
+                  <span className="text-gray-400 mt-1 shrink-0 group-hover:text-primary transition-colors">-</span>
                   <p className="text-gray-400 group-hover:text-gray-300 transition-colors">{nestedItem}</p>
                 </div>
               ))}
@@ -244,7 +244,7 @@ export default function ReturnPolicyPage() {
                 <section 
                   key={section.id} 
                   id={section.id} 
-                  className="scroll-mt-24 bg-gradient-to-b from-gray-900/50 to-transparent p-5 rounded-2xl"
+                  className="scroll-mt-24 bg-linear-to-b from-gray-900/50 to-transparent p-5 rounded-2xl"
                 >
                   <h2 className="text-xl font-bold mb-3">
                     {section.title}
@@ -259,7 +259,7 @@ export default function ReturnPolicyPage() {
         </div>
 
         {/* Additional Info Box */}
-        <div className="mt-16 p-8 bg-gradient-to-r from-primary/10 to-purple-600/10 rounded-2xl border border-primary/20">
+        <div className="mt-16 p-8 bg-linear-to-r from-primary/10 to-purple-600/10 rounded-2xl border border-primary/20">
           <h3 className="text-2xl font-bold mb-4 text-primary">Need Help with a Return?</h3>
           <p className="text-gray-300 mb-4">
             Our customer service team is here to help you with any return-related questions or concerns.

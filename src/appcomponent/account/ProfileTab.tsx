@@ -270,7 +270,7 @@ export const ProfileTab = () => {
               value={formData.gender}
               onChange={handleChange}
               disabled={!isEditing}
-              className={`w-full rounded-lg border border-primary bg-black text-white px-4 py-2 text-white focus:outline-none focus:ring-1 focus:ring-primary ${
+              className={`w-full rounded-lg border border-primary bg-blackpx-4 py-2 text-white focus:outline-none focus:ring-1 focus:ring-primary ${
                 !isEditing ? "cursor-not-allowed opacity-70" : ""
               }`}
             >
