@@ -16,20 +16,14 @@ export const Heater = ({
   description,
   category_detail,
   price,
+  discount,
+  discounted_price,
 }: ProductResponse) => {
   const [cart, { isLoading }] = useAddToCartMutation();
-  
+
   const route = useRouter();
-  
+
   async function addToCart(id: number) {
-    // const token =  await cookieStore.get("token");
-    // if (!token) {
-    //   toast.error("You need to login first");
-    //   setTimeout(() => {
-    //     route.push("/login");
-    //   }, 1000);
-    //   return;
-    // }
     const token = Cookies.get("access"); // get token from cookies
     if (!token) {
       toast.error("You need to login first");
@@ -41,11 +35,10 @@ export const Heater = ({
     try {
       const res = await cart({ product_id: id, quantity: 1 }).unwrap();
       console.log("Product added to cart", res);
-      
-        toast.success("Product added to cart");
-      
+
+      toast.success("Product added to cart");
     } catch (error) {
-      const err = error as Error
+      const err = error as Error;
       console.error("Failed to add to cart:", err);
       toast.error(err.message || "Failed to add to cart");
     }
@@ -73,7 +66,16 @@ export const Heater = ({
           <p className="text-gray-400 text-sm line-clamp-2 min-h-16">
             {description}
           </p>
-          <p className="text-lg font-semibold text-white mt-2">{price}</p>
+          {discount != undefined && discount > 0 ? (
+            <div className="flex gap-2 items-center">
+              <p className="text-lg  text-red-500 line-through">${price}</p>
+              <p className="text-lg text-white font-semibold ">
+                ${discounted_price}
+              </p>
+            </div>
+          ) : (
+            <p className="text-lg font-semibold text-white">${price}</p>
+          )}
           <Button
             onClick={(e) => {
               e.preventDefault(); // stop <Link> from triggering

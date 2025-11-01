@@ -13,11 +13,21 @@ interface Props {
   editing: ProductResponse | null;
 }
 
-export const ImageUploader = ({ mainFile, setMainFile, moreFiles, setMoreFiles, editing }: Props) => {
+export const ImageUploader = ({
+  mainFile,
+  setMainFile,
+  moreFiles,
+  setMoreFiles,
+  editing,
+}: Props) => {
   const mainRef = useRef<HTMLInputElement | null>(null);
   const moreRef = useRef<HTMLInputElement | null>(null);
-  const [mainPreview, setMainPreview] = useState<string | null>(editing?.main_image ?? null);
-  const [morePreviews, setMorePreviews] = useState<string[]>(editing?.images ?? []);
+  const [mainPreview, setMainPreview] = useState<string | null>(
+    editing?.main_image ?? null
+  );
+  const [morePreviews, setMorePreviews] = useState<string[]>(
+    editing?.images ?? []
+  );
 
   useEffect(() => {
     if (mainFile) {
@@ -39,7 +49,21 @@ export const ImageUploader = ({ mainFile, setMainFile, moreFiles, setMoreFiles, 
 
   const removeMore = (idx: number) => {
     setMoreFiles((prev) => prev.filter((_, i) => i !== idx));
-    setMorePreviews((prev) => prev.filter((_, i) => i !== idx));
+    setMorePreviews((prev) => {
+      const urlToRevoke = prev[idx];
+      if (urlToRevoke && urlToRevoke.startsWith('blob:')) {
+        try {
+          URL.revokeObjectURL(urlToRevoke);
+        } catch (err) {
+          // ignore
+        }
+      }
+      return prev.filter((_, i) => i !== idx);
+    });
+
+    if (moreRef.current) {
+      moreRef.current.value = "";
+    }
   };
 
   const handleDropMain = (e: React.DragEvent) => {
@@ -62,12 +86,25 @@ export const ImageUploader = ({ mainFile, setMainFile, moreFiles, setMoreFiles, 
         onDrop={handleDropMain}
         className="border border-primary/20 rounded p-3 flex items-center gap-4 cursor-pointer hover:bg-primary/10 transition"
       >
-        <input ref={mainRef} type="file" accept="image/*" className="hidden" onChange={(e) => setMainFile(e.target.files?.[0] ?? null)} />
+        <input
+          ref={mainRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => setMainFile(e.target.files?.[0] ?? null)}
+        />
         {mainPreview ? (
           <div className="relative">
-            <img src={mainPreview} className="w-24 h-24 object-cover rounded" alt="main" />
+            <Image
+              src={mainPreview}
+              className="w-24 h-24 object-cover rounded"
+              width={100}
+              height={100}
+              alt="main"
+            />
             {mainFile && (
               <button
+                type="button"
                 onClick={(e) => {
                   e.stopPropagation();
                   setMainFile(null);
@@ -106,9 +143,25 @@ export const ImageUploader = ({ mainFile, setMainFile, moreFiles, setMoreFiles, 
         />
         <div className="flex gap-2 overflow-x-auto items-center">
           {morePreviews.map((src, idx) => (
-            <div key={idx} className="relative w-20 h-20 rounded overflow-hidden border border-primary/20 shrink-0">
-              <Image src={src} alt={`preview ${idx}`} width={80} height={80} className="w-full h-full object-cover" />
-              <button type="button" onClick={() => removeMore(idx)} className="absolute top-1 right-1 bg-black/50 p-1 rounded">
+            <div
+              key={idx}
+              className="relative w-20 h-20 rounded overflow-hidden border border-primary/20 shrink-0"
+            >
+              <Image
+                src={src}
+                alt={`preview ${idx}`}
+                width={80}
+                height={80}
+                className="w-full h-full object-cover"
+              />
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeMore(idx);
+                }}
+                className="absolute top-1 right-1 bg-black/50 p-1 rounded"
+              >
                 <X size={14} />
               </button>
             </div>

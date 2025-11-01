@@ -61,6 +61,7 @@ export const ShippingAddressSelector = ({
 
       await shipping(payload).unwrap(); // RTK Query mutation call
       toast.success("Address saved successfully!");
+      setShowAddAddress(false);
 
       // Optionally reset form
       setFullName("");

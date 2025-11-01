@@ -298,7 +298,7 @@ export const OrderTab = () => {
                 <div className="flex flex-col">
                   <p>Placed on {formatDate(order.created_at)}</p>
                   <p>
-                    Items - ${order.total_amount}
+                    Items - ${order.final_amount}
                   </p>
                 </div>
                 {order.order_status === "PENDING" && (

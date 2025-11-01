@@ -85,7 +85,8 @@ export interface UserOrderSummary {
   order_number: string;
   user_email: string;
   order_status: string;
-  total_amount: string;
+  total_amount?: string;
+  final_amount?: string;
   created_at: string;
   order_items: UserOrderItemSummary[];
 }

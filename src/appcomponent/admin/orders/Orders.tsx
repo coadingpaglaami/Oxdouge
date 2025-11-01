@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { Breadcrumb } from "@/appcomponent/reusable";
 import {
   Table,
@@ -87,6 +87,10 @@ export const Orders = () => {
     );
   };
 
+  if (selectedStatus === "ALL") {
+    setSelectedStatus("");
+  }
+
   // Filter orders by status
   const filteredOrders =
     selectedStatus === ""
@@ -115,7 +119,7 @@ export const Orders = () => {
               <SelectItem value="PENDING">Pending</SelectItem>
               <SelectItem value="DELIVERED">Delivered</SelectItem>
               <SelectItem value="SHIPPED">Shipped</SelectItem>
-              <SelectItem value="CANCELLED">Cancelled</SelectItem>
+              <SelectItem value="CANCELED">Cancelled</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -225,10 +229,14 @@ export const Orders = () => {
             </TableBody>
             <div className="flex justify-center items-center gap-2 mt-4">
               {order?.previous && (
-
-                <Button onClick={() => {
-                  if(page=== undefined) return;
-                  handlePageChange(page  - 1 )}}>Prev</Button>
+                <Button
+                  onClick={() => {
+                    if (page === undefined) return;
+                    handlePageChange(page - 1);
+                  }}
+                >
+                  Prev
+                </Button>
               )}
 
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
@@ -243,9 +251,14 @@ export const Orders = () => {
               ))}
 
               {order?.next && (
-                <Button onClick={() => {
-                  if(page=== undefined) return;
-                  handlePageChange(page  + 1)}}>Next</Button>
+                <Button
+                  onClick={() => {
+                    if (page === undefined) return;
+                    handlePageChange(page + 1);
+                  }}
+                >
+                  Next
+                </Button>
               )}
             </div>
           </Table>

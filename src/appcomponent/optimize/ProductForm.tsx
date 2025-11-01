@@ -214,6 +214,7 @@ export const ProductForm = ({ editing, onClose }: Props) => {
   const createCategory = async (name: string) => {
     const res = await addCategory({ name });
     if (res.data) {
+      setCategory(res.data.id);
       toast.success("Category created");
     } else {
       toast.error("Category creation failed");
@@ -221,96 +222,6 @@ export const ProductForm = ({ editing, onClose }: Props) => {
   };
 
   return (
-    // <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4">
-    //   <div className="grid gap-4 w-full ">
-    //     {/* Left */}
-    //     <div className="flex flex-col gap-3">
-    //       <input
-    //         value={title}
-    //         onChange={(e) => setTitle(e.target.value)}
-    //         placeholder="Product title"
-    //         className="p-2 rounded border border-primary/20 bg-transparent text-white"
-    //         required
-    //       />
-    //       <div className="flex gap-2">
-    //         <input
-    //           value={price}
-    //           onChange={(e) => setPrice(e.target.value)}
-    //           placeholder="Price"
-    //           className="p-2 rounded border border-primary/20 bg-transparent text-white flex-1"
-    //           required
-    //         />
-    //         <input
-    //           type="number"
-    //           value={discount}
-    //           onChange={(e) => setDiscount(Number(e.target.value))}
-    //           placeholder="Discount %"
-    //           className="p-2 rounded border border-primary/20 bg-transparent text-white w-24"
-    //         />
-    //         <input
-    //           type="number"
-    //           value={quantity}
-    //           onChange={(e) => setQuantity(Number(e.target.value))}
-    //           placeholder="Stock"
-    //           className="p-2 rounded border border-primary/20 bg-transparent text-white w-24"
-    //           required
-    //         />
-    //       </div>
-    //       <Select value={selected} onValueChange={handleSelect}>
-    //         <SelectTrigger className="w-full text-white">
-    //           <SelectValue placeholder="Select category" />
-    //         </SelectTrigger>
-    //         <SelectContent>
-    //           <SelectGroup>
-    //             {categories?.results?.map((cat) => (
-    //               <SelectItem
-    //                 key={cat.id}
-    //                 value={String(cat.id)}
-    //                 className="text-white bg-black "
-    //               >
-    //                 {cat.name}
-    //               </SelectItem>
-    //             ))}
-    //           </SelectGroup>
-    //         </SelectContent>
-    //       </Select>
-    //       <textarea
-    //         value={description}
-    //         onChange={(e) => setDescription(e.target.value)}
-    //         rows={4}
-    //         placeholder="Description"
-    //         className="p-2 rounded border border-primary/20 bg-transparent text-white"
-    //       />
-    //     </div>
-
-    //     {/* Right */}
-    //     <div className="flex flex-col gap-3">
-    //       <ImageUploader
-    //         mainFile={mainFile}
-    //         setMainFile={setMainFile}
-    //         moreFiles={moreFiles}
-    //         setMoreFiles={setMoreFiles}
-    //         editing={editing}
-    //       />
-    //       <VideoUploader videoFile={videoFile} setVideoFile={setVideoFile} />
-    //       <FeaturesInput features={keyFeatures} setFeatures={setKeyFeatures} />
-    //       <ColorsInput colors={colors} setColors={setColors} />
-    //     </div>
-    //   </div>
-
-    //   <div className="flex justify-center gap-4 mt-4">
-    //     <Button type="button" variant="outline" onClick={onClose}>
-    //       Cancel
-    //     </Button>
-    //     <Button type="submit" disabled={isLoading || loadingEdit}>
-    //       {isLoading || loadingEdit
-    //         ? "Saving..."
-    //         : editing
-    //         ? "Update Product"
-    //         : "Upload Product"}
-    //     </Button>
-    //   </div>
-    // </form>
     <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4">
       <div className="grid gap-4 w-full">
         {/* Left */}
@@ -371,30 +282,6 @@ export const ProductForm = ({ editing, onClose }: Props) => {
               />
             </div>
           </div>
-          {/* <div className="flex gap-2">
-            <label htmlFor="category" className="text-sm text-gray-300">
-              Category
-            </label>
-            <Select value={selected} onValueChange={handleSelect}>
-              <SelectTrigger id="category" className="w-full text-white">
-                <SelectValue placeholder="Select category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {categories?.results?.map((cat) => (
-                    <SelectItem
-                      key={cat.id}
-                      value={String(cat.id)}
-                      className="text-white bg-black"
-                    >
-                      {cat.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-            <Button onClick={()=>createCategory()}>Create</Button>
-          </div> */}
           <div className="flex gap-2 items-center">
             <label htmlFor="category" className="text-sm text-gray-300">
               Category
@@ -406,56 +293,6 @@ export const ProductForm = ({ editing, onClose }: Props) => {
                   {inputValue || "Select category"}
                 </Button>
               </PopoverTrigger>
-
-              {/* <PopoverContent className="w-64 p-0 bg-[#121212] border border-primary">
-                <Command>
-                  <CommandInput
-                    placeholder="Search or type new category..."
-                    value={inputValue}
-                    onValueChange={setInputValue}
-                    className="bg-black text-white"
-                  />
-                  <CommandEmpty>No category found.</CommandEmpty>
-                  <CommandGroup>
-                    {categories?.results
-                      .filter((cat) =>
-                        cat.name
-                          .toLowerCase()
-                          .includes(inputValue.toLowerCase())
-                      )
-                      .map((cat) => (
-                        <CommandItem
-                          key={cat.id}
-                          onSelect={() => handleSelect(cat.id)}
-                          className={`${
-                            selectedCategoryId === cat.id
-                              ? "bg-primary"
-                              : "text-white"
-                          }`}
-                        >
-                          {cat.name}
-                          {selectedCategoryId === cat.id && (
-                            <span className="ml-auto">✔</span>
-                          )}
-                        </CommandItem>
-                      ))}
-                  </CommandGroup>
-                  {inputValue &&
-                    !categories?.results.some(
-                      (cat) =>
-                        cat.name.toLowerCase() === inputValue.toLowerCase()
-                    ) && (
-                      <CommandItem
-                        onSelect={() => createCategory(inputValue)}
-                        className="text-green-400"
-                      >
-                        Create {'"'}
-                        {inputValue}
-                        {'"'} category
-                      </CommandItem>
-                    )}
-                </Command>
-              </PopoverContent> */}
               <PopoverContent className="w-64 p-0 bg-[#121212] border border-primary">
                 <Command>
                   {/* Search */}
@@ -527,7 +364,10 @@ export const ProductForm = ({ editing, onClose }: Props) => {
                     )}
 
                   {/* Pagination Controls */}
-                  <div className="flex justify-between items-center p-2 border-t border-primary text-sm text-gray-400" style={{display:hasMorePages? 'none':''}}>
+                  <div
+                    className="flex justify-between items-center p-2 border-t border-primary text-sm text-gray-400"
+                    style={{ display: hasMorePages ? "none" : "" }}
+                  >
                     {hasPreviousPages ? (
                       <button
                         onClick={() =>

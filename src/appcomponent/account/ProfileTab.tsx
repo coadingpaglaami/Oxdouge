@@ -5,6 +5,7 @@ import { Pencil, LogOut, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useGetProfileQuery, useUpdateProfileMutation } from "@/api/profileApi";
 import { toast } from "sonner";
+import Image from "next/image";
 
 export const ProfileTab = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -43,7 +44,9 @@ export const ProfileTab = () => {
   }, [profile]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -53,7 +56,7 @@ export const ProfileTab = () => {
     const file = e.target.files?.[0];
     if (file) {
       // Validate file type
-      if (!file.type.startsWith('image/')) {
+      if (!file.type.startsWith("image/")) {
         toast.error("Please select a valid image file");
         return;
       }
@@ -65,7 +68,7 @@ export const ProfileTab = () => {
       }
 
       setSelectedImageFile(file);
-      
+
       // Create local preview
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -81,21 +84,24 @@ export const ProfileTab = () => {
       const formDataToSend = new FormData();
 
       // Append all form fields
-      if (formData.full_name) formDataToSend.append('full_name', formData.full_name);
-      if (formData.phone_number) formDataToSend.append('phone_number', formData.phone_number);
-      if (formData.address) formDataToSend.append('address', formData.address);
-      if (formData.gender) formDataToSend.append('gender', formData.gender);
-      if (formData.date_of_birth) formDataToSend.append('date_of_birth', formData.date_of_birth);
-      if (formData.country) formDataToSend.append('country', formData.country);
+      if (formData.full_name)
+        formDataToSend.append("full_name", formData.full_name);
+      if (formData.phone_number)
+        formDataToSend.append("phone_number", formData.phone_number);
+      if (formData.address) formDataToSend.append("address", formData.address);
+      if (formData.gender) formDataToSend.append("gender", formData.gender);
+      if (formData.date_of_birth)
+        formDataToSend.append("date_of_birth", formData.date_of_birth);
+      if (formData.country) formDataToSend.append("country", formData.country);
 
       // Append profile image if selected
       if (selectedImageFile) {
-        formDataToSend.append('profile_image', selectedImageFile);
+        formDataToSend.append("profile_image", selectedImageFile);
       }
 
       // Send the FormData
       await updateProfile(formDataToSend).unwrap();
-      
+
       toast.success("Profile updated successfully!");
       setIsEditing(false);
       setSelectedImageFile(null); // Reset selected file after successful update
@@ -166,8 +172,10 @@ export const ProfileTab = () => {
         <div className="relative">
           <div className="w-24 h-24 rounded-full bg-gray-600 overflow-hidden border-2 border-primary">
             {profileImage ? (
-              <img
+              <Image
                 src={profileImage}
+                height={100}
+                width={100}
                 alt="Profile"
                 className="w-full h-full object-cover"
               />
@@ -205,7 +213,10 @@ export const ProfileTab = () => {
       </div>
 
       {/* Form Section */}
-      <form className="flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
+      <form
+        className="flex flex-col gap-6"
+        onSubmit={(e) => e.preventDefault()}
+      >
         {/* 1️⃣ Name Field */}
         <div className="flex flex-col gap-2">
           <label htmlFor="full_name" className="text-sm text-gray-300">
@@ -270,7 +281,7 @@ export const ProfileTab = () => {
               value={formData.gender}
               onChange={handleChange}
               disabled={!isEditing}
-              className={`w-full rounded-lg border border-primary bg-blackpx-4 py-2 text-white focus:outline-none focus:ring-1 focus:ring-primary ${
+              className={`w-full rounded-lg border border-primary bg-black px-4 py-2 text-white focus:outline-none focus:ring-1 focus:ring-primary  ${
                 !isEditing ? "cursor-not-allowed opacity-70" : ""
               }`}
             >
@@ -336,7 +347,11 @@ export const ProfileTab = () => {
         </div>
 
         {/* 6️⃣ Action Row */}
-        <div className={`flex ${isEditing ? 'justify-between items-center' : 'justify-end'} mt-4`}>
+        <div
+          className={`flex ${
+            isEditing ? "justify-between items-center" : "justify-end"
+          } mt-4`}
+        >
           {isEditing && (
             <div className="flex gap-2">
               <Button
@@ -359,13 +374,6 @@ export const ProfileTab = () => {
             </div>
           )}
 
-          <Button
-            variant="outline"
-            className="flex items-center gap-2 text-white border-primary hover:bg-primary/10"
-          >
-            <LogOut className="w-4 h-4" />
-            Log Out
-          </Button>
         </div>
       </form>
     </div>

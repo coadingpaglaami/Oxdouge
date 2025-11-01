@@ -3,11 +3,11 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
+      new URL("https://res.cloudinary.com/**"), // Example for Cloudinary
       {
-        protocol: "https",
+        protocol: "http",
         hostname: "res.cloudinary.com",
-        port: "",
-        pathname: "/**", // allow all paths
+        pathname: "/**",
       },
     ],
   },

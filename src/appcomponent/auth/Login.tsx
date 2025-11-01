@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useLoginMutation, useGoogleLoginQuery, useGoogleExchangeMutation } from "@/api/authApi";
 import { setAuthTokens } from "@/lib/token";
 import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -78,6 +79,7 @@ export const Login = () => {
         router.push("/");
       } catch (err) {
         console.error("Login failed", err);
+        toast.error("Invalid email or password");
       }
     }
   };

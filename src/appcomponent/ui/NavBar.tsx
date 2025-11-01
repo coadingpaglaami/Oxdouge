@@ -173,7 +173,7 @@ export const NavBar = () => {
                   href="/admin"
                   className="flex items-center gap-2 text-white"
                 >
-                  <UserCheck2 /> Admin
+                  <UserCheck2 /> Dashboard
                 </Link>
               )}
             </div>

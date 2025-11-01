@@ -9,6 +9,7 @@ import { ProfileTab } from "./ProfileTab";
 import { SecurityTab } from "./SecurityTab";
 import { ShippingTab } from "./ShippingTab";
 import { OrderTab } from "./OrderTab";
+import Link from "next/link";
 
 export const Account = () => {
   const [activeTab, setActiveTab] = useState<
@@ -45,10 +46,10 @@ export const Account = () => {
     <div className="flex flex-col text-white space-y-10">
       {/* Top Section */}
       <div className="flex flex-col items-center text-center mt-4">
-        <div className="flex items-center gap-2 self-start text-sm text-gray-300 hover:text-primary cursor-pointer">
+        <Link href={'/products'} className="flex items-center gap-2 self-start text-sm text-gray-300 hover:text-primary cursor-pointer">
           <ArrowLeft className="w-4 h-4" />
           <span>Back To Products</span>
-        </div>
+        </Link>
 
         <div className="mt-4">
           <h2 className="text-lg font-semibold">My Account</h2>
