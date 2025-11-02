@@ -6,6 +6,7 @@ import {
   MapPin,
   Mail,
   Phone,
+  ShoppingCartIcon,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -17,6 +18,7 @@ import { CartItemResponse } from "@/interfaces/api/AddToCart";
 import { useGetCartQuery } from "@/api/cartApi";
 import { useMyOrderQuery } from "@/api/ordersApi";
 import { useGetShippingsQuery } from "@/api/shippingApi";
+import { Button } from "@/components/ui/button";
 
 export const Cart = () => {
   const searchParams = useSearchParams();
@@ -50,8 +52,30 @@ export const Cart = () => {
   if (orderId) {
     if (orderLoading) {
       return (
-        <div className="flex items-center justify-center min-h-[80vh]">
-          <div className="text-white text-lg">Loading order details...</div>
+        // <div className="flex items-center justify-center min-h-[80vh]">
+        //   <div className="text-white text-lg">Loading order details...</div>
+        // </div>
+        <div
+          className="text-lg font-medium"
+          style={{
+            color: "white",
+            textShadow: "0 0 10px yellow",
+            animation: "colorChange 1s infinite alternate",
+          }}
+        >
+          Loading order details...
+          <style jsx>{`
+            @keyframes colorChange {
+              0% {
+                color: white;
+                text-shadow: 0 0 5px white;
+              }
+              100% {
+                color: yellow;
+                text-shadow: 0 0 15px yellow;
+              }
+            }
+          `}</style>
         </div>
       );
     }
@@ -118,7 +142,7 @@ export const Cart = () => {
                 <div>
                   <span className="text-white block">Total Amount</span>
                   <span className="font-semibold text-white">
-                    ৳{order.final_amount}
+                    ${order.final_amount}
                   </span>
                 </div>
               </div>
@@ -226,7 +250,7 @@ export const Cart = () => {
               )}
               <div className="flex justify-between text-lg font-bold text-white pt-2 border-t">
                 <span>Total:</span>
-                <span>৳{order.final_amount}</span>
+                <span>${order.final_amount}</span>
               </div>
             </div>
           </div>
@@ -268,26 +292,44 @@ export const Cart = () => {
       </div>
 
       {/* Main Content Row */}
-      <div className="flex flex-col md:flex-row md:justify-between gap-6">
-        {/* Left Child */}
-        <div className="md:w-[60%] w-full">
-          <CartLeftChild
-            cartItems={cartItems}
-            setCartItems={setCartItems}
-            selectedItems={selectedItems}
-            setSelectedItems={setSelectedItems}
-          />
-        </div>
+      {cartData != undefined && cartData?.length > 0 ? (
+        <div className="flex flex-col md:flex-row md:justify-between gap-6">
+          {/* Left Child */}
+          <div className="md:w-[60%] w-full">
+            <CartLeftChild
+              cartItems={cartItems}
+              setCartItems={setCartItems}
+              selectedItems={selectedItems}
+              setSelectedItems={setSelectedItems}
+            />
+          </div>
 
-        {/* Right Child */}
-        <div className="md:w-[40%] w-full">
-          <CartRightChild
-            cartItems={cartItems}
-            selectedItems={selectedItems}
-            shippingAddresses={shippingAddresses || []}
-          />
+          {/* Right Child */}
+          <div className="md:w-[40%] w-full">
+            <CartRightChild
+              cartItems={cartItems}
+              selectedItems={selectedItems}
+              shippingAddresses={shippingAddresses || []}
+            />
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center text-center py-20 text-gray-300 h-[44vh]">
+          <ShoppingCartIcon className="w-16 h-16 mb-4 text-gray-400" />
+          <h2 className="text-xl font-semibold mb-2">Your cart is empty</h2>
+          <p className="text-gray-500 text-sm mb-6">
+            Looks like you haven’t added anything to your cart yet.
+          </p>
+          <Link href="/products">
+            <Button
+              variant="default"
+              className="bg-primary hover:bg-primary/90"
+            >
+              Browse Products
+            </Button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

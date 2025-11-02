@@ -26,7 +26,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { removeAuthTokens } from "@/lib/token";
-import { baseUrl } from "@/lib/config";
 import { useGetCartQuery } from "@/api/cartApi";
 
 export const NavBar = () => {
@@ -37,7 +36,14 @@ export const NavBar = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const { data: cartData, isLoading, isError, refetch } = useGetCartQuery();
+  const {
+    data: cartData,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetCartQuery(undefined, {
+    skip: !isLoggedIn,
+  });
   const [cartCount, setCartCount] = useState<number>(0);
 
   useEffect(() => {
@@ -47,7 +53,10 @@ export const NavBar = () => {
   }, [cartData]);
 
   useEffect(() => {
-    refetch();
+    // refetch();
+    if (isLoggedIn && !isLoading) {
+      refetch();
+    }
   }, [pathname]);
 
   // read cookies client side

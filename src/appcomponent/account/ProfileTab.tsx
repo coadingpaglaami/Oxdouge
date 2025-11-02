@@ -356,7 +356,7 @@ export const ProfileTab = () => {
             <div className="flex gap-2">
               <Button
                 type="button"
-                className="bg-primary text-white hover:opacity-90"
+                className="bg-primary hover:opacity-90"
                 onClick={handleSaveChanges}
                 disabled={isUpdating}
               >

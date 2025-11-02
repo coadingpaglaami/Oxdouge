@@ -33,14 +33,16 @@ export const CartLeftChild = ({
 }: CartLeftChildProps) => {
   const [cartDelete] = useDeleteCartMutation();
   const [updateCart] = useUpdateCartMutation();
-  
+
   // Debounce timer refs for each cart item
   const debounceTimers = useRef<{ [key: number]: NodeJS.Timeout }>({});
 
   // Cleanup timers on unmount
   useEffect(() => {
     return () => {
-      Object.values(debounceTimers.current).forEach(timer => clearTimeout(timer));
+      Object.values(debounceTimers.current).forEach((timer) =>
+        clearTimeout(timer)
+      );
     };
   }, []);
 
@@ -48,7 +50,8 @@ export const CartLeftChild = ({
     const currentItem = cartItems.find((item) => item.id === id);
     if (!currentItem) return;
 
-    let newQty = type === "inc" ? currentItem.quantity + 1 : currentItem.quantity - 1;
+    let newQty =
+      type === "inc" ? currentItem.quantity + 1 : currentItem.quantity - 1;
     if (newQty < 1) newQty = 1;
 
     // Immediately update UI for instant feedback
@@ -196,7 +199,9 @@ export const CartLeftChild = ({
                     >
                       -
                     </button>
-                    <span className="text-white min-w-8 text-center">{item?.quantity}</span>
+                    <span className="text-white min-w-8 text-center">
+                      {item?.quantity}
+                    </span>
                     <button
                       onClick={() => updateQuantity(item?.id, "inc")}
                       className="px-2 py-1 rounded bg-primary/20 text-primary hover:bg-primary/30 transition-colors"

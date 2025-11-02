@@ -1,7 +1,12 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import rawBaseQuery from "./api";
-import { CreateUserResponse, LoginResponse, GoogleLoginResponse } from "@/interfaces/api";
+import {
+  CreateUserResponse,
+  LoginResponse,
+  GoogleLoginResponse,
+} from "@/interfaces/api";
 import { ChangePasswordPayload } from "@/interfaces/api/User";
+import { verify } from "crypto";
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -51,21 +56,45 @@ export const authApi = createApi({
       query: () => `email-security/`,
     }),
     updateEmailSecurity: builder.mutation({
-      query: (body)=>({
+      query: (body) => ({
         url: `email-security/`,
         method: "PUT",
         body,
-      })
-    })
+      }),
+    }),
+    sendOtp: builder.mutation<void, FormData>({
+      query: (body) => ({
+        url: "send-otp/",
+        method: "POST",
+        body,
+      }),
+    }),
+    verifyOtp: builder.mutation<void, FormData>({
+      query: (body) => ({
+        url: "verify-otp/",
+        method: "POST",
+        body,
+      }),
+    }),
+    resetOtp: builder.mutation<void, FormData>({
+      query: (body) => ({
+        url: "reset-password/",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
-export const { 
-  useSignupMutation, 
-  useLoginMutation, 
+export const {
+  useSignupMutation,
+  useLoginMutation,
   useGoogleLoginQuery,
   useGoogleExchangeMutation,
-  useChangePasswordUserMutation, 
-  useEmailSecurityQuery, 
-  useUpdateEmailSecurityMutation 
+  useChangePasswordUserMutation,
+  useEmailSecurityQuery,
+  useUpdateEmailSecurityMutation,
+  useSendOtpMutation,
+  useVerifyOtpMutation,
+  useResetOtpMutation,
 } = authApi;

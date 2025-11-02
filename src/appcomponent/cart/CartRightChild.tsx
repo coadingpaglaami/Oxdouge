@@ -265,6 +265,7 @@ import {
   usePlaceOrderMutation,
 } from "@/api/ordersApi";
 import { MapPin, Phone, Mail } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface CartRightChildProps {
   cartItems: CartItemResponse[];
@@ -298,6 +299,7 @@ export const CartRightChild = ({
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"COD" | "ONLINE" | "">("");
   const [checkOut, { isLoading: checking }] = useChekOutSessionMutation();
+  const router = useRouter();
 
   useEffect(() => {
     if (shippingAddresses.length > 0 && selectedAddress === 0) {
@@ -498,7 +500,9 @@ export const CartRightChild = ({
         >
           Proceed to Checkout
         </Button>
-        <Button variant="outline" className="w-full">
+        <Button variant="outline" className="w-full"
+        onClick={()=>router.push('/products')}
+        >
           Continue Shopping
         </Button>
       </div>

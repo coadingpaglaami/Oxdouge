@@ -97,6 +97,8 @@ export const Orders = () => {
       ? order?.results || []
       : order?.results.filter((o) => o.order_status === selectedStatus) || [];
 
+
+      console.log("selected order:",selectedOrder)
   return (
     <>
       <Breadcrumb title="Orders" subtitle="Track and update Customer Orders" />
