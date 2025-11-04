@@ -115,6 +115,7 @@ export const productApi = createApi({
     }),
     reviewList: builder.query<ProductReviewResponse[],void>({
       query: () => `top/reviews/`,
+      providesTags: ["UserProduct"],
     })
   }),
 });
