@@ -22,5 +22,6 @@ export interface ShippingAddressResponse {
   zipcode: string;
   order: number | null;   // nullable, as shown
   created_at: string;     // ISO datetime string
-  updated_at: string;     // ISO datetime string
+  updated_at: string; 
+  isDefault?:boolean    // ISO datetime string
 }

@@ -3,22 +3,31 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { ShippingAddressSelector } from "./ShippingAddressTwo";
-import { useGetShippingsQuery } from "@/api/shippingApi";
 import { ShippingAddressResponse } from "@/interfaces/api/ShippingAddress";
+import { useEffect, useState } from "react";
 
 interface ShippingAddressSectionProps {
   selectedAddress: number;
   setSelectedAddress: React.Dispatch<React.SetStateAction<number>>;
-  shippingAddresses:ShippingAddressResponse[]
+  shippingAddresses: ShippingAddressResponse[];
+  addressLoading: boolean;
 }
 
 export const ShippingAddressSection = ({
   selectedAddress,
   setSelectedAddress,
+  shippingAddresses,
+  addressLoading,
 }: ShippingAddressSectionProps) => {
-
-  const { data, isLoading: shipLoading } = useGetShippingsQuery();
-
+  // const { data, isLoading: shipLoading } = useGetShippingsQuery();
+  const [showAddAddress, setShowAddAddress] = useState(false);
+  useEffect(() => {
+    if (shippingAddresses.length === 0) {
+      setShowAddAddress(true);
+    } else {
+      setShowAddAddress(false);
+    }
+  }, [shippingAddresses]);
 
   return (
     <div className="flex justify-between items-start">
@@ -44,8 +53,11 @@ export const ShippingAddressSection = ({
 
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline" size="sm">
-            Change
+          <Button
+            variant={shippingAddresses.length > 0 ? "outline" : "default"}
+            size="sm"
+          >
+            {shippingAddresses.length > 0 ? "Change" : "Add Address"}
           </Button>
         </DialogTrigger>
 
@@ -53,8 +65,10 @@ export const ShippingAddressSection = ({
           <ShippingAddressSelector
             selectedAddress={selectedAddress}
             setSelectedAddress={setSelectedAddress}
-            data={data}
-            shipLoading={shipLoading}
+            data={shippingAddresses}
+            shipLoading={addressLoading}
+            showAddAddress={showAddAddress}
+            setShowAddAddress={setShowAddAddress}
           />
         </DialogContent>
       </Dialog>

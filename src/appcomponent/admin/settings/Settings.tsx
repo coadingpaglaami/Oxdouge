@@ -290,22 +290,26 @@ export const Settings = () => {
       setShowCurrentPwd(false);
       setShowNewPwd(false);
       setShowConfirmPwd(false);
-    } catch (error: unknown) {
-      console.error("Password Changed Fail:", error);
+    } catch (err) {
+      interface ApiError {
+        status: number;
+        data: {
+          [key: string]: string[]; // for example: { email: ["Enter a valid email address."] }
+        };
+      }
 
-      // Type-safe access
-      const err = error as {
-        data?: { detail?: string; message?: string };
-        message?: string;
-      };
+      const error = err as ApiError;
 
-      const message =
-        err?.data?.detail ||
-        err?.data?.message ||
-        err?.message ||
-        "Password change failed";
+      // Extract the first field and message, if any
+      const field = Object.keys(error.data || {})[0];
+      const message = field ? error.data[field][0] : "Something went wrong";
 
-      toast.error(message);
+      console.error("Failed to create user:", error);
+      console.log("Signup 89", error);
+
+      toast.error(message, {
+        richColors: true,
+      });
     }
   };
 

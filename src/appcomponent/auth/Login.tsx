@@ -5,7 +5,11 @@ import { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useLoginMutation, useGoogleLoginQuery, useGoogleExchangeMutation } from "@/api/authApi";
+import {
+  useLoginMutation,
+  useGoogleLoginQuery,
+  useGoogleExchangeMutation,
+} from "@/api/authApi";
 import { setAuthTokens } from "@/lib/token";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -18,12 +22,14 @@ export const Login = () => {
     {}
   );
   const [login, { isLoading }] = useLoginMutation();
-  const { data: googleAuthData, refetch: initiateGoogleLogin } = useGoogleLoginQuery();
-  const [googleExchange, { isLoading: isGoogleLoading }] = useGoogleExchangeMutation();
+  const { data: googleAuthData, refetch: initiateGoogleLogin } =
+    useGoogleLoginQuery();
+  const [googleExchange, { isLoading: isGoogleLoading }] =
+    useGoogleExchangeMutation();
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const error = searchParams.get("error")
+  const error = searchParams.get("error");
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&]).{8,}$/;
@@ -31,8 +37,8 @@ export const Login = () => {
   // Handle Google OAuth callback
   useEffect(() => {
     const handleGoogleCallback = async () => {
-      const code = searchParams.get('code');
-      
+      const code = searchParams.get("code");
+
       if (code) {
         try {
           const res = await googleExchange({ code }).unwrap();
@@ -78,8 +84,25 @@ export const Login = () => {
         setAuthTokens(res.token.access, res.token.refresh, res.user.role);
         router.push("/");
       } catch (err) {
-        console.error("Login failed", err);
-        toast.error("Invalid email or password");
+        interface ApiError {
+          status: number;
+          data: {
+            [key: string]: string[]; // for example: { email: ["Enter a valid email address."] }
+          };
+        }
+
+        const error = err as ApiError;
+
+        // Extract the first field and message, if any
+        const field = Object.keys(error.data || {})[0];
+        const message = field ? error.data[field][0] : "Something went wrong";
+
+        console.error("Failed to create user:", error);
+        console.log("Signup 89", error);
+
+        toast.error(message, {
+          richColors: true,
+        });
       }
     }
   };
@@ -88,7 +111,7 @@ export const Login = () => {
     try {
       // Trigger the Google OAuth flow
       const response = await initiateGoogleLogin().unwrap();
-      
+
       if (response?.auth_url) {
         // Redirect to Google OAuth page
         window.location.href = response.auth_url;
@@ -102,7 +125,10 @@ export const Login = () => {
     <div className=" flex justify-center items-center min-h-[91vh] max-w-[80vw] mx-auto">
       <div className="flex items-stretch md:flex-row-reverse w-full h-full bg-[#121212] rounded-lg overflow-hidden gap-10 p-6">
         {/* LEFT IMAGE */}
-        <div className="w-1/2 relative max-md:hidden" style={{ aspectRatio: "3/3.1" }}>
+        <div
+          className="w-1/2 relative max-md:hidden"
+          style={{ aspectRatio: "3/3.1" }}
+        >
           <Image
             src="/landing/background1.jpg"
             alt="Signup"
@@ -115,10 +141,12 @@ export const Login = () => {
         <div className="md:w-1/2 w-full flex flex-col justify-center text-white gap-4 ">
           {/* HEADER */}
           <h2 className="text-3xl font-semibold text-primary">Login</h2>
-           {error == 'google_login_failed' && (
-            <p className="text-red-400 text-center">Google login/signup failed</p>
+          {error == "google_login_failed" && (
+            <p className="text-red-400 text-center">
+              Google login/signup failed
+            </p>
           )}
-         
+
           {/* FORM */}
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             {/* Email */}
@@ -166,9 +194,7 @@ export const Login = () => {
               {errors.password && (
                 <span className="text-xs text-red-500">{errors.password}</span>
               )}
-              
             </div>
-            
 
             {/* Submit */}
             <Button
@@ -183,8 +209,8 @@ export const Login = () => {
           {/* OR + Google */}
           <div className="flex flex-col items-center gap-3 ">
             <span className="text-gray-400">OR</span>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="flex gap-2"
               onClick={handleGoogleLogin}
               disabled={isGoogleLoading}

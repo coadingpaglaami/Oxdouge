@@ -17,7 +17,7 @@ import { useSearchParams } from "next/navigation";
 import { CartItemResponse } from "@/interfaces/api/AddToCart";
 import { useGetCartQuery } from "@/api/cartApi";
 import { useMyOrderQuery } from "@/api/ordersApi";
-import { useGetShippingsQuery } from "@/api/shippingApi";
+
 import { Button } from "@/components/ui/button";
 
 export const Cart = () => {
@@ -31,8 +31,8 @@ export const Cart = () => {
   );
 
   // Fetch shipping addresses
-  const { data: shippingAddresses, isLoading: addressesLoading } =
-    useGetShippingsQuery();
+  // const { data: shippingAddresses, isLoading: addressesLoading } =
+  //   useGetShippingsQuery();
 
   const [cartItems, setCartItems] = useState<CartItemResponse[]>([]);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
@@ -102,7 +102,7 @@ export const Cart = () => {
 
     return (
       <div className="flex flex-col items-center min-h-[80vh] p-6 text-white">
-        <div className="max-w-[80vw] w-full ">
+        <div className="md:max-w-[80vw] w-full ">
           {/* Success Header */}
           <div className=" rounded-lg shadow-lg p-8 text-center mb-6">
             <div className="flex justify-center mb-6">
@@ -270,7 +270,7 @@ export const Cart = () => {
     );
   }
   // Show loading state while fetching
-  if (isLoading || addressesLoading) {
+  if (isLoading ) {
     return (
       <div className="flex items-center justify-center min-h-[80vh]">
         <div className="text-white text-lg">Loading...</div>
@@ -309,7 +309,6 @@ export const Cart = () => {
             <CartRightChild
               cartItems={cartItems}
               selectedItems={selectedItems}
-              shippingAddresses={shippingAddresses || []}
             />
           </div>
         </div>

@@ -5,14 +5,19 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useGoogleExchangeMutation, useGoogleLoginQuery, useSignupMutation } from "@/api/authApi";
+import {
+  useGoogleExchangeMutation,
+  useGoogleLoginQuery,
+  useSignupMutation,
+} from "@/api/authApi";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showCPassword, setShowCPassword] = useState(false);
-  const [googleExchange, { isLoading: isGoogleLoading }] = useGoogleExchangeMutation();
+  const [googleExchange, { isLoading: isGoogleLoading }] =
+    useGoogleExchangeMutation();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -25,9 +30,10 @@ export const SignUp = () => {
     cPassword?: string;
   }>({});
   const formData = new FormData();
-    const { data: googleAuthData, refetch: initiateGoogleLogin } = useGoogleLoginQuery(undefined, {
-  skip: true, // Don't run on mount
-});
+  const { data: googleAuthData, refetch: initiateGoogleLogin } =
+    useGoogleLoginQuery(undefined, {
+      skip: true, // Don't run on mount
+    });
   const [signup, { isLoading }] = useSignupMutation();
   const router = useRouter();
   const nameRegex = /^[A-Za-z\s]{1,50}$/;
@@ -85,12 +91,26 @@ export const SignUp = () => {
         toast.success("Account created successfully!", { richColors: true });
         router.push("/login");
       } catch (err) {
-        console.error("Failed to create user:", err);
-        toast.error("Failed to create account. Please try again.", {
+        interface ApiError {
+          status: number;
+          data: {
+            [key: string]: string[]; // for example: { email: ["Enter a valid email address."] }
+          };
+        }
+
+        const error = err as ApiError;
+
+        // Extract the first field and message, if any
+        const field = Object.keys(error.data || {})[0];
+        const message = field ? error.data[field][0] : "Something went wrong";
+
+        console.error("Failed to create user:", error);
+        console.log("Signup 89", error);
+
+        toast.error(message, {
           richColors: true,
         });
       }
-      // Submit the form (e.g., send data to server)
     }
   };
 
@@ -98,7 +118,7 @@ export const SignUp = () => {
     try {
       // Trigger the Google OAuth flow
       const response = await initiateGoogleLogin().unwrap();
-      
+
       if (response?.auth_url) {
         // Redirect to Google OAuth page
         window.location.href = response.auth_url;
@@ -112,7 +132,10 @@ export const SignUp = () => {
     <div className="flex justify-center items-center min-h-[91vh] max-w-[80vw] mx-auto">
       <div className="flex items-stretch w-full h-full bg-[#121212] rounded-lg overflow-hidden gap-10 p-6">
         {/* LEFT IMAGE */}
-        <div className="w-1/2 relative max-md:hidden" style={{ aspectRatio: "3/3.1" }}>
+        <div
+          className="w-1/2 relative max-md:hidden"
+          style={{ aspectRatio: "3/3.1" }}
+        >
           <Image
             src="/auth/signup.png"
             alt="Signup"
@@ -231,8 +254,12 @@ export const SignUp = () => {
           {/* OR + Google */}
           <div className="flex flex-col items-center gap-3 w-4/5">
             <span className="text-gray-400">OR</span>
-            <Button onClick={handleGoogleLogin}
-              disabled={isGoogleLoading} variant="outline" className="flex gap-2">
+            <Button
+              onClick={handleGoogleLogin}
+              disabled={isGoogleLoading}
+              variant="outline"
+              className="flex gap-2"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 533.5 544.3"

@@ -315,14 +315,19 @@ interface ShippingAddressSelectorProps {
   setSelectedAddress: (val: number) => void;
   data: ShippingAddressResponse[] | undefined;
   shipLoading: boolean;
+  showAddAddress:boolean;
+  setShowAddAddress:React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ShippingAddressSelector = ({
   selectedAddress,
   setSelectedAddress,
   data,
+  shipLoading,
+  showAddAddress,
+  setShowAddAddress
 }: ShippingAddressSelectorProps) => {
-  const [showAddAddress, setShowAddAddress] = useState(false);
+  // const [showAddAddress, setShowAddAddress] = useState(false);
   const [shipping, { isLoading }] = useCreateShippingMutation();
   const [shippDelete, { isLoading: deleting }] = useDeleteShippingMutation();
 
