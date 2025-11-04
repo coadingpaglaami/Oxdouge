@@ -315,8 +315,8 @@ interface ShippingAddressSelectorProps {
   setSelectedAddress: (val: number) => void;
   data: ShippingAddressResponse[] | undefined;
   shipLoading: boolean;
-  showAddAddress:boolean;
-  setShowAddAddress:React.Dispatch<React.SetStateAction<boolean>>;
+  showAddAddress?:boolean;
+  setShowAddAddress?:React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ShippingAddressSelector = ({
@@ -405,6 +405,7 @@ export const ShippingAddressSelector = ({
       await shipping(payload).unwrap();
       toast.success("Address saved successfully!");
       resetForm();
+      if(showAddAddress && setShowAddAddress)
       setShowAddAddress(false);
     } catch (err) {
       console.error("Failed to save address:", err);
@@ -510,7 +511,9 @@ export const ShippingAddressSelector = ({
           </RadioGroup>
 
           <Button
-            onClick={() => setShowAddAddress(true)}
+            onClick={() => {
+              if(showAddAddress && setShowAddAddress)
+                    setShowAddAddress(true)}}
             className="self-center"
             size="sm"
           >
