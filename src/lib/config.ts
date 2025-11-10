@@ -1,1 +1,1 @@
-export const baseUrl = 'https://m2q33rg2-8002.inc1.devtunnels.ms/api/'
+export const baseUrl = 'https://api.notoverland.com/api/'
