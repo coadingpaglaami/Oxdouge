@@ -18,6 +18,7 @@ export const Heater = ({
   price,
   discount,
   discounted_price,
+  available_stock
 }: ProductResponse) => {
   const [cart, { isLoading }] = useAddToCartMutation();
 
@@ -85,9 +86,9 @@ export const Heater = ({
               console.log("Added to cart"); // here call your add-to-cart ap
             }}
             className="mt-3 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={isLoading}
+            disabled={isLoading || available_stock === 0}
           >
-            <ShoppingCart className="w-4 h-4" /> Add to Cart
+            <ShoppingCart className="w-4 h-4" /> {available_stock === 0 ? 'No Stock' : 'Add to Cart'} 
           </Button>
         </div>
       </div>
