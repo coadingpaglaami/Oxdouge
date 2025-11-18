@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useContactUsMutation } from "@/api/profileApi";
 import { toast } from "sonner";
 
-import { getAccessToken } from "@/lib/token";
+import { getAccessToken, getAuthTokens } from "@/lib/token";
 import { getUserInfoFromToken } from "@/lib/jwthelper";
 
 export interface ContactFormPayload {
@@ -22,6 +22,7 @@ export const ContactForm = () => {
     subject: "",
     message: "",
   });
+  const {email}=getAuthTokens();
 
   const [isUserAutoFilled, setIsUserAutoFilled] = useState(false);
   const [submitContact, { isLoading }] = useContactUsMutation();
@@ -38,7 +39,7 @@ export const ContactForm = () => {
         setFormData((prev) => ({
           ...prev,
           name: user.name || "",
-          email: user.email || "",
+          email: user.email!==undefined?user.email:email || "",
         }));
         setIsUserAutoFilled(true); // mark as prefilled
       }

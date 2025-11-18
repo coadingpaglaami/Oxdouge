@@ -81,7 +81,7 @@ export const Login = () => {
       try {
         const res = await login(formData).unwrap();
         console.log("Login successful", res);
-        setAuthTokens(res.token.access, res.token.refresh, res.user.role);
+        setAuthTokens(res.token.access, res.token.refresh, res.user.role,res.user.email);
         router.push("/");
       } catch (err) {
         interface ApiError {
