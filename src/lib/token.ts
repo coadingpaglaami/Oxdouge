@@ -1,6 +1,11 @@
 import Cookies from "js-cookie";
 
-export const setAuthTokens = (access: string, refresh: string, role: string,email?:string) => {
+export const setAuthTokens = (
+  access: string,
+  refresh: string,
+  role: string,
+  email?: string
+) => {
   Cookies.set("access", access, {
     expires: 30,
     secure: true, // must be true when sameSite: 'none'
@@ -21,6 +26,13 @@ export const setAuthTokens = (access: string, refresh: string, role: string,emai
     sameSite: "none",
     path: "/",
   });
+  if (email) {
+    Cookies.set("email", email, {
+      expires: 30,
+      secure: true,
+      sameSite: "none",
+    });
+  }
 };
 
 export const removeAuthTokens = () => {
@@ -36,7 +48,7 @@ export const getAuthTokens = () => {
   const role = Cookies.get("role") || null;
   const email = Cookies.get("email") || null;
 
-  return { access, refresh, role,email };
+  return { access, refresh, role, email };
 };
 
 // ✅ Optional: get only access token
