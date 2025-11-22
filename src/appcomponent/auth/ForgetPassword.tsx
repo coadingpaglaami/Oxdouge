@@ -52,6 +52,7 @@ export const ForgetPassword = () => {
       const formData = new FormData();
       formData.append("email", email);
       await sendOtp(formData).unwrap();
+      toast.success("OTP sent Successfully!");
       setStep("verifyOtp");
       setErrors({});
     } catch {
@@ -74,6 +75,7 @@ export const ForgetPassword = () => {
       formData.append("email", email);
       formData.append("code", otp);
       await verifyOtp(formData).unwrap();
+      toast.success("OTP verified successfully!");
       setStep("reset-password");
       setErrors({});
     } catch {
