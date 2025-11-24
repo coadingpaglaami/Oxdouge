@@ -15,6 +15,7 @@ export const  GoogleCallback=()=> {
   useEffect(() => {
     const handleGoogleCallback = async () => {
       const code = searchParams.get("code");
+      console.log("Authorization code:", code);
 
       if (!code) {
         setStatus("No authorization code received. Redirecting to login...");
