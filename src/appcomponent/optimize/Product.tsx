@@ -2,7 +2,12 @@
 
 import React, { useState } from "react";
 import { Breadcrumb } from "@/appcomponent/reusable";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { ProductForm } from "./ProductForm";
 import { ProductTable } from "./ProductTable";
 import { ProductResponse } from "@/interfaces/api";
@@ -25,8 +30,6 @@ export const Products = () => {
   return (
     <div className="p-6">
       <Breadcrumb title="Products" subtitle="Manage your product catalog" />
-
-   
 
       <ProductTable onEdit={openEdit} openAdd={openAdd} />
 

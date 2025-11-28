@@ -7,30 +7,35 @@ export const setAuthTokens = (
   email?: string
 ) => {
   Cookies.set("access", access, {
+    httpOnly: true,
     expires: 30,
     secure: true, // must be true when sameSite: 'none'
-    sameSite: "none",
+    sameSite: "Lax",
     path: "/",
   });
 
   Cookies.set("refresh", refresh, {
+    httpOnly: true,
     expires: 30,
     secure: true,
-    sameSite: "none",
+    sameSite: "Lax",
     path: "/",
   });
 
   Cookies.set("role", role, {
+    httpOnly: true,
     expires: 30,
     secure: true,
-    sameSite: "none",
+    sameSite: "Lax",
     path: "/",
   });
   if (email) {
     Cookies.set("email", email, {
+      httpOnly: true,
       expires: 30,
       secure: true,
-      sameSite: "none",
+      sameSite: "Lax",
+      path: "/",
     });
   }
 };

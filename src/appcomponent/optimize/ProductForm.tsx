@@ -61,6 +61,8 @@ export const ProductForm = ({ editing, onClose }: Props) => {
   const [editProduct, { isLoading: loadingEdit }] = useEditProductMutation();
   const [deleteCategory, { isLoading: categoryDeleting }] =
     useCategoryDeleteMutation();
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+
   const [inputValue, setInputValue] = useState("");
 
   const filteredCategories =
@@ -80,13 +82,25 @@ export const ProductForm = ({ editing, onClose }: Props) => {
     if (selected) setInputValue(selected.name);
   };
 
+  // const handleDeleteCategory = async (id: number) => {
+  //   try {
+  //     await deleteCategory(id);
+  //     toast.success("Category deleted successfully");
+  //   } catch (error) {
+  //     console.error(error);
+  //     toast.error("Failed to delete category");
+  //   }
+  // };
+
   const handleDeleteCategory = async (id: number) => {
     try {
-      await deleteCategory(id);
+      setDeletingId(id); // 🔥 only this category shows loader
+      await deleteCategory(id).unwrap();
       toast.success("Category deleted successfully");
     } catch (error) {
-      console.error(error);
       toast.error("Failed to delete category");
+    } finally {
+      setDeletingId(null); // clear after finish
     }
   };
 
@@ -156,11 +170,6 @@ export const ProductForm = ({ editing, onClose }: Props) => {
     setVideoFile(null);
   };
 
-  // const handleSelect = (value: string) => {
-  //   setSelected(value);
-  //   setCategory(Number(value));
-  // };
-
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
     console.log("Submitting product:", {
@@ -216,10 +225,17 @@ export const ProductForm = ({ editing, onClose }: Props) => {
     if (res.data) {
       setCategory(res.data.id);
       toast.success("Category created");
+      setInputValue("");
     } else {
       toast.error("Category creation failed");
     }
   };
+  console.log(
+    hasMorePages,
+    "hasmorepages",
+    hasPreviousPages,
+    "hasPreviousPages"
+  );
 
   return (
     <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4">
@@ -299,11 +315,16 @@ export const ProductForm = ({ editing, onClose }: Props) => {
                   <CommandInput
                     placeholder="Search or type new category..."
                     value={inputValue}
-                    onValueChange={setInputValue}
+                    onValueChange={(value) => {
+                      setInputValue(value);
+                      setCategoryPage(1);
+                    }}
                     className="bg-black text-white"
                   />
 
-                  <CommandEmpty>No category found.</CommandEmpty>
+                  <CommandEmpty className="text-white p-3 text-center">
+                    No category found.
+                  </CommandEmpty>
 
                   {/* Category List */}
                   <CommandGroup className="max-h-64 overflow-y-auto">
@@ -315,35 +336,52 @@ export const ProductForm = ({ editing, onClose }: Props) => {
                         />
                       </div>
                     ) : (
-                      filteredCategories.map((cat) => (
-                        <CommandItem
-                          key={cat.id}
-                          onSelect={() => handleSelect(cat.id)}
-                          className={`flex justify-between items-center cursor-pointer ${
-                            selectedCategoryId === cat.id
-                              ? "bg-primary text-black "
-                              : "text-white"
-                          }`}
+                      <>
+                        <div
+                          className="flex justify-between items-center p-2 border-t border-primary text-sm text-gray-400"
+                          style={{
+                            display: hasPreviousPages ? "" : "none",
+                          }}
                         >
-                          <span>{cat.name}</span>
-
-                          {/* Delete Icon */}
                           <button
-                            className="p-1 hover:text-red-400"
-                            onClick={(e) => {
-                              e.stopPropagation(); // prevent selecting while deleting
-                              handleDeleteCategory(cat.id);
-                            }}
-                            disabled={categoryDeleting}
+                            onClick={() =>
+                              setCategoryPage((p) => Math.max(p - 1, 1))
+                            }
+                            className="hover:text-white"
                           >
-                            {categoryDeleting ? (
-                              <Loader2 className="animate-spin" size={14} />
-                            ) : (
-                              <XIcon size={14} />
-                            )}
+                            ← Show Earlier Categories
                           </button>
-                        </CommandItem>
-                      ))
+                        </div>
+                        {filteredCategories.map((cat) => (
+                          <CommandItem
+                            key={cat.id}
+                            onSelect={() => handleSelect(cat.id)}
+                            className={`flex justify-between items-center cursor-pointer ${
+                              selectedCategoryId === cat.id
+                                ? "bg-primary text-black "
+                                : "text-white"
+                            }`}
+                          >
+                            <span>{cat.name}</span>
+
+                            {/* Delete Icon */}
+                            <button
+                              className="p-1 hover:text-red-400"
+                              onClick={(e) => {
+                                e.stopPropagation(); // prevent selecting while deleting
+                                handleDeleteCategory(cat.id);
+                              }}
+                              disabled={deletingId === cat.id}
+                            >
+                              {deletingId === cat.id ? (
+                                <Loader2 className="animate-spin" size={14} />
+                              ) : (
+                                <XIcon size={14} />
+                              )}
+                            </button>
+                          </CommandItem>
+                        ))}
+                      </>
                     )}
                   </CommandGroup>
 
@@ -355,7 +393,7 @@ export const ProductForm = ({ editing, onClose }: Props) => {
                     ) && (
                       <CommandItem
                         onSelect={() => createCategory(inputValue)}
-                        className="text-green-400"
+                        className="text-green-400 cursor-pointer"
                       >
                         Create {'"'}
                         {inputValue}
@@ -366,9 +404,11 @@ export const ProductForm = ({ editing, onClose }: Props) => {
                   {/* Pagination Controls */}
                   <div
                     className="flex justify-between items-center p-2 border-t border-primary text-sm text-gray-400"
-                    style={{ display: hasMorePages ? "none" : "" }}
+                    style={{
+                      display: hasMorePages ? "" : "none",
+                    }}
                   >
-                    {hasPreviousPages ? (
+                    {/* {hasPreviousPages ? (
                       <button
                         onClick={() =>
                           setCategoryPage((p) => Math.max(p - 1, 1))
@@ -379,7 +419,7 @@ export const ProductForm = ({ editing, onClose }: Props) => {
                       </button>
                     ) : (
                       <span></span>
-                    )}
+                    )} */}
                     {hasMorePages && (
                       <button
                         onClick={() => setCategoryPage((p) => p + 1)}
