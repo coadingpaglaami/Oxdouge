@@ -7,7 +7,6 @@ export const setAuthTokens = (
   email?: string
 ) => {
   Cookies.set("access", access, {
-    httpOnly: true,
     expires: 30,
     secure: true, // must be true when sameSite: 'none'
     sameSite: "Lax",
@@ -15,7 +14,7 @@ export const setAuthTokens = (
   });
 
   Cookies.set("refresh", refresh, {
-    httpOnly: true,
+
     expires: 30,
     secure: true,
     sameSite: "Lax",
@@ -23,7 +22,6 @@ export const setAuthTokens = (
   });
 
   Cookies.set("role", role, {
-    httpOnly: true,
     expires: 30,
     secure: true,
     sameSite: "Lax",
@@ -31,7 +29,6 @@ export const setAuthTokens = (
   });
   if (email) {
     Cookies.set("email", email, {
-      httpOnly: true,
       expires: 30,
       secure: true,
       sameSite: "Lax",

@@ -169,7 +169,7 @@ export const NavBar = () => {
                     <User /> Profile
                   </Link>
                   <button
-                    className="text-white flex justify-start items-center gap-2 mt-1"
+                    className="text-white flex justify-start items-center gap-2 mt-1 cursor-pointer"
                     onClick={() => handleLogOut()}
                   >
                     <LogOut /> Logout
