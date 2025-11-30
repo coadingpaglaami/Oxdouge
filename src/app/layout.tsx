@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     description: "Welcome to Oxdouge Store",
     images: [
       {
-        url: "https://notoverland.com/landing/logo.svg",
+        url: "https://notoverland.com/landing/logo.png",
         height: 630,
         width: 1200,
         alt: "Oxdouge Store",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Oxdouge Store",
     description: "Welcome to Oxdouge Store",
-    images: ["https://notoverland.com/landing/logo.svg"],
+    images: ["https://notoverland.com/landing/logo.png"],
   },
 };
 
