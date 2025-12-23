@@ -1,1 +1,1 @@
-export const baseUrl = 'https://api.notoverland.com/api/'
+export const baseUrl = 'https://api.notoverlandtech.com/api/'
