@@ -35,10 +35,7 @@ export const Products = () => {
 
       {/* Dialog for Add/Edit */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent
-          className="w-full max-h-[90vh] overflow-y-auto scrollbar-hide bg-[#0B0B0B] border border-primary/20"
-          style={{ maxWidth: "-webkit-fill-available" }}
-        >
+        <DialogContent className="w-full max-h-[90vh] overflow-y-auto scrollbar-hide bg-[#0B0B0B] border border-primary/20 md:max-w-[-webkit-fill-available] ">
           <DialogHeader>
             <DialogTitle className="text-white text-lg">
               {editing ? "Edit Product" : "Add New Product"}

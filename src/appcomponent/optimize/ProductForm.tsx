@@ -254,7 +254,7 @@ export const ProductForm = ({ editing, onClose }: Props) => {
             required
           />
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-col md:flex-row">
             <div className="flex flex-col flex-1">
               <label htmlFor="price" className="text-sm text-gray-300">
                 Price
