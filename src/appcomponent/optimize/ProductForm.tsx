@@ -255,7 +255,7 @@ export const ProductForm = ({ editing, onClose }: Props) => {
           />
 
           <div className="flex gap-2 flex-col md:flex-row">
-            <div className="flex flex-col flex-1">
+            <div className="flex flex-col md:flex-1">
               <label htmlFor="price" className="text-sm text-gray-300">
                 Price
               </label>
@@ -269,7 +269,7 @@ export const ProductForm = ({ editing, onClose }: Props) => {
               />
             </div>
 
-            <div className="flex flex-col w-24">
+            <div className="flex flex-col md:w-24 w-full">
               <label htmlFor="discount" className="text-sm text-gray-300">
                 Discount (%)
               </label>
@@ -283,7 +283,7 @@ export const ProductForm = ({ editing, onClose }: Props) => {
               />
             </div>
 
-            <div className="flex flex-col w-24">
+            <div className="flex flex-col md:w-24 w-full">
               <label htmlFor="quantity" className="text-sm text-gray-300">
                 Stock
               </label>
