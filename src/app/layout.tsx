@@ -15,29 +15,29 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Oxdouge Store",
-  description: "Welcome to Oxdouge Store",
+  title: "Notoverland Tech",
+  description: "Welcome to Notoverland Tech",
   icons: {
     icon: "/landing/logo.svg",
   },
   openGraph: {
-    title: "Oxdouge Store",
-    description: "Welcome to Oxdouge Store",
+    title: "Notoverland Tech",
+    description: "Welcome to Notoverland Tech",
     images: [
       {
         url: "https://notoverlandtech.com/landing/logo.png",
         height: 630,
         width: 1200,
-        alt: "Oxdouge Store",
+        alt: "Notoverland Tech",
       },
     ],
     type: "website",
-    siteName: "Oxdouge Store",
+    siteName: "Notoverland Tech",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Oxdouge Store",
-    description: "Welcome to Oxdouge Store",
+    title: "Notoverland Tech",
+    description: "Welcome to Notoverland Tech",
     images: ["https://notoverlandtech.com/landing/logo.png"],
   },
 };

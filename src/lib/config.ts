@@ -1,1 +1,1 @@
-export const baseUrl = 'https://api.notoverlandtech.com/api/'
+export const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
