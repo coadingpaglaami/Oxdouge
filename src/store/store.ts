@@ -7,33 +7,36 @@ import { productApi } from "@/api/productApi";
 import { shippingApi } from "@/api/shippingApi";
 import { profileApi } from "@/api/profileApi"; // Import the profile API
 import { configureStore } from "@reduxjs/toolkit";
+import { uiManagerApi } from "@/api/ui_manager";
 
-export const store = ()=>{
-return configureStore({
-  reducer: {
-    [authApi.reducerPath]: authApi.reducer,
-    [productApi.reducerPath]: productApi.reducer,
-    [cartApi.reducerPath]: cartApi.reducer,
-    [couponApi.reducerPath]: couponApi.reducer,
-    [shippingApi.reducerPath]: shippingApi.reducer,
-    [ordersApi.reducerPath]: ordersApi.reducer,
-    [profileApi.reducerPath]: profileApi.reducer,
-    [dashboardApi.reducerPath]: dashboardApi.reducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(
-      authApi.middleware,
-      productApi.middleware,
-      cartApi.middleware,
-      couponApi.middleware,
-      shippingApi.middleware,
-      ordersApi.middleware,
-      profileApi.middleware,
-      dashboardApi.middleware
-    ),
-});
-}
+export const store = () => {
+  return configureStore({
+    reducer: {
+      [authApi.reducerPath]: authApi.reducer,
+      [productApi.reducerPath]: productApi.reducer,
+      [cartApi.reducerPath]: cartApi.reducer,
+      [couponApi.reducerPath]: couponApi.reducer,
+      [shippingApi.reducerPath]: shippingApi.reducer,
+      [ordersApi.reducerPath]: ordersApi.reducer,
+      [profileApi.reducerPath]: profileApi.reducer,
+      [dashboardApi.reducerPath]: dashboardApi.reducer,
+      [uiManagerApi.reducerPath]: uiManagerApi.reducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(
+        authApi.middleware,
+        productApi.middleware,
+        cartApi.middleware,
+        couponApi.middleware,
+        shippingApi.middleware,
+        ordersApi.middleware,
+        profileApi.middleware,
+        dashboardApi.middleware,
+        uiManagerApi.middleware,
+      ),
+  });
+};
 
-export type RootState = ReturnType<AppStore['getState']>
-export type AppDispatch = AppStore['dispatch']
-export type AppStore = ReturnType<typeof store>
+export type RootState = ReturnType<AppStore["getState"]>;
+export type AppDispatch = AppStore["dispatch"];
+export type AppStore = ReturnType<typeof store>;

@@ -9,6 +9,7 @@ import {
   Settings,
   ShoppingCart,
   MessageCircleMoreIcon,
+  Sliders,
 } from "lucide-react";
 
 interface SidebarItem {
@@ -34,12 +35,17 @@ export const Sidebar = () => {
     },
     { name: "Settings", href: "/admin/settings", icon: <Settings size={20} /> },
     { name: "Coupons", href: "/admin/coupon", icon: <Package size={20} /> },
+    {
+      name: "UI Manager",
+      href: "/admin/ui_manager",
+      icon: <Sliders size={20} />,
+    },
   ];
 
   return (
     <div className="flex flex-col h-full p-6 gap-8 bg-[#121212]">
       {/* Logo */}
-      <Link href='/' className="flex justify-center">
+      <Link href="/" className="flex justify-center">
         <Image
           src="/landing/logo.svg"
           alt="Logo"

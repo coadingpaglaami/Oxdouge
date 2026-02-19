@@ -2,6 +2,8 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { baseUrl } from "@/lib/config";
 
+console.log(baseUrl);
+
 const rawBaseQuery = fetchBaseQuery({
   baseUrl,
   prepareHeaders: (headers) => {
