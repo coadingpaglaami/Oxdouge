@@ -5,6 +5,7 @@ export interface PostRequest {
   new_images: File[] | null;  // Assuming an array of files
   new_headings: string[];
   new_subheadings: string[];
+  deleted_image_ids: number[]; // IDs of images to be deleted
 }
 
 
@@ -19,6 +20,7 @@ export interface PostResponse {
 }
 
 export interface ExistingImage {
+  id:number;
   image: string;
   heading: string | null;
   sub_heading: string | null;

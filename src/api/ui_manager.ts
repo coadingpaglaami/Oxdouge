@@ -23,24 +23,38 @@ export const uiManagerApi = createApi({
     heropromotion: builder.mutation<void, PostRequest>({
       query: (body) => {
         const formData = new FormData();
+
         formData.append("title1", body.title1);
         formData.append("title2", body.title2);
         formData.append("description", body.description);
 
-        // Append multiple files
-        if (body.new_images) {
-          body.new_images.forEach((file, index) => {
-            formData.append(`new_images[${index}]`, file);
+        // Deleted IDs
+        if (body.deleted_image_ids?.length) {
+          body.deleted_image_ids.forEach((id) => {
+            formData.append("deleted_image_ids", id.toString());
           });
         }
 
-        body.new_headings.forEach((heading, index) => {
-          formData.append(`new_headings[${index}]`, heading);
-        });
+        // New Images
+        if (body.new_images?.length) {
+          body.new_images.forEach((file) => {
+            formData.append("new_images", file);
+          });
+        }
 
-        body.new_subheadings.forEach((subheading, index) => {
-          formData.append(`new_subheadings[${index}]`, subheading);
-        });
+        // New Headings
+        if (body.new_headings?.length) {
+          body.new_headings.forEach((heading) => {
+            formData.append("new_headings", heading);
+          });
+        }
+
+        // New Subheadings
+        if (body.new_subheadings?.length) {
+          body.new_subheadings.forEach((subheading) => {
+            formData.append("new_subheadings", subheading);
+          });
+        }
 
         return {
           url: heroPromotionEndpoint,

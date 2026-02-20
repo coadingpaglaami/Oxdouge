@@ -5,16 +5,16 @@ import { resolveImage } from "./valueandfunction";
 
 export const ExistingImageCard = ({
   img,
-  originalIndex,
+  id,
   displayIndex,
   onChange,
   onDelete,
 }: {
   img: ExistingImage;
-  originalIndex: number;
+  id: number;
   displayIndex: number;
-  onChange: (originalIndex: number, field: keyof ExistingImage, value: string) => void;
-  onDelete: (originalIndex: number) => void;
+  onChange: (id: number, field: keyof ExistingImage, value: string) => void;
+  onDelete: (id: number) => void;
 }) => {
   const [imgError, setImgError] = useState(false);
 
@@ -43,7 +43,7 @@ export const ExistingImageCard = ({
 
         {/* Delete — only existing images can be deleted */}
         <button
-          onClick={() => onDelete(originalIndex)}
+          onClick={() => onDelete(id)}
           title="Delete this image"
           className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-red-500/80 hover:bg-red-500 text-white text-xs font-bold flex items-center justify-center backdrop-blur-sm transition-all duration-150 hover:scale-110 opacity-0 group-hover:opacity-100 cursor-pointer"
         >
@@ -55,14 +55,14 @@ export const ExistingImageCard = ({
       <div className="p-3.5 flex flex-col gap-3">
         <Field
           label="Heading"
-          value={img.heading ?? ''}
-          onChange={(v) => onChange(originalIndex, 'heading', v)}
+          value={img.heading ?? ""}
+          onChange={(v) => onChange(id, "heading", v)}
           placeholder="No heading"
         />
         <Field
           label="Sub-heading"
-          value={img.sub_heading ?? ''}
-          onChange={(v) => onChange(originalIndex, 'sub_heading', v)}
+          value={img.sub_heading ?? ""}
+          onChange={(v) => onChange(id, "sub_heading", v)}
           placeholder="No sub-heading"
         />
       </div>
