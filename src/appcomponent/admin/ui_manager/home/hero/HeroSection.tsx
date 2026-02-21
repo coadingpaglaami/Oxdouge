@@ -12,6 +12,7 @@ import { Field } from "./Field";
 import { ExistingImageCard } from "./ExistingImageCard";
 import { NewImageCard } from "./NewImageCard";
 import { MAX_NEW_IMAGES } from "./valueandfunction";
+import { toast } from "sonner";
 
 export const HeroSectionManagement = () => {
   const { data, isLoading, error } = useGetHeroPromotionQuery();
@@ -28,12 +29,12 @@ export const HeroSectionManagement = () => {
   const [deletedImageIds, setDeletedImageIds] = useState<number[]>([]);
   console.log(deletedImageIds);
 
-  // ── New Images ──
   const [newFiles, setNewFiles] = useState<File[]>([]);
   const [newHeadings, setNewHeadings] = useState<string[]>([]);
   const [newSubheadings, setNewSubheadings] = useState<string[]>([]);
 
   const [saved, setSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // ── Seed From API ──
@@ -73,12 +74,30 @@ export const HeroSectionManagement = () => {
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
-    const slots = MAX_NEW_IMAGES - newFiles.length;
-    const toAdd = files.slice(0, slots);
+    if (files.length === 0) return;
 
-    setNewFiles((prev) => [...prev, ...toAdd]);
-    setNewHeadings((prev) => [...prev, ...toAdd.map(() => "")]);
-    setNewSubheadings((prev) => [...prev, ...toAdd.map(() => "")]);
+    setNewFiles((prev) => {
+      const slots = MAX_NEW_IMAGES - prev.length;
+      if (slots <= 0) return prev;
+
+      const filtered = files.filter(
+        (file) =>
+          !prev.some(
+            (existing) =>
+              existing.name === file.name &&
+              existing.size === file.size &&
+              existing.lastModified === file.lastModified,
+          ),
+      );
+
+      const toAdd = filtered.slice(0, slots);
+      if (toAdd.length === 0) return prev;
+
+      setNewHeadings((hPrev) => [...hPrev, ...toAdd.map(() => "")]);
+      setNewSubheadings((sPrev) => [...sPrev, ...toAdd.map(() => "")]);
+
+      return [...prev, ...toAdd];
+    });
 
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
@@ -100,6 +119,8 @@ export const HeroSectionManagement = () => {
   // ── Save Handler ──
 
   const handleSave = async () => {
+    if (isSaving || isUpdating) return;
+    setIsSaving(true);
     try {
       await updateHeroPromotion({
         title1,
@@ -110,6 +131,7 @@ export const HeroSectionManagement = () => {
         new_headings: newHeadings,
         new_subheadings: newSubheadings,
       }).unwrap();
+      toast.success("Hero section updated successfully!");
 
       // Reset temporary states after success
       setDeletedImageIds([]);
@@ -121,6 +143,9 @@ export const HeroSectionManagement = () => {
       setTimeout(() => setSaved(false), 2500);
     } catch (err) {
       console.error("Failed to update hero promotion:", err);
+      toast.error("Failed to update hero section");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -188,11 +213,11 @@ export const HeroSectionManagement = () => {
 
         <button
           onClick={handleSave}
-          disabled={isUpdating}
-          className={`px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-all duration-300 disabled:opacity-60
-            ${saved ? "bg-emerald-600" : "bg-violet-600 hover:bg-violet-500"}`}
+          disabled={isSaving || isUpdating}
+          className={`px-5 py-2.5 rounded-lg text-sm text-black font-semibold transition-all duration-300 disabled:opacity-60
+            ${saved ? "bg-emerald-600" : "bg-primary hover:bg-primary/80"}`}
         >
-          {isUpdating ? "Saving…" : saved ? "✓ Saved" : "Save Changes"}
+          {isSaving || isUpdating ? "Saving…" : saved ? "✓ Saved" : "Save Changes"}
         </button>
       </header>
 

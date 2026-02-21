@@ -38,7 +38,7 @@ export const ExistingImageCard = ({
 
         {/* Badge */}
         <span className="absolute top-2.5 left-2.5 text-[10px] font-mono tracking-wider bg-black/70 text-violet-400 border border-violet-500/25 px-2 py-0.5 rounded-md backdrop-blur-sm">
-          #{displayIndex + 1}
+          #{id}
         </span>
 
         {/* Delete — only existing images can be deleted */}
@@ -58,12 +58,14 @@ export const ExistingImageCard = ({
           value={img.heading ?? ""}
           onChange={(v) => onChange(id, "heading", v)}
           placeholder="No heading"
+          disabled={true}
         />
         <Field
           label="Sub-heading"
           value={img.sub_heading ?? ""}
           onChange={(v) => onChange(id, "sub_heading", v)}
           placeholder="No sub-heading"
+          disabled={true}
         />
       </div>
     </div>

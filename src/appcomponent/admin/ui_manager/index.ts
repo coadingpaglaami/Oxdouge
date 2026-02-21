@@ -1,1 +1,2 @@
-export * from './UIManager';
+export * from './home';
+export * from './about';

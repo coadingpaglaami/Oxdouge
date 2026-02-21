@@ -2,6 +2,7 @@ import { AboutCard } from "./AboutCard";
 import { HeroSection } from "./HeroSection";
 import { OurJourney } from "./OurJourney";
 import { OurStory } from "./OurStory";
+import { AboutStoryAndAboutCard } from "./OurStoryAndAboutCard";
 import { OurValues } from "./OurValues";
 
 export const About = () => {
@@ -9,8 +10,7 @@ export const About = () => {
     <>
       <HeroSection />
       <div className="my-20 space-y-16">
-        <OurStory />
-        <AboutCard />
+        <AboutStoryAndAboutCard />
         <OurValues />
         <OurJourney />
       </div>
