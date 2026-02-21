@@ -135,7 +135,7 @@ export const Footer = () => {
               <li key={link.name}>
                 <Link
                   href={link.href}
-                  className="relative pb-1 transition-all duration-200 hover:text-primary after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-200 hover:after:w-full"
+                  className="relative pb-1 transition-all duration-200 hover:text-primary after:absolute after:left-0 after:bottom-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-200 hover:after:w-full"
                 >
                   {link.name}
                 </Link>
@@ -152,7 +152,7 @@ export const Footer = () => {
               <li key={link.name}>
                 <Link
                   href={link.href}
-                  className="relative pb-1 transition-all duration-200 hover:text-primary after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-200 hover:after:w-full"
+                  className="relative pb-1 transition-all duration-200 hover:text-primary after:absolute after:left-0 after:bottom-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-200 hover:after:w-full"
                 >
                   {link.name}
                 </Link>

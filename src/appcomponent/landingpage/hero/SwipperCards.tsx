@@ -59,7 +59,7 @@ export const SwipperCards = ({ images }: SwipperCardsProps) => {
       {slides.map((slide) => (
         <SwiperSlide
           key={slide.id}
-          className="relative bg-cover bg-center rounded-2xl overflow-hidden border-2 border-primary aspect-[3/4]"
+          className="relative bg-cover bg-center rounded-2xl overflow-hidden border-2 border-primary aspect-3/4"
           style={{
             backgroundImage: `url(${slide.image})`,
           }}

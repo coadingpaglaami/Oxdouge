@@ -87,7 +87,7 @@ const FeatureCardForm = ({ slot, setSlot, fileRef, onFilePick, onFileChange }: F
   <div className="flex flex-col gap-4">
     {/* Live preview */}
     <div className="flex items-center gap-3 p-3 rounded-xl border border-primary/30 bg-primary/5">
-      <div className="w-10 h-10 flex-shrink-0 rounded-xl bg-gradient-to-br from-amber-900/60 to-amber-700/40 flex items-center justify-center overflow-hidden border border-primary/20">
+      <div className="w-10 h-10 shrink-0 rounded-xl bg-linear-to-br from-amber-900/60 to-amber-700/40 flex items-center justify-center overflow-hidden border border-primary/20">
         {slot.iconPreview ? (
           <Image src={slot.iconPreview} alt="preview" width={36} height={36} className="w-8 h-8 object-cover rounded-lg" />
         ) : (
@@ -113,7 +113,7 @@ const FeatureCardForm = ({ slot, setSlot, fileRef, onFilePick, onFileChange }: F
         value={slot.heading}
         onChange={(e) => setSlot((p) => p ? { ...p, heading: e.target.value } : p)}
         placeholder="e.g. Premium Quality"
-        className="bg-[#1a1a1a] border-white/[0.08] text-white placeholder-neutral-600 focus-visible:ring-primary focus-visible:border-primary"
+        className="bg-[#1a1a1a] border-white/8 text-white placeholder-neutral-600 focus-visible:ring-primary focus-visible:border-primary"
       />
     </div>
 
@@ -124,7 +124,7 @@ const FeatureCardForm = ({ slot, setSlot, fileRef, onFilePick, onFileChange }: F
         onChange={(e) => setSlot((p) => p ? { ...p, description: e.target.value } : p)}
         placeholder="e.g. Engineered for the toughest conditions…"
         rows={3}
-        className="bg-[#1a1a1a] border-white/[0.08] text-white placeholder-neutral-600 focus-visible:ring-primary focus-visible:border-primary resize-none"
+        className="bg-[#1a1a1a] border-white/8 text-white placeholder-neutral-600 focus-visible:ring-primary focus-visible:border-primary resize-none"
       />
     </div>
 
@@ -343,7 +343,7 @@ export const WarmSection = () => {
           </div>
 
           <div
-            className="relative w-full rounded-2xl overflow-hidden border border-white/[0.08] bg-[#121212] cursor-pointer group"
+            className="relative w-full rounded-2xl overflow-hidden border border-white/8 bg-[#121212] cursor-pointer group"
             style={{ aspectRatio: '16/6' }}
             onClick={openMainImage}
           >
@@ -380,10 +380,10 @@ export const WarmSection = () => {
             {featureCards.map(({ index, heading, description, icon }) => (
               <div
                 key={index}
-                className="flex flex-col bg-[#121212] rounded-2xl p-5 border border-white/[0.08] hover:border-primary hover:scale-[1.02] transition-all duration-300"
+                className="flex flex-col bg-[#121212] rounded-2xl p-5 border border-white/8 hover:border-primary hover:scale-[1.02] transition-all duration-300"
               >
                 <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-[#1e1e1e] border border-white/[0.08] overflow-hidden flex-shrink-0">
+                  <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-[#1e1e1e] border border-white/8 overflow-hidden shrink-0">
                     {icon ? (
                       <Image src={icon} alt={heading ?? `Card ${index}`} width={36} height={36} className="w-8 h-8 object-cover rounded-lg" />
                     ) : (

@@ -194,10 +194,10 @@ const handleAdd = async () => {
             {items.map((item) => (
               <div
                 key={item.id}
-                className="flex flex-col bg-[#121212] rounded-2xl p-5 border border-white/[0.08] hover:border-primary hover:scale-[1.02] transition-all duration-300"
+                className="flex flex-col bg-[#121212] rounded-2xl p-5 border border-white/8 hover:border-primary hover:scale-[1.02] transition-all duration-300"
               >
                 {/* Icon thumbnail */}
-                <div className="w-14 h-14 flex items-center justify-center rounded-xl mb-4 bg-[#1e1e1e] border border-white/[0.08] overflow-hidden flex-shrink-0">
+                <div className="w-14 h-14 flex items-center justify-center rounded-xl mb-4 bg-[#1e1e1e] border border-white/8 overflow-hidden shrink-0">
                   {item.icon ? (
                     <Image
                       src={item.icon}
@@ -227,7 +227,7 @@ const handleAdd = async () => {
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-2 mt-4 pt-4 border-t border-white/[0.05]">
+                <div className="flex gap-2 mt-4 pt-4 border-t border-white/5">
                   <button
                     onClick={() => openEdit(item)}
                     className="flex-1 flex items-center justify-center gap-1.5 text-xs font-semibold text-neutral-300 border border-white/10 rounded-lg py-2 hover:bg-white/5 hover:border-white/20 transition-colors"
@@ -273,7 +273,7 @@ const handleAdd = async () => {
               </h3>
               <button
                 onClick={closeModal}
-                className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#1e1e1e] border border-white/[0.08] text-neutral-400 hover:text-white hover:bg-[#2a2a2a] transition-colors"
+                className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#1e1e1e] border border-white/8 text-neutral-400 hover:text-white hover:bg-[#2a2a2a] transition-colors"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
                   <path d="M18 6 6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -284,7 +284,7 @@ const handleAdd = async () => {
             {/* Live preview strip */}
             <div className="mx-6 mt-5 p-4 rounded-xl border border-primary/30 bg-primary/5 flex items-center justify-between gap-3">
               <div className="flex items-center gap-3 flex-1 min-w-0">
-                <div className="w-11 h-11 flex-shrink-0 rounded-xl bg-gradient-to-br from-amber-900/60 to-amber-700/40 flex items-center justify-center overflow-hidden border border-primary/20">
+                <div className="w-11 h-11 shrink-0 rounded-xl bg-linear-to-br from-amber-900/60 to-amber-700/40 flex items-center justify-center overflow-hidden border border-primary/20">
                   {form.iconPreview ? (
                     <Image
                       src={form.iconPreview}
@@ -326,7 +326,7 @@ const handleAdd = async () => {
                   value={form.card_heading}
                   onChange={(e) => setForm((prev) => ({ ...prev, card_heading: e.target.value }))}
                   placeholder="e.g. Reliable Power"
-                  className="bg-[#1a1a1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-sm text-white placeholder-neutral-600 outline-none focus:border-primary transition-colors"
+                  className="bg-[#1a1a1a] border border-white/8 rounded-lg px-4 py-2.5 text-sm text-white placeholder-neutral-600 outline-none focus:border-primary transition-colors"
                 />
               </div>
 
@@ -339,7 +339,7 @@ const handleAdd = async () => {
                   onChange={(e) => setForm((prev) => ({ ...prev, card_description: e.target.value }))}
                   placeholder="e.g. Built for rugged environments"
                   rows={3}
-                  className="bg-[#1a1a1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-sm text-white placeholder-neutral-600 outline-none focus:border-primary transition-colors resize-none"
+                  className="bg-[#1a1a1a] border border-white/8 rounded-lg px-4 py-2.5 text-sm text-white placeholder-neutral-600 outline-none focus:border-primary transition-colors resize-none"
                 />
               </div>
 
@@ -352,7 +352,7 @@ const handleAdd = async () => {
                   value={form.description}
                   onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))}
                   placeholder="e.g. Reliable portable power solutions"
-                  className="bg-[#1a1a1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-sm text-white placeholder-neutral-600 outline-none focus:border-primary transition-colors"
+                  className="bg-[#1a1a1a] border border-white/8 rounded-lg px-4 py-2.5 text-sm text-white placeholder-neutral-600 outline-none focus:border-primary transition-colors"
                 />
               </div>
 
@@ -408,7 +408,7 @@ const handleAdd = async () => {
             </div>
 
             {/* Footer */}
-            <div className="flex justify-end gap-3 px-6 pb-6 pt-2 border-t border-white/[0.05]">
+            <div className="flex justify-end gap-3 px-6 pb-6 pt-2 border-t border-white/5">
               <button
                 onClick={closeModal}
                 className="px-4 py-2.5 text-sm font-semibold text-neutral-300 border border-white/10 rounded-lg hover:bg-white/5 transition-colors"

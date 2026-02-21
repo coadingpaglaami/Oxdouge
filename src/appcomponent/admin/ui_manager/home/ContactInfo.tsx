@@ -132,9 +132,9 @@ export const ContactInfo = () => {
       </div>
 
       {/* Card */}
-      <div className="max-w-xl bg-[#121212] border border-white/[0.08] rounded-2xl overflow-hidden">
+      <div className="max-w-xl bg-[#121212] border border-white/8 rounded-2xl overflow-hidden">
         {/* Card header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/6">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-primary/15 border border-primary/30 flex items-center justify-center">
               <Phone className="w-4 h-4 text-primary" />
@@ -173,7 +173,7 @@ export const ContactInfo = () => {
                         setForm((prev) => ({ ...prev, [key]: e.target.value }))
                       }
                       placeholder={placeholder}
-                      className="pl-9 bg-[#1a1a1a] border-white/[0.08] text-white placeholder-neutral-600 focus-visible:ring-primary focus-visible:border-primary transition-colors"
+                      className="pl-9 bg-[#1a1a1a] border-white/8 text-white placeholder-neutral-600 focus-visible:ring-primary focus-visible:border-primary transition-colors"
                     />
                   </div>
                 </div>
@@ -184,7 +184,7 @@ export const ContactInfo = () => {
 
         {/* Footer actions */}
         {!isLoading && (
-          <div className="flex items-center justify-between gap-3 px-6 py-4 border-t border-white/[0.06] bg-[#0f0f0f]">
+          <div className="flex items-center justify-between gap-3 px-6 py-4 border-t border-white/6 bg-[#0f0f0f]">
             <Button
               variant="ghost"
               size="sm"

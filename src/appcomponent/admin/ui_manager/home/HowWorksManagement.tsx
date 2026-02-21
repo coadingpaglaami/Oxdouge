@@ -116,7 +116,7 @@ const FormFields = ({
   <div className="flex flex-col gap-5">
     {/* Live preview */}
     <div className="flex items-center gap-3 p-3 rounded-xl border border-primary/30 bg-primary/5">
-      <div className="w-10 h-10 flex-shrink-0 rounded-xl bg-gradient-to-br from-amber-900/60 to-amber-700/40 flex items-center justify-center overflow-hidden border border-primary/20">
+      <div className="w-10 h-10 shrink-0 rounded-xl bg-linear-to-br from-amber-900/60 to-amber-700/40 flex items-center justify-center overflow-hidden border border-primary/20">
         {form.iconPreview ? (
           <Image
             src={form.iconPreview}
@@ -174,7 +174,7 @@ const FormFields = ({
           setForm((prev) => ({ ...prev, title: e.target.value }))
         }
         placeholder="e.g. Choose Your Kit"
-        className="bg-[#1a1a1a] border-white/[0.08] text-white placeholder-neutral-600 focus-visible:ring-primary focus-visible:border-primary"
+        className="bg-[#1a1a1a] border-white/8 text-white placeholder-neutral-600 focus-visible:ring-primary focus-visible:border-primary"
       />
     </div>
 
@@ -190,7 +190,7 @@ const FormFields = ({
         }
         placeholder="e.g. Select the power kit that suits your adventure…"
         rows={3}
-        className="bg-[#1a1a1a] border-white/[0.08] text-white placeholder-neutral-600 focus-visible:ring-primary focus-visible:border-primary resize-none"
+        className="bg-[#1a1a1a] border-white/8 text-white placeholder-neutral-600 focus-visible:ring-primary focus-visible:border-primary resize-none"
       />
     </div>
 
@@ -450,10 +450,10 @@ export const HowWorksManagement = () => {
             {items.map((item, index) => (
               <div
                 key={item.id}
-                className="flex flex-col bg-[#121212] rounded-2xl p-5 border border-white/[0.08] hover:border-primary hover:scale-[1.02] transition-all duration-300"
+                className="flex flex-col bg-[#121212] rounded-2xl p-5 border border-white/8 hover:border-primary hover:scale-[1.02] transition-all duration-300"
               >
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-14 h-14 flex items-center justify-center rounded-xl bg-[#1e1e1e] border border-white/[0.08] overflow-hidden flex-shrink-0">
+                  <div className="w-14 h-14 flex items-center justify-center rounded-xl bg-[#1e1e1e] border border-white/8 overflow-hidden shrink-0">
                     {item.icon ? (
                       <Image
                         src={item.icon}
@@ -483,7 +483,7 @@ export const HowWorksManagement = () => {
                   </p>
                 </div>
 
-                <div className="flex gap-2 mt-4 pt-4 border-t border-white/[0.05]">
+                <div className="flex gap-2 mt-4 pt-4 border-t border-white/5">
                   <button
                     onClick={() => openEdit(item)}
                     className="flex-1 flex items-center justify-center gap-1.5 text-xs font-semibold text-neutral-300 border border-white/10 rounded-lg py-2 hover:bg-white/5 hover:border-white/20 transition-colors"

@@ -111,7 +111,7 @@ const ParagraphEditor = ({
         {paragraphs.map((para, index) => (
           <div key={index} className="flex gap-2 items-start group">
             {/* Index badge */}
-            <div className="flex-shrink-0 w-6 h-7 flex items-center justify-center mt-[9px]">
+            <div className="shrink-0 w-6 h-7 flex items-center justify-center mt-[9px]">
               <span className="text-[10px] font-bold text-neutral-600 font-mono">
                 {String(index + 1).padStart(2, "0")}
               </span>
@@ -122,14 +122,14 @@ const ParagraphEditor = ({
               onChange={(e) => update(index, e.target.value)}
               placeholder={`Paragraph ${index + 1}…`}
               rows={3}
-              className="flex-1 bg-[#1a1a1a] border-white/[0.08] text-white placeholder-neutral-600 focus-visible:ring-primary focus-visible:border-primary resize-none transition-colors text-sm"
+              className="flex-1 bg-[#1a1a1a] border-white/8 text-white placeholder-neutral-600 focus-visible:ring-primary focus-visible:border-primary resize-none transition-colors text-sm"
             />
 
             {/* Remove button */}
             <button
               type="button"
               onClick={() => removeParagraph(index)}
-              className="flex-shrink-0 mt-[9px] w-7 h-7 flex items-center justify-center rounded-lg text-neutral-700 hover:text-red-400 hover:bg-red-500/10 transition-colors opacity-0 group-hover:opacity-100"
+              className="shrink-0 mt-[9px] w-7 h-7 flex items-center justify-center rounded-lg text-neutral-700 hover:text-red-400 hover:bg-red-500/10 transition-colors opacity-0 group-hover:opacity-100"
               title="Remove paragraph"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -235,7 +235,7 @@ const ImageUploadZone = ({
         tabIndex={0}
         onClick={onFilePick}
         onKeyDown={(e) => e.key === "Enter" && onFilePick()}
-        className="relative w-full rounded-2xl overflow-hidden border border-white/[0.08] bg-[#1a1a1a] cursor-pointer group transition-all hover:border-primary"
+        className="relative w-full rounded-2xl overflow-hidden border border-white/8 bg-[#1a1a1a] cursor-pointer group transition-all hover:border-primary"
         style={{ aspectRatio: "16/9" }}
       >
         {displaySrc ? (
@@ -392,8 +392,8 @@ export const OurStoryManagement = () => {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           {/* ── Left: Text fields ── */}
-          <div className="flex flex-col bg-[#121212] border border-white/[0.08] rounded-2xl overflow-hidden">
-            <div className="flex items-center gap-2.5 px-6 pt-5 pb-4 border-b border-white/[0.06]">
+          <div className="flex flex-col bg-[#121212] border border-white/8 rounded-2xl overflow-hidden">
+            <div className="flex items-center gap-2.5 px-6 pt-5 pb-4 border-b border-white/6">
               <div className="w-8 h-8 rounded-lg bg-primary/15 border border-primary/30 flex items-center justify-center">
                 <BookOpen className="w-4 h-4 text-primary" />
               </div>
@@ -423,7 +423,7 @@ export const OurStoryManagement = () => {
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-between gap-3 px-6 py-4 border-t border-white/[0.06] bg-[#0f0f0f]">
+            <div className="flex items-center justify-between gap-3 px-6 py-4 border-t border-white/6 bg-[#0f0f0f]">
               {story?.updated_at && (
                 <span className="text-[11px] text-neutral-600 font-mono hidden sm:block">
                   Updated {new Date(story.updated_at).toLocaleDateString()}
@@ -457,8 +457,8 @@ export const OurStoryManagement = () => {
           </div>
 
           {/* ── Right: Image ── */}
-          <div className="bg-[#121212] border border-white/[0.08] rounded-2xl overflow-hidden">
-            <div className="flex items-center gap-2.5 px-6 pt-5 pb-4 border-b border-white/[0.06]">
+          <div className="bg-[#121212] border border-white/8 rounded-2xl overflow-hidden">
+            <div className="flex items-center gap-2.5 px-6 pt-5 pb-4 border-b border-white/6">
               <div className="w-8 h-8 rounded-lg bg-primary/15 border border-primary/30 flex items-center justify-center">
                 <ImageIcon className="w-4 h-4 text-primary" />
               </div>
