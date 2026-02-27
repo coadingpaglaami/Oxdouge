@@ -7,7 +7,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import Cookies from "js-cookie";
 
 export const Heater = ({
   id,
@@ -25,14 +24,7 @@ export const Heater = ({
   const route = useRouter();
 
   async function addToCart(id: number) {
-    const token = Cookies.get("access"); // get token from cookies
-    if (!token) {
-      toast.error("You need to login first");
-      setTimeout(() => {
-        route.push("/login");
-      }, 1000);
-      return;
-    }
+
     try {
       const res = await cart({ product_id: id, quantity: 1 }).unwrap();
       console.log("Product added to cart", res);

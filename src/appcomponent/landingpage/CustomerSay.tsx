@@ -45,7 +45,9 @@ export const CustomerSay = () => {
         </div>
       ) : (
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {customerReview?.map((item) => {
+          {
+          
+          customerReview?.map((item) => {
             const ratingNum = Number(item.rating) || 5;
             return (
               <div

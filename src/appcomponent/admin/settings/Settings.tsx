@@ -209,7 +209,7 @@ export const Settings = () => {
   }, [emailSecurityData]);
 
   const handleProfileSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
+    e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
 
@@ -246,7 +246,7 @@ export const Settings = () => {
   };
 
   const handlePasswordSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
+    e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
 
@@ -370,7 +370,10 @@ export const Settings = () => {
               <label className="text-sm text-gray-400">Admin Email</label>
               <Input
                 value={profile.primary_email}
-                disabled
+                disabled={!editProfile || isUpdatingProfile}
+                 onChange={(e) =>
+                  setProfile({ ...profile, primary_email: e.target.value })
+                }
                 className="bg-[#1E1E1E] text-white border border-primary"
               />
             </div>

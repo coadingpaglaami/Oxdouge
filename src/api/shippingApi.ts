@@ -11,8 +11,8 @@ export const shippingApi = createApi({
   endpoints: (builder) => ({
 
     // ✅ GET all shipping options
-    getShippings: builder.query<ShippingAddressResponse[],void>({
-      query: () =>  shippingEndpoint,
+    getShippings: builder.query<{results: ShippingAddressResponse[], count: number},void>({
+      query: () =>  ({ url: shippingEndpoint, credentials: "include" }),
      
       providesTags: ["Shipping"],
     }),
@@ -23,6 +23,7 @@ export const shippingApi = createApi({
         url: shippingEndpoint,
         method: "POST",
         body,
+        credentials: "include",
       }),
       invalidatesTags: ["Shipping"],
     }),
@@ -33,6 +34,7 @@ export const shippingApi = createApi({
         url: `${shippingEndpoint}${id}/`,
         method: "PATCH",
         body,
+        credentials: "include",
       }),
       invalidatesTags: ["Shipping"],
     }),
@@ -42,6 +44,7 @@ export const shippingApi = createApi({
       query: (id) => ({
         url: `${shippingEndpoint}${id}/`,
         method: "DELETE",
+        credentials: "include",
       }),
       invalidatesTags: ["Shipping"],
     }),

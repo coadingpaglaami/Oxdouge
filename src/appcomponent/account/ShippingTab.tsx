@@ -13,7 +13,7 @@ export const ShippingTab = () => {
     <ShippingAddressSelector
       selectedAddress={selectedAddress}
       setSelectedAddress={setSelectedAddress}
-      data={data}
+      data={data?.results}
       shipLoading={shipLoading}
     />
   );

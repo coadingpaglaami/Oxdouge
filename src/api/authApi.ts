@@ -6,20 +6,21 @@ import {
   GoogleLoginResponse,
 } from "@/interfaces/api";
 import { ChangePasswordPayload } from "@/interfaces/api/User";
-import { verify } from "crypto";
+import { cartApi } from "./cartApi";
 
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: rawBaseQuery,
-  tagTypes: ["Auth"],
+  tagTypes: ["Auth", "Cart"],
   endpoints: (builder) => ({
     signup: builder.mutation<CreateUserResponse, FormData>({
       query: (formData) => ({
         url: "signup/",
         method: "POST",
         body: formData,
+        credentials: "include",
       }),
-      invalidatesTags: ["Auth"],
+      invalidatesTags: ["Auth", "Cart"],
     }),
 
     login: builder.mutation<LoginResponse, FormData>({
@@ -27,8 +28,34 @@ export const authApi = createApi({
         url: "login/",
         method: "POST",
         body: formData,
+        credentials: "include",
       }),
-      invalidatesTags: ["Auth"],
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          console.log(data, "Login response data");
+
+          // Save tokens in cookies
+
+          // If backend tells to clear session
+          if (data.clear_session) {
+            document.cookie =
+              "sessionid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+          }
+
+          await dispatch(
+            cartApi.endpoints.getCart.initiate(undefined, {
+              forceRefetch: true,
+            }),
+          );
+
+          // 🔥 Force cart refetch
+          dispatch(cartApi.util.invalidateTags(["Cart"]));
+        } catch (err) {
+          console.error("Login failed", err);
+        }
+      },
+      invalidatesTags: ["Auth", "Cart"],
     }),
 
     // Google OAuth endpoints

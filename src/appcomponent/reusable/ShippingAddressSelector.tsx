@@ -5,6 +5,8 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { ShippingAddressSelector } from "./ShippingAddressTwo";
 import { ShippingAddressResponse } from "@/interfaces/api/ShippingAddress";
 import { useEffect, useState } from "react";
+import { getAccessToken } from "@/lib/token";
+import { useRouter } from "next/navigation";
 
 interface ShippingAddressSectionProps {
   selectedAddress: number;
@@ -19,6 +21,8 @@ export const ShippingAddressSection = ({
   shippingAddresses,
   addressLoading,
 }: ShippingAddressSectionProps) => {
+  const token = getAccessToken();
+  const router = useRouter();
   // const { data, isLoading: shipLoading } = useGetShippingsQuery();
   const [showAddAddress, setShowAddAddress] = useState(false);
   useEffect(() => {
@@ -56,6 +60,11 @@ export const ShippingAddressSection = ({
           <Button
             variant={shippingAddresses.length > 0 ? "outline" : "default"}
             size="sm"
+            onClick={() => {
+              if (!token) {
+                router.push("/login?redirect=/cart");
+              }
+            }}
           >
             {shippingAddresses.length > 0 ? "Change" : "Add Address"}
           </Button>

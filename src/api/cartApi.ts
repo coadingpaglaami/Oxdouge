@@ -11,7 +11,7 @@ export const cartApi = createApi({
   endpoints: (builder) => ({
     // ✅ GET all cart items
     getCart: builder.query<CartItemResponse[], void>({
-      query: () => endpoint,
+      query: () => ({ url: endpoint, credentials: "include" }),
       providesTags: ["Cart"],
     }),
 
@@ -21,6 +21,7 @@ export const cartApi = createApi({
         url: endpoint,
         method: "POST",
         body,
+        credentials: "include",
       }),
       invalidatesTags: ["Cart"],
     }),
@@ -40,6 +41,7 @@ export const cartApi = createApi({
       query: (id) => ({
         url: `${endpoint}${id}/`,
         method: "DELETE",
+        credentials: "include",
       }),
       invalidatesTags: ["Cart"],
     }),
@@ -54,6 +56,7 @@ export const cartApi = createApi({
           product_id,
           quantity,
         },
+        credentials: "include",
       }),
       invalidatesTags: ["Cart"],
     }),
@@ -65,5 +68,5 @@ export const {
   useAddToCartMutation,
   //   useUpdateCartMutation,
   useDeleteCartMutation,
-  useUpdateCartMutation
+  useUpdateCartMutation,
 } = cartApi;

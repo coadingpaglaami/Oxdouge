@@ -23,7 +23,7 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  const protectedRoutes = ["/cart", "/profile", "/orders", "/admin"];
+  const protectedRoutes = [ "/profile", "/orders", "/admin"];
 
   const isProtected = protectedRoutes.some((route) =>
     pathname.startsWith(route)

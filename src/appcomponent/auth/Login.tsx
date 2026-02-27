@@ -19,7 +19,7 @@ export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
-    {}
+    {},
   );
   const [login, { isLoading }] = useLoginMutation();
   const { data: googleAuthData, refetch: initiateGoogleLogin } =
@@ -30,6 +30,7 @@ export const Login = () => {
   const searchParams = useSearchParams();
 
   const error = searchParams.get("error");
+  const redirect = searchParams.get("redirect");
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&]).{8,}$/;
@@ -44,7 +45,7 @@ export const Login = () => {
           const res = await googleExchange({ code }).unwrap();
           console.log("Google login successful", res);
           setAuthTokens(res.access, res.refresh, res.user.role);
-          router.push("/");
+          router.push(redirect && redirect.startsWith("/") ? redirect : "/");
         } catch (err) {
           console.error("Google login failed", err);
           // Handle error - show error message to user
@@ -82,7 +83,7 @@ export const Login = () => {
         const res = await login(formData).unwrap();
         console.log("Login successful", res);
         setAuthTokens(res.token.access, res.token.refresh, res.user.role);
-        router.push("/");
+        router.push(redirect && redirect.startsWith("/") ? redirect : "/");
       } catch (err) {
         interface ApiError {
           status: number;
@@ -245,8 +246,11 @@ export const Login = () => {
           {/* Footer */}
           <div className=" text-sm text-center ">
             <span className="text-gray-400">Don{"'"}t have an Account? </span>
-            <Link href="/signup" className="text-primary underline">
-              Create Account
+            <Link
+              href={`/signup?redirect=${redirect}`}
+              className="text-primary underline"
+            >
+              Sign Up
             </Link>
           </div>
         </div>

@@ -42,7 +42,6 @@ export const NavBar = () => {
     isError,
     refetch,
   } = useGetCartQuery(undefined, {
-    skip: !isLoggedIn,
   });
   const [cartCount, setCartCount] = useState<number>(0);
 
@@ -194,7 +193,7 @@ export const NavBar = () => {
             <ShoppingCart className="cursor-pointer text-white" />
           </Link>
         )} */}
-        {isLoggedIn && (
+       
           <Link href="/cart" className="relative">
             <ShoppingCart className="cursor-pointer text-white" />
 
@@ -204,7 +203,7 @@ export const NavBar = () => {
               </span>
             )}
           </Link>
-        )}
+       
       </div>
 
       {/* ---------------- MOBILE SIDE MENU ---------------- */}

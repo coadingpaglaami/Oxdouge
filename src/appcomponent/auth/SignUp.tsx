@@ -10,7 +10,7 @@ import {
   useGoogleLoginQuery,
   useSignupMutation,
 } from "@/api/authApi";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 export const SignUp = () => {
@@ -18,6 +18,8 @@ export const SignUp = () => {
   const [showCPassword, setShowCPassword] = useState(false);
   const [googleExchange, { isLoading: isGoogleLoading }] =
     useGoogleExchangeMutation();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/";
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -87,7 +89,7 @@ export const SignUp = () => {
         const res = await signup(formData).unwrap();
         console.log("User created:", res);
         toast.success("Account created successfully!", { richColors: true });
-        router.push("/login");
+        router.push(`/login?redirect=${redirect}`);
       } catch (err) {
         interface ApiError {
           status: number;
@@ -119,7 +121,7 @@ export const SignUp = () => {
 
       if (response?.auth_url) {
         // Redirect to Google OAuth page
-        window.location.href = response.auth_url;
+        window.location.href = `${response.auth_url}&redirect=${redirect}`;
       }
     } catch (err) {
       console.error("Failed to initiate Google login", err);
@@ -288,9 +290,15 @@ export const SignUp = () => {
           {/* Footer */}
           <div className="w-4/5 text-sm text-center ">
             <span className="text-gray-400">Already Have Account? </span>
-            <Link href="/login" className="text-primary underline">
+            <Link
+              href={`/login?redirect=${redirect}`}
+              className="text-primary underline"
+            >
               Login
             </Link>
+            {/* <Link href="/login" className="text-primary underline">
+              Login
+            </Link> */}
           </div>
         </div>
       </div>

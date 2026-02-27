@@ -4,6 +4,7 @@ export interface LoginResponse {
   message: string;
   token: Token;
   user: User; // Reusing the previously defined User interface
+  clear_session: boolean; // New field to indicate if session should be cleared
 }
 
 export interface Token {

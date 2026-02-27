@@ -17,6 +17,7 @@ import {
 import { MapPin, Phone, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useGetShippingsQuery } from "@/api/shippingApi";
+import { getAccessToken } from "@/lib/token";
 
 interface CartRightChildProps {
   cartItems: CartItemResponse[];
@@ -31,24 +32,25 @@ export const CartRightChild = ({
   const [selectedAddress, setSelectedAddress] = useState<number>(0);
   const { data: shippingAddresses, isLoading: addressesLoading } =
     useGetShippingsQuery();
+  const token = getAccessToken();
 
   // Set default address when shipping addresses are loaded
   useEffect(() => {
     if (
       shippingAddresses != undefined &&
-      shippingAddresses.length > 0 &&
+      shippingAddresses.results.length > 0 &&
       selectedAddress === 0
     ) {
-      setSelectedAddress(shippingAddresses[0].shipping_id);
+      setSelectedAddress(shippingAddresses.results[0].shipping_id);
     }
   }, [shippingAddresses]);
   const [applyCouponTwo, { isLoading }] = useApplyCouponMutation();
   const [couponCode, setCouponCode] = useState("");
   const [couponeData, setCouponData] = useState<ApplyCouponResponse>(
-    {} as ApplyCouponResponse
+    {} as ApplyCouponResponse,
   );
-  const selectedAddressDetails = shippingAddresses?.find(
-    (addr) => addr.shipping_id === selectedAddress
+  const selectedAddressDetails = shippingAddresses?.results.find(
+    (addr) => addr.shipping_id === selectedAddress,
   );
   const [placeOrder, { isLoading: placing }] = usePlaceOrderMutation();
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
@@ -57,14 +59,18 @@ export const CartRightChild = ({
   const router = useRouter();
 
   useEffect(() => {
-    if (shippingAddresses != undefined && shippingAddresses.length > 0 && selectedAddress === 0) {
-      setSelectedAddress(shippingAddresses[0].shipping_id);
+    if (
+      shippingAddresses != undefined &&
+      shippingAddresses.results.length > 0 &&
+      selectedAddress === 0
+    ) {
+      setSelectedAddress(shippingAddresses.results[0].shipping_id);
     }
   }, [shippingAddresses, selectedAddress]);
 
   // Filter only selected items
   const selectedCartItems = cartItems.filter((item) =>
-    selectedItems.includes(item.id)
+    selectedItems.includes(item.id),
   );
 
   // Subtotal (only selected items)
@@ -156,7 +162,7 @@ export const CartRightChild = ({
       <ShippingAddressSection
         selectedAddress={selectedAddress}
         setSelectedAddress={setSelectedAddress}
-        shippingAddresses={shippingAddresses || []}
+        shippingAddresses={shippingAddresses?.results || []}
         addressLoading={addressesLoading}
       />
 
@@ -194,7 +200,7 @@ export const CartRightChild = ({
             </div>
           </div>
         </div>
-      ):(
+      ) : (
         <p className="text-sm text-red-500">No shipping address found.</p>
       )}
 
