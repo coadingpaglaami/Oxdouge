@@ -1,328 +1,309 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { ChevronRight } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { ChevronRight, Loader2 } from "lucide-react";
+import { useGetTermsConditionsQuery } from "@/api/ui_manager";
 
-
-export interface NestedContent {
-  type: "nested";
-  title: string;
-  items: string[];
+interface TermsOfServiceResult {
+  id: number;
+  heading: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
 }
 
-export type SectionContent = string | NestedContent;
-
-export interface Section {
-  id: string;
-  title: string;
-  content: SectionContent[];
+interface TermsOfServiceResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: TermsOfServiceResult[];
 }
-
-export interface TermsOfService {
-  title: string;
-  description: string;
-  lastUpdated: string;
-  sections: Section[];
-}
-
-export interface TermsData {
-  termsOfService: TermsOfService;
-}
-
-
-const termsData:TermsData = {
-  "termsOfService": {
-    "title": "Terms of Service",
-    "description": "Please read these terms of service carefully before using our website and purchasing our products.",
-    "lastUpdated": "Last updated: January 2025",
-    "sections": [
-      {
-        "id": "agreement-to-terms",
-        "title": "Agreement to Terms",
-        "content": [
-          "By accessing or using our website, you agree to be bound by these Terms of Service and all applicable laws and regulations.",
-          "If you do not agree with any of these terms, you are prohibited from using or accessing this site.",
-          "We reserve the right to update, change, or replace any part of these Terms of Service at our discretion."
-        ]
-      },
-      {
-        "id": "user-accounts",
-        "title": "User Accounts",
-        "content": [
-          "When you create an account with us, you must provide accurate and complete information.",
-          "You are responsible for maintaining the confidentiality of your account and password.",
-          "You agree to accept responsibility for all activities that occur under your account.",
-          "We reserve the right to refuse service, terminate accounts, or remove content at our discretion."
-        ]
-      },
-      {
-        "id": "products-pricing",
-        "title": "Products and Pricing",
-        "content": [
-          "All products are subject to availability and we reserve the right to limit quantities.",
-          "Prices for our products are subject to change without notice.",
-          {
-            "type": "nested",
-            "title": "We are not responsible for typographical errors regarding:",
-            "items": [
-              "Product pricing",
-              "Product descriptions",
-              "Product availability",
-              "Shipping charges"
-            ]
-          },
-          "We reserve the right to discontinue any product at any time."
-        ]
-      },
-      {
-        "id": "order-acceptance",
-        "title": "Order Acceptance",
-        "content": [
-          "Your receipt of an order confirmation does not constitute our acceptance of your order.",
-          "We reserve the right to refuse or cancel any order for any reason at our sole discretion.",
-          "We may require additional verification or information before accepting any order.",
-          "Orders may be cancelled for reasons including but not limited to: product availability, errors in pricing, or suspected fraud."
-        ]
-      },
-      {
-        "id": "intellectual-property",
-        "title": "Intellectual Property",
-        "content": [
-          "All content on this website, including text, graphics, logos, and images, is our property and protected by copyright laws.",
-          "You may not use our trademarks, logos, or service marks without our prior written consent.",
-          "You may not reproduce, distribute, or create derivative works from our website content.",
-          "Any unauthorized use terminates the permission or license granted by us."
-        ]
-      },
-      {
-        "id": "prohibited-uses",
-        "title": "Prohibited Uses",
-        "content": [
-          {
-            "type": "nested",
-            "title": "In addition to other prohibitions, you are prohibited from using the site:",
-            "items": [
-              "For any unlawful purpose",
-              "To solicit others to perform illegal acts",
-              "To violate international regulations or laws",
-              "To infringe upon intellectual property rights",
-              "To harass, abuse, or insult others",
-              "To submit false or misleading information"
-            ]
-          },
-          "We reserve the right to terminate your use of the service for violating any prohibited uses."
-        ]
-      },
-      {
-        "id": "disclaimer",
-        "title": "Disclaimer of Warranties",
-        "content": [
-          "The service is provided on an 'as is' and 'as available' basis.",
-          "We do not warrant that the service will be uninterrupted, timely, secure, or error-free.",
-          "We do not warrant that the results from using the service will be accurate or reliable.",
-          "You expressly agree that your use of the service is at your sole risk."
-        ]
-      },
-      {
-        "id": "limitation-liability",
-        "title": "Limitation of Liability",
-        "content": [
-          "We shall not be liable for any indirect, incidental, special, consequential, or punitive damages.",
-          "Our total liability to you for all claims arising from these terms shall not exceed the amount you paid us in the past six months.",
-          "Some jurisdictions do not allow the exclusion of certain warranties or limitations of liability, so some of the above limitations may not apply to you."
-        ]
-      },
-      {
-        "id": "indemnification",
-        "title": "Indemnification",
-        "content": [
-          "You agree to indemnify and hold us harmless from any claim or demand, including reasonable attorneys' fees.",
-          "This includes any claim arising from your breach of these Terms of Service or your violation of any law.",
-          "We reserve the right to assume the exclusive defense and control of any matter subject to indemnification by you."
-        ]
-      },
-      {
-        "id": "governing-law",
-        "title": "Governing Law",
-        "content": [
-          "These Terms of Service shall be governed by and construed in accordance with the laws of the State of California.",
-          "Any disputes arising from these terms shall be resolved in the state or federal courts located in California.",
-          "Our failure to enforce any right or provision will not be considered a waiver of those rights."
-        ]
-      },
-      {
-        "id": "severability",
-        "title": "Severability",
-        "content": [
-          "If any provision of these Terms of Service is determined to be unlawful, void, or unenforceable, that provision shall be deemed severable.",
-          "The severability shall not affect the validity and enforceability of any remaining provisions.",
-          "The unenforceable provision will be replaced by an enforceable provision that comes closest to the original intention."
-        ]
-      },
-      {
-        "id": "contact-information",
-        "title": "Contact Information",
-        "content": [
-          "Questions about the Terms of Service should be sent to us at legal@notoverland.com.",
-          "Our mailing address is: Not Overland Legal Department, 123 Commerce Street, Suite 456, Business Park, CA 90210",
-          "We typically respond to legal inquiries within 3-5 business days."
-        ]
-      }
-    ]
-  }
-};
 
 export default function TermsOfServicePage() {
-  const [activeSection, setActiveSection] = useState("agreement-to-terms");
-  const { title, description, lastUpdated, sections } = termsData.termsOfService;
+  const [page, setPage] = useState(1);
+  const [allPolicies, setAllPolicies] = useState<TermsOfServiceResult[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [activePolicyId, setActivePolicyId] = useState<number | null>(null);
+
+  // Track which pages we've already merged to prevent duplicate appends
+  const loadedPagesRef = useRef<Set<number>>(new Set());
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+  // Flag so the observer doesn't fire again while a fetch is in-flight
+  const isFetchingMoreRef = useRef(false);
+
+  const { data, isLoading, isFetching } = useGetTermsConditionsQuery({
+    page,
+    limit: 10,
+  });
+
+  // ── Merge incoming page data (run only once per page number) ───────────────
+  useEffect(() => {
+    if (!data) return;
+
+    const response = data as TermsOfServiceResponse;
+
+    // Skip if we've already processed this page
+    if (loadedPagesRef.current.has(page)) return;
+    loadedPagesRef.current.add(page);
+
+    setAllPolicies((prev) => {
+      // Deduplicate by id just in case
+      const existingIds = new Set(prev.map((p) => p.id));
+      const newItems = response.results.filter((r) => !existingIds.has(r.id));
+      return [...prev, ...newItems];
+    });
+
+    setHasMore(!!response.next);
+    isFetchingMoreRef.current = false;
+
+    // Set first item active only once
+    if (page === 1 && response.results.length > 0) {
+      setActivePolicyId((prev) => (prev === null ? response.results[0].id : prev));
+    }
+  }, [data, page]);
+
+  // ── Intersection Observer for infinite scroll ──────────────────────────────
+  const setupObserver = useCallback(() => {
+    if (observerRef.current) observerRef.current.disconnect();
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (
+          entries[0].isIntersecting &&
+          hasMore &&
+          !isFetching &&
+          !isFetchingMoreRef.current
+        ) {
+          isFetchingMoreRef.current = true;
+          setPage((prev) => prev + 1);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (loadMoreRef.current) {
+      observerRef.current.observe(loadMoreRef.current);
+    }
+  }, [hasMore, isFetching]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const sectionElements = sections.map(section => 
-        document.getElementById(section.id)
-      ).filter(Boolean) as HTMLElement[];
+    if (!isLoading) setupObserver();
+    return () => observerRef.current?.disconnect();
+  }, [isLoading, setupObserver]);
 
-      const currentSection = sectionElements.find(section => {
-        const rect = section.getBoundingClientRect();
-        return rect.top <= 100 && rect.bottom >= 100;
+  // ── Scroll spy ─────────────────────────────────────────────────────────────
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = allPolicies
+        .map((p) => document.getElementById(`policy-${p.id}`))
+        .filter(Boolean) as HTMLElement[];
+
+      const active = sections.find((el) => {
+        const rect = el.getBoundingClientRect();
+        return rect.top <= 120 && rect.bottom >= 120;
       });
 
-      if (currentSection) {
-        setActiveSection(currentSection.id);
+      if (active) {
+        setActivePolicyId(parseInt(active.id.replace("policy-", "")));
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [sections]);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [allPolicies]);
 
-  const scrollToSection = (sectionId: string) => {
-    setActiveSection(sectionId);
-    const element = document.getElementById(sectionId);
-    element?.scrollIntoView({ behavior: "smooth" });
+  const scrollToPolicy = (policyId: number) => {
+    setActivePolicyId(policyId);
+    document
+      .getElementById(`policy-${policyId}`)
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const renderContent = (content:SectionContent[] ) => {
-    return content.map((item, index) => {
-      if (typeof item === 'string') {
-        return (
-          <div key={index} className="flex gap-3 group">
-            <span className=" mt-1 shrink-0 group-hover:scale-110 transition-transform">•</span>
-            <p className="group-hover:text-gray-200 transition-colors leading-relaxed">{item}</p>
-          </div>
-        );
-      } else if (item.type === 'nested') {
-        return (
-          <div key={index} className="space-y-3">
-            <div className="flex gap-3 group">
-              <span className=" mt-1 shrink-0 group-hover:scale-110 transition-transform">•</span>
-              <p className="group-hover:text-gray-200 transition-colors leading-relaxed">{item.title}</p>
-            </div>
-            <div className="space-y-2 ml-6">
-              {item.items.map((nestedItem: string, nestedIndex: number) => (
-                <div key={nestedIndex} className="flex gap-3 group">
-                  <span className="text-gray-400 mt-1 shrink-0 group-hover:text-primary transition-colors">-</span>
-                  <p className="text-gray-400 group-hover:text-gray-300 transition-colors leading-relaxed">{nestedItem}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      }
-      return null;
-    });
+  const renderContent = (content: string) => {
+    const paragraphs = content.split("\n").filter((p) => p.trim() !== "");
+    return paragraphs.map((paragraph, index) => (
+      <div key={index} className="flex gap-3 group">
+        <span className="mt-1.5 shrink-0 text-[#FFD345] text-xs">•</span>
+        <p className="group-hover:text-gray-200 transition-colors leading-relaxed text-gray-300 m-0">
+          {paragraph}
+        </p>
+      </div>
+    ));
   };
+
+  // ── Initial loading screen ─────────────────────────────────────────────────
+  if (isLoading && page === 1) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="flex items-center gap-3">
+          <Loader2 className="w-6 h-6 animate-spin text-[#FFD345]" />
+          <p className="text-gray-400">Loading terms of service...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black text-white py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
-            {title}
-          </h1>
-          <p className="text-lg md:text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed mb-2">
-            {description}
+      {/* Header */}
+      <div className="text-center mb-12">
+        <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-4">
+          Terms of Service
+        </h1>
+        <p className="text-lg md:text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed mb-2">
+          Please read these terms carefully before using our website and purchasing our products.
+        </p>
+        {allPolicies.length > 0 && (
+          <p className="text-sm text-gray-500">
+            Last updated:{" "}
+            {new Date(allPolicies[0].updated_at).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
           </p>
-          <p className="text-sm text-gray-500">{lastUpdated}</p>
-        </div>
+        )}
+      </div>
 
-        <div className="flex flex-col lg:flex-row gap-12">
-          {/* Table of Contents - Left Side */}
-          <div className="lg:w-1/4">
-            <div className="sticky top-24">
-              <h2 className="text-2xl font-bold mb-6 text-primary">Table of Contents</h2>
-              <nav className="space-y-2">
-                {sections.map((section) => (
-                  <button
-                    key={section.id}
-                    onClick={() => scrollToSection(section.id)}
-                    className={`w-full flex items-center gap-2 py-3 px-4 rounded-lg transition-all duration-300 text-left group ${
-                      activeSection === section.id
-                        ? "bg-primary/20 border-l-4 border-primary shadow-lg shadow-primary/10"
-                        : "hover:bg-primary/10 border-l-4 border-transparent hover:border-primary/30"
+      <div className="flex flex-col lg:flex-row gap-12">
+        {/* ── Table of Contents (sticky sidebar) ── */}
+        <div className="lg:w-1/4">
+          <div className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto custom-scrollbar">
+            <h2 className="text-xl font-bold mb-5 text-[#FFD345]">All Terms</h2>
+
+            <nav className="space-y-1 pr-2">
+              {allPolicies.map((policy) => (
+                <button
+                  key={policy.id}
+                  onClick={() => scrollToPolicy(policy.id)}
+                  className={`w-full flex items-center gap-2 py-2.5 px-3 rounded-lg transition-all duration-200 text-left group ${
+                    activePolicyId === policy.id
+                      ? "bg-[#FFD345]/15 border-l-4 border-[#FFD345]"
+                      : "hover:bg-white/5 border-l-4 border-transparent hover:border-[#FFD345]/30"
+                  }`}
+                >
+                  <ChevronRight
+                    className={`w-4 h-4 shrink-0 transition-transform duration-200 ${
+                      activePolicyId === policy.id
+                        ? "rotate-90 text-[#FFD345]"
+                        : "text-gray-500 group-hover:text-[#FFD345]"
+                    }`}
+                  />
+                  <span
+                    className={`text-sm font-medium line-clamp-1 transition-colors duration-200 ${
+                      activePolicyId === policy.id
+                        ? "text-[#FFD345]"
+                        : "text-gray-400 group-hover:text-white"
                     }`}
                   >
-                    <ChevronRight className={`w-4 h-4 transition-transform duration-300 ${
-                      activeSection === section.id ? "rotate-90 text-primary" : "text-gray-400 group-hover:text-primary"
-                    }`} />
-                    <span className={`font-medium transition-colors duration-300 text-sm ${
-                      activeSection === section.id ? "text-primary" : "text-gray-300 group-hover:text-white"
-                    }`}>
-                      {section.title}
-                    </span>
-                  </button>
-                ))}
-              </nav>
-            </div>
-          </div>
+                    {policy.heading}
+                  </span>
+                </button>
+              ))}
 
-          {/* Content - Right Side */}
-          <div className="lg:w-3/4">
-            <div>
-              {sections.map((section) => (
-                <section 
-                  key={section.id} 
-                  id={section.id} 
-                  className="scroll-mt-24 bg-linear-to-b from-gray-900/50 to-transparent p-4"
+              {/* Infinite scroll sentinel */}
+              <div ref={loadMoreRef} className="py-3">
+                {isFetching && page > 1 && (
+                  <div className="flex items-center justify-center gap-2 text-[#FFD345]">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span className="text-xs">Loading more...</span>
+                  </div>
+                )}
+                {!hasMore && allPolicies.length > 0 && (
+                  <p className="text-center text-xs text-gray-600 py-1">
+                    All {allPolicies.length} terms loaded
+                  </p>
+                )}
+              </div>
+            </nav>
+          </div>
+        </div>
+
+        {/* ── Main Content ── */}
+        <div className="lg:w-3/4">
+          {allPolicies.length === 0 ? (
+            <div className="text-center py-16">
+              <p className="text-gray-500">No terms of service available.</p>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {allPolicies.map((policy) => (
+                <section
+                  key={policy.id}
+                  id={`policy-${policy.id}`}
+                  className={`scroll-mt-28 p-6 rounded-2xl transition-all duration-300 ${
+                    activePolicyId === policy.id
+                      ? "bg-gradient-to-b from-[#FFD345]/10 to-transparent border border-[#FFD345]/20 shadow-lg shadow-[#FFD345]/5"
+                      : "bg-gradient-to-b from-gray-900/50 to-transparent hover:from-gray-800/50 border border-transparent"
+                  }`}
                 >
-                  <h2 className="text-xl font-bold mb-3">
-                    {section.title}
-                  </h2>
-                  <div className="space-y-4 text-gray-300">
-                    {renderContent(section.content)}
+                  <h2 className="text-lg font-bold mb-4 text-white">{policy.heading}</h2>
+
+                  <div className="space-y-3">{renderContent(policy.content)}</div>
+
+                  <div className="mt-5 pt-4 border-t border-white/10">
+                    <p className="text-xs text-gray-600">
+                      Last updated:{" "}
+                      {new Date(policy.updated_at).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </p>
                   </div>
                 </section>
               ))}
-            </div>
-          </div>
-        </div>
 
-        {/* Legal Notice Box */}
-        <div className="mt-16 p-8 bg-linear-to-r from-primary/10 to-purple-600/10 rounded-2xl border border-primary/20">
-          <div className="text-center">
-            <h3 className="text-2xl font-bold mb-4 text-primary">Legal Notice</h3>
-            <p className="text-gray-300 mb-4 max-w-2xl mx-auto">
-              These Terms of Service constitute a legally binding agreement between you and Not Overland. 
-              By using our website and services, you acknowledge that you have read, understood, and agree to be bound by these terms.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center text-sm">
-              <div className="text-center">
-                <h4 className="font-semibold text-primary mb-2">Legal Inquiries</h4>
-                <p className="text-gray-400">legal@notoverland.com</p>
-              </div>
-              <div className="text-center">
-                <h4 className="font-semibold text-primary mb-2">General Support</h4>
-                <p className="text-gray-400">support@notoverland.com</p>
-              </div>
-              <div className="text-center">
-                <h4 className="font-semibold text-primary mb-2">Business Hours</h4>
-                <p className="text-gray-400">Mon-Fri, 9AM-6PM PST</p>
-              </div>
+              {isFetching && page > 1 && (
+                <div className="flex items-center justify-center gap-2 py-8">
+                  <Loader2 className="w-5 h-5 animate-spin text-[#FFD345]" />
+                  <span className="text-gray-400 text-sm">Loading more terms...</span>
+                </div>
+              )}
+
+              {!hasMore && allPolicies.length > 0 && (
+                <div className="text-center py-8 border-t border-white/10">
+                  <p className="text-gray-500 text-sm">
+                    You've viewed all {allPolicies.length} terms of service
+                  </p>
+                </div>
+              )}
             </div>
+          )}
+        </div>
+      </div>
+
+      {/* Legal Notice */}
+      <div className="mt-16 p-8 bg-gradient-to-r from-[#FFD345]/10 to-transparent rounded-2xl border border-[#FFD345]/20">
+        <div className="text-center">
+          <h3 className="text-2xl font-bold mb-4 text-[#FFD345]">Legal Notice</h3>
+          <p className="text-gray-300 mb-8 max-w-2xl mx-auto text-sm leading-relaxed">
+            These Terms of Service constitute a legally binding agreement between you and Not
+            Overland. By using our website and services, you acknowledge that you have read,
+            understood, and agree to be bound by these terms.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl mx-auto">
+            {[
+              { title: "Legal Inquiries", value: "legal@notoverland.com" },
+              { title: "General Support", value: "support@notoverland.com" },
+              { title: "Business Hours", value: "Mon–Fri, 9AM–6PM PST" },
+            ].map((item) => (
+              <div key={item.title} className="text-center">
+                <h4 className="font-semibold text-[#FFD345] mb-1 text-sm">{item.title}</h4>
+                <p className="text-gray-400 text-sm">{item.value}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #3a3a3a; }
+      `}</style>
     </div>
   );
 }

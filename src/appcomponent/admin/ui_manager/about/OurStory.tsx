@@ -19,8 +19,8 @@ import {
   Loader2,
   RefreshCw,
   Pencil,
-  Plus,
   Trash2,
+  Plus,
 } from "lucide-react";
 
 /* ─── Types ──────────────────────────────────────────────────────── */
@@ -36,16 +36,13 @@ interface AboutStoryData {
 /** Each text field is stored as an array of paragraph strings */
 interface FormState {
   story_paragraphs: string[];
-  mission_paragraphs: string[];
-  vision_paragraphs: string[];
+  mission_paragraph: string;
+  vision_paragraph: string;
   image: File | null;
   imagePreview: string | null;
 }
 
-type ParagraphField =
-  | "story_paragraphs"
-  | "mission_paragraphs"
-  | "vision_paragraphs";
+type ParagraphField = "story_paragraphs";
 
 /* ─── Helpers ────────────────────────────────────────────────────── */
 
@@ -169,20 +166,6 @@ const TEXT_FIELDS: {
     Icon: BookOpen,
     accent: "text-blue-400",
   },
-  {
-    paragraphKey: "mission_paragraphs",
-    payloadKey: "mission_description",
-    label: "Our Mission",
-    Icon: Target,
-    accent: "text-emerald-400",
-  },
-  {
-    paragraphKey: "vision_paragraphs",
-    payloadKey: "vision_description",
-    label: "Our Vision",
-    Icon: Eye,
-    accent: "text-violet-400",
-  },
 ];
 
 /* ─── ImageUploadZone — module scope ─────────────────────────────── */
@@ -292,8 +275,8 @@ export const OurStoryManagement = () => {
 
   const [form, setForm] = useState<FormState>({
     story_paragraphs: DEFAULT_PARAGRAPHS,
-    mission_paragraphs: DEFAULT_PARAGRAPHS,
-    vision_paragraphs: DEFAULT_PARAGRAPHS,
+    mission_paragraph: "",
+    vision_paragraph: "",
     image: null,
     imagePreview: null,
   });
@@ -303,8 +286,8 @@ export const OurStoryManagement = () => {
     if (story) {
       setForm({
         story_paragraphs: toParagraphs(story.story_description ?? ""),
-        mission_paragraphs: toParagraphs(story.mission_description ?? ""),
-        vision_paragraphs: toParagraphs(story.vision_description ?? ""),
+        mission_paragraph: story.mission_description ?? "",
+        vision_paragraph: story.vision_description ?? "",
         image: null,
         imagePreview: null,
       });
@@ -314,10 +297,8 @@ export const OurStoryManagement = () => {
   const isDirty =
     toPayloadString(form.story_paragraphs) !==
       (story?.story_description ?? "") ||
-    toPayloadString(form.mission_paragraphs) !==
-      (story?.mission_description ?? "") ||
-    toPayloadString(form.vision_paragraphs) !==
-      (story?.vision_description ?? "") ||
+    form.mission_paragraph !== (story?.mission_description ?? "") ||
+    form.vision_paragraph !== (story?.vision_description ?? "") ||
     form.image !== null;
 
   const handleParagraphChange = (
@@ -327,12 +308,20 @@ export const OurStoryManagement = () => {
     setForm((prev) => ({ ...prev, [field]: paragraphs }));
   };
 
+  const handleMissionChange = (value: string) => {
+    setForm((prev) => ({ ...prev, mission_paragraph: value }));
+  };
+
+  const handleVisionChange = (value: string) => {
+    setForm((prev) => ({ ...prev, vision_paragraph: value }));
+  };
+
   const handleReset = () => {
     if (!story) return;
     setForm({
       story_paragraphs: toParagraphs(story.story_description ?? ""),
-      mission_paragraphs: toParagraphs(story.mission_description ?? ""),
-      vision_paragraphs: toParagraphs(story.vision_description ?? ""),
+      mission_paragraph: story.mission_description ?? "",
+      vision_paragraph: story.vision_description ?? "",
       image: null,
       imagePreview: null,
     });
@@ -360,8 +349,8 @@ export const OurStoryManagement = () => {
     const fd = new FormData();
     // Join paragraphs with \n before sending
     fd.append("story_description", toPayloadString(form.story_paragraphs));
-    fd.append("mission_description", toPayloadString(form.mission_paragraphs));
-    fd.append("vision_description", toPayloadString(form.vision_paragraphs));
+    fd.append("mission_description", form.mission_paragraph);
+    fd.append("vision_description", form.vision_paragraph);
     if (form.image) fd.append("image", form.image, form.image.name);
     await updateAboutStory({ data: fd });
     toast.success("Story updated successfully!");
@@ -380,8 +369,9 @@ export const OurStoryManagement = () => {
           </span>
         </div>
         <p className="text-neutral-400 text-sm max-w-xl leading-relaxed">
-          Update the story, mission, vision and section image. Each field
-          supports multiple paragraphs.
+          Update the story, mission, vision and section image. The story
+          supports multiple paragraphs, while mission and vision are single
+          paragraphs.
         </p>
       </div>
 
@@ -402,13 +392,14 @@ export const OurStoryManagement = () => {
                   Text Content
                 </span>
                 <span className="text-[11px] text-neutral-600">
-                  Each section supports multiple paragraphs — joined with ↵ on
-                  save
+                  Story supports multiple paragraphs, Mission & Vision are
+                  single paragraphs
                 </span>
               </div>
             </div>
 
             <div className="px-6 py-5 flex flex-col gap-7">
+              {/* Our Story - Multiple paragraphs */}
               {TEXT_FIELDS.map(({ paragraphKey, label, Icon, accent }) => (
                 <ParagraphEditor
                   key={paragraphKey}
@@ -420,6 +411,36 @@ export const OurStoryManagement = () => {
                   onChange={handleParagraphChange}
                 />
               ))}
+
+              {/* Our Mission - Single paragraph */}
+              <div className="flex flex-col gap-3">
+                <Label className="flex items-center gap-1.5 text-xs font-semibold text-neutral-400 uppercase tracking-wider">
+                  <Target className="w-3.5 h-3.5 text-emerald-400" />
+                  Our Mission
+                </Label>
+                <Textarea
+                  value={form.mission_paragraph}
+                  onChange={(e) => handleMissionChange(e.target.value)}
+                  placeholder="Enter mission statement..."
+                  rows={4}
+                  className="bg-[#1a1a1a] border-white/8 text-white placeholder-neutral-600 focus-visible:ring-primary focus-visible:border-primary resize-none transition-colors text-sm"
+                />
+              </div>
+
+              {/* Our Vision - Single paragraph */}
+              <div className="flex flex-col gap-3">
+                <Label className="flex items-center gap-1.5 text-xs font-semibold text-neutral-400 uppercase tracking-wider">
+                  <Eye className="w-3.5 h-3.5 text-violet-400" />
+                  Our Vision
+                </Label>
+                <Textarea
+                  value={form.vision_paragraph}
+                  onChange={(e) => handleVisionChange(e.target.value)}
+                  placeholder="Enter vision statement..."
+                  rows={4}
+                  className="bg-[#1a1a1a] border-white/8 text-white placeholder-neutral-600 focus-visible:ring-primary focus-visible:border-primary resize-none transition-colors text-sm"
+                />
+              </div>
             </div>
 
             {/* Footer */}

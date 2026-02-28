@@ -48,7 +48,7 @@ export const ProductForm = ({ editing, onClose }: Props) => {
   const [moreFiles, setMoreFiles] = useState<File[]>([]);
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
-    null
+    null,
   );
   const [categoryPage, setCategoryPage] = useState(1);
   const { data: categories, isFetching } = useGetCategoryQuery({
@@ -67,7 +67,7 @@ export const ProductForm = ({ editing, onClose }: Props) => {
 
   const filteredCategories =
     categories?.results?.filter((cat) =>
-      cat.name.toLowerCase().includes(inputValue.toLowerCase())
+      cat.name.toLowerCase().includes(inputValue.toLowerCase()),
     ) || [];
 
   const hasMorePages =
@@ -135,7 +135,7 @@ export const ProductForm = ({ editing, onClose }: Props) => {
 
       // Convert image URLs to File objects
       convertUrlsToFiles(editing?.images || []).then((files) =>
-        setMoreFiles(files)
+        setMoreFiles(files),
       );
 
       // Convert video URL to File object if available
@@ -234,7 +234,7 @@ export const ProductForm = ({ editing, onClose }: Props) => {
     hasMorePages,
     "hasmorepages",
     hasPreviousPages,
-    "hasPreviousPages"
+    "hasPreviousPages",
   );
 
   return (
@@ -290,6 +290,7 @@ export const ProductForm = ({ editing, onClose }: Props) => {
               <input
                 id="quantity"
                 type="number"
+                min={0}
                 value={quantity}
                 onChange={(e) => setQuantity(Number(e.target.value))}
                 placeholder="0"
@@ -389,7 +390,7 @@ export const ProductForm = ({ editing, onClose }: Props) => {
                   {inputValue &&
                     !categories?.results?.some(
                       (cat) =>
-                        cat.name.toLowerCase() === inputValue.toLowerCase()
+                        cat.name.toLowerCase() === inputValue.toLowerCase(),
                     ) && (
                       <CommandItem
                         onSelect={() => createCategory(inputValue)}
@@ -488,8 +489,8 @@ export const ProductForm = ({ editing, onClose }: Props) => {
           {isLoading || loadingEdit
             ? "Saving..."
             : editing
-            ? "Update Product"
-            : "Upload Product"}
+              ? "Update Product"
+              : "Upload Product"}
         </Button>
       </div>
     </form>

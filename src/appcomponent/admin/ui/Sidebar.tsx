@@ -72,6 +72,26 @@ export const Sidebar = () => {
           href: "/admin/ui_manager/about_page",
           icon: <Info size={16} />,
         },
+        {
+          name: "FAQ Management",
+          href: "/admin/ui_manager/faq_page",
+          icon: <Info size={16} />,
+        },
+        {
+          name: "Shipping Policy Management",
+          href: "/admin/ui_manager/shipping_policy",
+          icon: <Info size={16} />,
+        },
+        {
+          name: "Return Policy Management",
+          href: "/admin/ui_manager/return_policy",
+          icon: <Info size={16} />,
+        },
+        {
+          name: "Terms and Condition Management",
+          href: "/admin/ui_manager/terms_and_condition",
+          icon: <Info size={16} />,
+        }
       ],
     },
   ];
@@ -134,7 +154,7 @@ export const Sidebar = () => {
 
                 {/* Animated Children */}
                 <div
-                  className="overflow-hidden transition-all duration-300 ease-in-out"
+                  className="transition-all duration-300 ease-in-out overflow-auto no"
                   style={{
                     maxHeight: uiManagerOpen ? "200px" : "0px",
                     opacity: uiManagerOpen ? 1 : 0,
@@ -170,7 +190,7 @@ export const Sidebar = () => {
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-colors
+              className={`flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-colors scrollbar-hide
                 ${
                   isActive
                     ? "bg-primary text-black"
@@ -185,4 +205,4 @@ export const Sidebar = () => {
       </div>
     </div>
   );
-}
+};

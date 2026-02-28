@@ -10,7 +10,7 @@ import {
   Instagram,
   Twitter,
 } from "lucide-react";
-import { useGetContactInfoQuery } from "@/api/ui_manager";
+import { useGetContactInfoQuery, useGetFooterSectionQuery } from "@/api/ui_manager";
 
 
 
@@ -68,6 +68,7 @@ const fallbackContact: ContactInfoResponse = {
 
 export const Footer = () => {
   const { data: contactInfo, isLoading, isError } = useGetContactInfoQuery({});
+  const { data: footerSections, isLoading: isFooterSectionsLoading } = useGetFooterSectionQuery();
   
   // Use API data if available, otherwise use fallback
   const displayContact = contactInfo || fallbackContact;
@@ -119,11 +120,11 @@ export const Footer = () => {
             className="w-32 h-32 self-center"
           />
           <span className="font-bold text-lg">
-            NOT <span className="text-primary">Overland</span> Tech
+            {/* NOT <span className="text-primary">Overland</span> Tech */}
+            {footerSections && footerSections.length > 0 ? footerSections[0].title : "Overland Tech"}
           </span>
           <p className="text-sm">
-            Portable power solutions for adventurers who demand reliability.
-            Stay charged, stay connected, stay exploring.
+          {footerSections && footerSections.length > 0 ? footerSections[0].content : "Explore the world with confidence. Our expert gear and trusted advice ensure you're ready for every adventure."}
           </p>
         </div>
 

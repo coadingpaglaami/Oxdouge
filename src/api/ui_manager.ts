@@ -3,7 +3,34 @@ import baseQuery from "./api"; // Your base query setup
 import { CardResponse, GetResponse, PostRequest } from "@/interfaces/api";
 import { FormState } from "@/appcomponent/admin/ui_manager/home/WhyChooseManagement";
 import { buildFormData } from "@/lib/buildFormdata";
-import { get } from "http";
+
+interface ReturnHelp {
+  id: number;
+  title: string;
+  heading1: string;
+  email: string;
+  phone: string;
+  hours: string;
+  heading2: string;
+  address_line1: string;
+  address_line2: string;
+  city_state_zip: string;
+  updated_at: string;
+}
+
+interface FooterSection {
+  id: number;
+  title: string;
+  content: string;
+  image: string; // cloudinary path
+  image_url: string; // full url
+}
+
+interface FooterSectionForm {
+  title: string;
+  content: string;
+  image?: File | null;
+}
 
 const endpoint = "why-choose/";
 const heroPromotionEndpoint = "hero-promotion/";
@@ -21,6 +48,12 @@ export const uiManagerApi = createApi({
     "ContactInfo",
     "AboutStory",
     "AboutJourney",
+    "Faq",
+    "ShippingPolicy",
+    "ReturnPolicy",
+    "TermsConditions",
+    "ReturnHelp",
+    "FooterSection",
   ],
   endpoints: (builder) => ({
     getHeroPromotion: builder.query<GetResponse, void>({
@@ -180,7 +213,198 @@ export const uiManagerApi = createApi({
         body: data,
       }),
       invalidatesTags: ["AboutJourney"],
-    })
+    }),
+
+    // ✅ GET FAQs
+    getFaqs: builder.query({
+      query: ({ page = 1, limit = 10 }) => `faqs/?page=${page}&limit=${limit}`,
+      providesTags: ["Faq"],
+    }),
+
+    // ✅ POST FAQ
+    addFaq: builder.mutation({
+      query: (body) => ({
+        url: "faqs/",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Faq"],
+    }),
+
+    // ✅ PATCH FAQ
+    updateFaq: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `faqs/${id}/`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["Faq"],
+    }),
+
+    // ✅ DELETE FAQ
+    deleteFaq: builder.mutation({
+      query: (id) => ({
+        url: `faqs/${id}/`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Faq"],
+    }),
+
+    // ✅ GET Shipping Policy
+    getShippingPolicy: builder.query({
+      query: ({ page = 1, limit = 10 }) =>
+        `shipping-policy/?page=${page}&limit=${limit}`,
+      providesTags: ["ShippingPolicy"],
+    }),
+
+    // ✅ POST Shipping Policy
+    addShippingPolicy: builder.mutation({
+      query: (body) => ({
+        url: "shipping-policy/",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["ShippingPolicy"],
+    }),
+
+    // ✅ PATCH Shipping Policy
+    updateShippingPolicy: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `shipping-policy/${id}/`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["ShippingPolicy"],
+    }),
+
+    // ✅ DELETE Shipping Policy
+    deleteShippingPolicy: builder.mutation({
+      query: (id) => ({
+        url: `shipping-policy/${id}/`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["ShippingPolicy"],
+    }),
+
+    // ✅ GET Return Policy
+    getReturnPolicy: builder.query({
+      query: ({ page = 1, limit = 10 }) =>
+        `return-policy/?page=${page}&limit=${limit}`,
+      providesTags: ["ReturnPolicy"],
+    }),
+
+    // ✅ POST Return Policy
+    addReturnPolicy: builder.mutation({
+      query: (body) => ({
+        url: "return-policy/",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["ReturnPolicy"],
+    }),
+
+    // ✅ PATCH Return Policy
+    updateReturnPolicy: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `return-policy/${id}/`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["ReturnPolicy"],
+    }),
+
+    // ✅ DELETE Return Policy
+    deleteReturnPolicy: builder.mutation({
+      query: (id) => ({
+        url: `return-policy/${id}/`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["ReturnPolicy"],
+    }),
+
+    // ✅ GET Terms & Conditions
+    getTermsConditions: builder.query({
+      query: ({ page = 1, limit = 10 }) =>
+        `terms-and-conditions/?page=${page}&limit=${limit}`,
+      providesTags: ["TermsConditions"],
+    }),
+
+    // ✅ POST Terms & Conditions
+    addTermsConditions: builder.mutation({
+      query: (body) => ({
+        url: "terms-and-conditions/",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["TermsConditions"],
+    }),
+
+    // ✅ PATCH Terms & Conditions
+    updateTermsConditions: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `terms-and-conditions/${id}/`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["TermsConditions"],
+    }),
+
+    // ✅ DELETE Terms & Conditions
+    deleteTermsConditions: builder.mutation({
+      query: (id) => ({
+        url: `terms-and-conditions/${id}/`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["TermsConditions"],
+    }),
+
+    // ✅ GET return-help
+    getReturnHelp: builder.query<ReturnHelp, void>({
+      query: () => "return-help/",
+      providesTags: ["ReturnHelp"],
+    }),
+
+    // ✅ PATCH return-help by id
+    updateReturnHelp: builder.mutation<
+      ReturnHelp,
+      { id: number } & Partial<ReturnHelp>
+    >({
+      query: ({ id, ...data }) => ({
+        url: `return-help/${id}/`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["ReturnHelp"],
+    }),
+
+    getFooterSection: builder.query<FooterSection[], void>({
+      query: () => "footer-section/",
+      providesTags: ["FooterSection"],
+    }),
+
+    updateFooterSection: builder.mutation<
+      FooterSection,
+      { id: number; data: FooterSectionForm }
+    >({
+      query: ({ id, data }) => {
+        const formData = new FormData();
+
+        formData.append("title", data.title);
+        formData.append("content", data.content);
+
+        // Only append image if new file selected
+        if (data.image) {
+          formData.append("image", data.image);
+        }
+
+        return {
+          url: `footer-section/${id}/`,
+          method: "PATCH",
+          body: formData,
+        };
+      },
+      invalidatesTags: ["FooterSection"],
+    }),
   }),
 });
 
@@ -203,4 +427,24 @@ export const {
   useUpdateAboutStoryMutation,
   useGetAboutJourneyQuery,
   useUpdateAboutJourneyMutation,
+  useGetFaqsQuery,
+  useAddFaqMutation,
+  useUpdateFaqMutation,
+  useDeleteFaqMutation,
+  useGetShippingPolicyQuery,
+  useAddShippingPolicyMutation,
+  useUpdateShippingPolicyMutation,
+  useDeleteShippingPolicyMutation,
+  useGetReturnPolicyQuery,
+  useAddReturnPolicyMutation,
+  useUpdateReturnPolicyMutation,
+  useDeleteReturnPolicyMutation,
+  useGetTermsConditionsQuery,
+  useAddTermsConditionsMutation,
+  useUpdateTermsConditionsMutation,
+  useDeleteTermsConditionsMutation,
+  useGetReturnHelpQuery,
+  useUpdateReturnHelpMutation,
+  useGetFooterSectionQuery,
+  useUpdateFooterSectionMutation,
 } = uiManagerApi;
