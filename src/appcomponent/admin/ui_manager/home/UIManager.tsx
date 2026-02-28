@@ -1,4 +1,5 @@
 import { ContactInfo } from "./ContactInfo";
+import { FooterSection } from "./FooterSection";
 import { HeroSectionManagement } from "./hero/HeroSection";
 import { HowWorksManagement } from "./HowWorksManagement";
 import { WarmSection } from "./WarmSection";
@@ -12,6 +13,7 @@ export const UIManager = () => {
       <HowWorksManagement />
       <WarmSection />
       <ContactInfo />
+      <FooterSection />
     </div>
   );
 };
