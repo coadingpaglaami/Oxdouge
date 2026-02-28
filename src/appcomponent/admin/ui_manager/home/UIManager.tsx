@@ -2,6 +2,7 @@ import { ContactInfo } from "./ContactInfo";
 import { FooterSection } from "./FooterSection";
 import { HeroSectionManagement } from "./hero/HeroSection";
 import { HowWorksManagement } from "./HowWorksManagement";
+import { SocialLinks } from "./SocialLinks";
 import { WarmSection } from "./WarmSection";
 import { WhyChooseManagement } from "./WhyChooseManagement";
 
@@ -14,6 +15,7 @@ export const UIManager = () => {
       <WarmSection />
       <ContactInfo />
       <FooterSection />
+      <SocialLinks />
     </div>
   );
 };

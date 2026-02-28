@@ -10,9 +10,11 @@ import {
   Instagram,
   Twitter,
 } from "lucide-react";
-import { useGetContactInfoQuery, useGetFooterSectionQuery } from "@/api/ui_manager";
-
-
+import {
+  useGetContactInfoQuery,
+  useGetFooterSectionQuery,
+  useGetSocialLinksQuery,
+} from "@/api/ui_manager";
 
 export interface ContactInfoResponse {
   email: string;
@@ -51,11 +53,6 @@ const resourcesLinks: QuickLink[] = [
 ];
 
 // Social media links data
-const socialLinks: SocialLink[] = [
-  { name: "Facebook", href: "https://facebook.com", icon: Facebook },
-  { name: "Instagram", href: "https://instagram.com", icon: Instagram },
-  { name: "Twitter", href: "https://twitter.com", icon: Twitter },
-];
 
 // Fallback contact info
 const fallbackContact: ContactInfoResponse = {
@@ -68,19 +65,40 @@ const fallbackContact: ContactInfoResponse = {
 
 export const Footer = () => {
   const { data: contactInfo, isLoading, isError } = useGetContactInfoQuery({});
-  const { data: footerSections, isLoading: isFooterSectionsLoading } = useGetFooterSectionQuery();
-  
+  const { data: footerSections, isLoading: isFooterSectionsLoading } =
+    useGetFooterSectionQuery();
+  const { data: socialLinks, isLoading: isSocialLinksLoading } =
+    useGetSocialLinksQuery();
+
+  const socialLinksList: SocialLink[] = [
+    {
+      name: "Facebook",
+      href: socialLinks?.facebook || "https://facebook.com",
+      icon: Facebook,
+    },
+    {
+      name: "Instagram",
+      href: socialLinks?.instagram || "https://instagram.com",
+      icon: Instagram,
+    },
+    {
+      name: "Twitter",
+      href: socialLinks?.x || "https://twitter.com",
+      icon: Twitter,
+    },
+  ];
+
   // Use API data if available, otherwise use fallback
   const displayContact = contactInfo || fallbackContact;
 
   // Format phone number if needed (you can customize this based on your needs)
   const formatPhoneNumber = (phone: string) => {
     // If it's already formatted, return as is
-    if (phone.includes(' ')) return phone;
-    
+    if (phone.includes(" ")) return phone;
+
     // Simple formatting for international numbers
     // This is a basic example - adjust based on your needs
-    if (phone.startsWith('+')) {
+    if (phone.startsWith("+")) {
       return phone; // Return as is if it has country code
     }
     return phone;
@@ -121,10 +139,14 @@ export const Footer = () => {
           />
           <span className="font-bold text-lg">
             {/* NOT <span className="text-primary">Overland</span> Tech */}
-            {footerSections && footerSections.length > 0 ? footerSections[0].title : "Overland Tech"}
+            {footerSections && footerSections.length > 0
+              ? footerSections[0].title
+              : "Overland Tech"}
           </span>
           <p className="text-sm">
-          {footerSections && footerSections.length > 0 ? footerSections[0].content : "Explore the world with confidence. Our expert gear and trusted advice ensure you're ready for every adventure."}
+            {footerSections && footerSections.length > 0
+              ? footerSections[0].content
+              : "Explore the world with confidence. Our expert gear and trusted advice ensure you're ready for every adventure."}
           </p>
         </div>
 
@@ -165,7 +187,7 @@ export const Footer = () => {
         {/* Column 4: Contact */}
         <div className="flex flex-col gap-3">
           <h3 className="font-semibold mb-2 text-xl">Contact Us</h3>
-          
+
           {/* Email */}
           <div className="flex items-center gap-2 group">
             <Mail className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors duration-200" />
@@ -173,7 +195,7 @@ export const Footer = () => {
               {displayContact.email}
             </span>
           </div>
-          
+
           {/* Phone */}
           <div className="flex items-center gap-2 group">
             <Phone className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors duration-200" />
@@ -181,7 +203,7 @@ export const Footer = () => {
               {formatPhoneNumber(displayContact.contact_number)}
             </span>
           </div>
-          
+
           {/* Location */}
           <div className="flex items-center gap-2 group">
             <MapPin className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors duration-200" />
@@ -192,12 +214,12 @@ export const Footer = () => {
 
           {/* Social Icons */}
           <div className="flex items-center gap-4 mt-4">
-            {socialLinks.map((social) => {
+            {socialLinksList.map((social) => {
               const Icon = social.icon;
               return (
-                <Link 
+                <Link
                   key={social.name}
-                  href={social.href} 
+                  href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group"
@@ -215,7 +237,8 @@ export const Footer = () => {
         © {new Date().getFullYear()} NOT Overland. All rights reserved.
         {displayContact.updated_at && (
           <span className="block text-xs text-gray-500 mt-1">
-            Last updated: {new Date(displayContact.updated_at).toLocaleDateString()}
+            Last updated:{" "}
+            {new Date(displayContact.updated_at).toLocaleDateString()}
           </span>
         )}
       </div>

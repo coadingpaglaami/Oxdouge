@@ -32,6 +32,13 @@ interface FooterSectionForm {
   image?: File | null;
 }
 
+interface SocialLinks {
+  id?: number;
+  facebook: string;
+  instagram: string;
+  x: string;
+}
+
 const endpoint = "why-choose/";
 const heroPromotionEndpoint = "hero-promotion/";
 const howWorks = "how-works/";
@@ -54,6 +61,7 @@ export const uiManagerApi = createApi({
     "TermsConditions",
     "ReturnHelp",
     "FooterSection",
+    "SocialLinks",
   ],
   endpoints: (builder) => ({
     getHeroPromotion: builder.query<GetResponse, void>({
@@ -405,6 +413,23 @@ export const uiManagerApi = createApi({
       },
       invalidatesTags: ["FooterSection"],
     }),
+
+    getSocialLinks: builder.query<SocialLinks, void>({
+      query: () => "social-links/",
+      providesTags: ["SocialLinks"],
+    }),
+
+    updateSocialLinks: builder.mutation<
+      SocialLinks,
+      { id: number } & Partial<SocialLinks>
+    >({
+      query: ({ id, ...data }) => ({
+        url: `social-links/${id}/`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["SocialLinks"],
+    }),
   }),
 });
 
@@ -447,4 +472,6 @@ export const {
   useUpdateReturnHelpMutation,
   useGetFooterSectionQuery,
   useUpdateFooterSectionMutation,
+  useGetSocialLinksQuery,
+  useUpdateSocialLinksMutation,
 } = uiManagerApi;
