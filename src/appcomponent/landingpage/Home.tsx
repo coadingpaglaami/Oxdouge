@@ -13,10 +13,10 @@ export const Home = () => {
       <div className="space-y-12 px-6 my-12">
         <WhyChoose />
         <HeaterSolution />
-        <WarmSection />
-        <Work />
+        {/* <WarmSection /> */}
+        {/* <Work /> */}
         <CustomerSay />
-        <Experience />
+        {/* <Experience /> */}
       </div>
     </>
   );

@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
 
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
+
   // ✅ Ignore TypeScript errors during build
 };
 

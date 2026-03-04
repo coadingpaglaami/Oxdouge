@@ -5,7 +5,7 @@ export const AboutMain = () => {
   return (
     <div className="py-16 flex flex-col gap-6">
       <OurStoryManagement />
-      <OurJourneyManagement />
+      {/* <OurJourneyManagement /> */}
     </div>
   );
 };

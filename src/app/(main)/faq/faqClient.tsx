@@ -111,7 +111,7 @@ export default function FaqPage() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-6">
+          <h1 className="text-5xl md:text-6xl font-bold bg-linear-to-r from-white to-gray-400 bg-clip-text text-transparent mb-6">
             FAQ
           </h1>
           <p className="text-lg md:text-xl text-[#BEBABA] max-w-2xl mx-auto leading-relaxed">
@@ -199,7 +199,7 @@ export default function FaqPage() {
           </p>
           <Button
             asChild
-            className="bg-gradient-to-r from-[#FFD345] to-[#FFBB28] hover:from-[#FFDF76] hover:to-[#FFD345] text-black px-8 py-6 text-md rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[#FFD345]/20"
+            className="bg-linear-to-r from-[#FFD345] to-[#FFBB28] hover:from-[#FFDF76] hover:to-[#FFD345] text-black px-8 py-6 text-md rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[#FFD345]/20"
           >
             <Link href="/contact" className="flex items-center gap-2 group">
               Contact Us

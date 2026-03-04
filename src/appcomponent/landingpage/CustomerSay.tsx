@@ -26,7 +26,7 @@ export const CustomerSay = () => {
     return colors[index];
   };
 
-  return (
+ if(Number(customerReview?.length) > 0) return (
     <div className="flex flex-col">
       {/* ---------- Top Section ---------- */}
       <div className="flex flex-col items-center text-center">

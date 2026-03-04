@@ -11,8 +11,8 @@ export const UIManager = () => {
     <div className="py-16 flex flex-col gap-6">
       <HeroSectionManagement />
       <WhyChooseManagement />
-      <HowWorksManagement />
-      <WarmSection />
+      {/* <HowWorksManagement /> */}
+      {/* <WarmSection /> */}
       <ContactInfo />
       <FooterSection />
       <SocialLinks />

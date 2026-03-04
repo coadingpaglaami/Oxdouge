@@ -2,6 +2,7 @@
 import { useAddToCartMutation } from "@/api/cartApi";
 import { Button } from "@/components/ui/button";
 import { ProductResponse } from "@/interfaces/api";
+import { slugify } from "@/lib/slugs";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,22 +18,19 @@ export const Heater = ({
   price,
   discount,
   discounted_price,
-  available_stock
+  available_stock,
 }: ProductResponse) => {
   const [cart, { isLoading }] = useAddToCartMutation();
 
   const route = useRouter();
 
   async function addToCart(id: number) {
-
     try {
       const res = await cart({ product_id: id, quantity: 1 }).unwrap();
-      console.log("Product added to cart", res);
 
       toast.success("Product added to cart");
     } catch (error) {
       const err = error as Error;
-      console.error("Failed to add to cart:", err);
       toast.error(err.message || "Failed to add to cart");
     }
   }
@@ -40,7 +38,7 @@ export const Heater = ({
 
   return (
     <Link
-      href={`/products/${id}`}
+      href={`/products/${slugify(title)}-${id}`}
       className="hover:sccale-105 transition-transform duration-200"
     >
       <div className="flex flex-col bg-[#121212] border border-primary rounded-lg overflow-hidden gap-4 ">
@@ -80,7 +78,8 @@ export const Heater = ({
             className="mt-3 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isLoading || available_stock === 0}
           >
-            <ShoppingCart className="w-4 h-4" /> {available_stock === 0 ? 'No Stock' : 'Add to Cart'} 
+            <ShoppingCart className="w-4 h-4" />{" "}
+            {available_stock === 0 ? "No Stock" : "Add to Cart"}
           </Button>
         </div>
       </div>
