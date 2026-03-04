@@ -17,7 +17,6 @@ export const ProductRightChild = ({ product }: ProductRightProps) => {
   const [cart, { isLoading }] = useAddToCartMutation();
   const router = useRouter();
   if (!product) return <div>Product not found</div>;
-  
 
   const unitPrice = product.price;
   const totalPrice = (parseFloat(product.price) * quantity).toFixed(2);
@@ -37,20 +36,17 @@ export const ProductRightChild = ({ product }: ProductRightProps) => {
   };
 
   async function addToCart() {
-    const token = await cookieStore.get("access");
-    if (!token) {
-      toast.error("You need to login first");
-      setTimeout(() => {
-        router.push("/login");
-      }, 1000);
-      return;
-    }
     try {
       if (!product?.id) {
         toast.error("Invalid product");
         return;
       }
-      const res = await cart({ product_id: product?.id, quantity }).unwrap();
+
+      const res = await cart({
+        product_id: product.id,
+        quantity,
+      }).unwrap();
+
       console.log("Product added to cart", res);
       toast.success("Product added to cart");
       router.push("/cart");
