@@ -81,11 +81,11 @@ export const Footer = () => {
       href: socialLinks?.instagram || "https://instagram.com",
       icon: Instagram,
     },
-    {
-      name: "Twitter",
-      href: socialLinks?.x || "https://twitter.com",
-      icon: Twitter,
-    },
+    // {
+    //   name: "Twitter",
+    //   href: socialLinks?.x || "https://twitter.com",
+    //   icon: Twitter,
+    // },
   ];
 
   // Use API data if available, otherwise use fallback

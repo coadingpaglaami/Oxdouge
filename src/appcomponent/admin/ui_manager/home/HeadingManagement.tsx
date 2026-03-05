@@ -151,12 +151,12 @@ export const HeadingManagement = () => {
           disabled={isUpdating}
           className={[
             "rounded-xl px-5 py-2.5 text-sm font-semibold transition-all duration-200",
-            "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900",
+            "focus:outline-none focus:ring-2 focus:ring-offset-2",
             saved
-              ? "bg-emerald-600 text-white focus:ring-emerald-500"
+              ? "bg-primary text-black focus:ring-primary"
               : isUpdating
-                ? "cursor-not-allowed bg-slate-800 text-slate-500"
-                : "bg-primary text-black hover:bg-primary/90 focus:ring-primary",
+                ? "cursor-not-allowed bg-slate-600 text-slate-400"
+                : "bg-primary text-black hover:brightness-110 focus:ring-primary",
           ].join(" ")}
         >
           {isUpdating ? "Saving…" : saved ? "✓ Saved" : "Save Changes"}

@@ -6,7 +6,7 @@ export const ContactUs = () => {
     return (
         <div className="my-20">
         <ContactHero />
-        <ContactCard />
+        {/* <ContactCard /> */}
         <ContactForm />
         </div>
     )

@@ -44,13 +44,6 @@ const PLATFORMS: {
     placeholder: "https://instagram.com/yourhandle",
     brandColor: "#E1306C",
   },
-  {
-    key: "x",
-    label: "X (Twitter)",
-    Icon: Twitter,
-    placeholder: "https://x.com/yourhandle",
-    brandColor: "#e2e8f0",
-  },
 ];
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -140,7 +133,7 @@ export const SocialLinks = () => {
         </div>
 
         {/* Fields */}
-        {PLATFORMS.map(({ key, label, Icon, placeholder, brandColor }) => (
+        {PLATFORMS.map(({ key, Icon, placeholder, brandColor }) => (
           <div key={key} className="flex items-center gap-3">
             <div
               className="flex items-center justify-center w-8 h-8 rounded-lg shrink-0"

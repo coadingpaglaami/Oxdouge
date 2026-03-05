@@ -41,13 +41,13 @@ const FIELDS: {
     type: "email",
     Icon: Mail,
   },
-  {
-    key: "contact_number",
-    label: "Contact Number",
-    placeholder: "+8801710000000",
-    type: "tel",
-    Icon: Phone,
-  },
+  // {
+  //   key: "contact_number",
+  //   label: "Contact Number",
+  //   placeholder: "+8801710000000",
+  //   type: "tel",
+  //   Icon: Phone,
+  // },
   {
     key: "location",
     label: "Location",

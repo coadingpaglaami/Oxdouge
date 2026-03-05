@@ -206,7 +206,7 @@ export const HeroSectionManagement = () => {
       {/* Header */}
       <header className="sticky top-0 z-20 border-b border-white/5 bg-black/90 backdrop-blur-md px-6 md:px-10 py-4 flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-lg md:text-xl font-bold tracking-tight text-white">
+          <h1 className="text-lg md:text-xl font-semibold tracking-tight text-primary">
             Hero Section Management
           </h1>
         </div>
@@ -215,9 +215,17 @@ export const HeroSectionManagement = () => {
           onClick={handleSave}
           disabled={isSaving || isUpdating}
           className={`px-5 py-2.5 rounded-lg text-sm text-black font-semibold transition-all duration-300 disabled:opacity-60
-            ${saved ? "bg-emerald-600" : "bg-primary hover:bg-primary/80"}`}
+      ${
+        saved
+          ? "bg-(--primary)/90"
+          : "bg-primary hover:brightness-110"
+      }`}
         >
-          {isSaving || isUpdating ? "Saving…" : saved ? "✓ Saved" : "Save Changes"}
+          {isSaving || isUpdating
+            ? "Saving…"
+            : saved
+              ? "✓ Saved"
+              : "Save Changes"}
         </button>
       </header>
 
