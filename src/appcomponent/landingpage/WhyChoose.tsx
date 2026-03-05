@@ -1,17 +1,8 @@
 "use client";
-import { useGetWhyChooseQuery } from "@/api/ui_manager";
+import { useGetHeadingSectionQuery, useGetWhyChooseQuery } from "@/api/ui_manager";
 import { CardResponse } from "@/interfaces/api";
 import Image from "next/image";
 import React from "react";
-
-interface WhyChooseItem {
-  id: number;
-  description: string; // This appears to be a general description
-  card_heading: string;
-  card_description: string;
-  icon: string | null;
-  created_at: string;
-}
 
 // Gradient colors array for dynamic icon backgrounds
 const gradientColors = [
@@ -30,6 +21,7 @@ const FALLBACK_ICON = "/landing/fire.svg";
 
 export const WhyChoose = () => {
   const { data: whyChooseData, isLoading, isError } = useGetWhyChooseQuery();
+  const { data: headingData } = useGetHeadingSectionQuery({});
 
   // Extract the array from the response
 
@@ -98,8 +90,7 @@ export const WhyChoose = () => {
       <div className="flex flex-col items-center text-center">
         {/* Header */}
         <div className="flex items-center gap-2 md:text-4xl text-2xl font-bold relative">
-          <h2 className="text-white">Why choose</h2>
-          <span className="text-primary">Overland Tech</span>
+          <h2 className="text-white">{headingData?.[0]?.heading1 || "Why Choose Us"}</h2>
           <Image
             src="/landing/quotation.svg"
             alt="line"
@@ -111,9 +102,7 @@ export const WhyChoose = () => {
 
         {/* Description */}
         <p className="text-gray-300 text-base md:text-lg max-w-2xl mt-4">
-          We&apos;re committed to providing outdoor enthusiasts with reliable,
-          portable power solutions that keep you connected and powered wherever
-          your adventures take you.
+          {headingData?.[0]?.subheading1 || "We're committed to providing outdoor enthusiasts with reliable, portable power solutions that keep you connected and powered wherever your adventures take you."}
         </p>
       </div>
 

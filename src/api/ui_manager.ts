@@ -62,6 +62,8 @@ export const uiManagerApi = createApi({
     "ReturnHelp",
     "FooterSection",
     "SocialLinks",
+    "HeadingSection",
+    "ValuesSection",
   ],
   endpoints: (builder) => ({
     getHeroPromotion: builder.query<GetResponse, void>({
@@ -430,6 +432,66 @@ export const uiManagerApi = createApi({
       }),
       invalidatesTags: ["SocialLinks"],
     }),
+
+    // ✅ GET Heading Section
+    getHeadingSection: builder.query({
+      query: () => "heading-section/",
+      providesTags: ["HeadingSection"],
+    }),
+
+    // ✅ PATCH Heading Section
+    updateHeadingSection: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `heading-section/${id}/`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["HeadingSection"],
+    }),
+
+    // ✅ GET Values Section
+    getValuesSection: builder.query({
+      query: () => "values-section/",
+      providesTags: ["ValuesSection"],
+    }),
+
+    // ✅ PATCH Values Section
+    updateValuesSection: builder.mutation({
+      query: ({ id, data }) => {
+        const formData = new FormData();
+
+        if (data.icon) {
+          formData.append("icon", data.icon);
+        }
+
+        formData.append("title", data.title);
+        formData.append("description", data.description);
+
+        return {
+          url: `values-section/${id}/`,
+          method: "PATCH",
+          body: formData,
+        };
+      },
+      invalidatesTags: ["ValuesSection"],
+    }),
+
+    addValuesSection: builder.mutation({
+      query: (data) => {
+        const formData = new FormData();
+
+        formData.append("icon", data.icon);
+        formData.append("title", data.title);
+        formData.append("description", data.description);
+
+        return {
+          url: "values-section/",
+          method: "POST",
+          body: formData,
+        };
+      },
+      invalidatesTags: ["ValuesSection"],
+    }),
   }),
 });
 
@@ -474,4 +536,9 @@ export const {
   useUpdateFooterSectionMutation,
   useGetSocialLinksQuery,
   useUpdateSocialLinksMutation,
+  useGetHeadingSectionQuery,
+  useUpdateHeadingSectionMutation,
+  useGetValuesSectionQuery,
+  useUpdateValuesSectionMutation,
+  useAddValuesSectionMutation,
 } = uiManagerApi;
