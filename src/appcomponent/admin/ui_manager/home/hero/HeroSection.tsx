@@ -13,6 +13,7 @@ import { ExistingImageCard } from "./ExistingImageCard";
 import { NewImageCard } from "./NewImageCard";
 import { MAX_NEW_IMAGES } from "./valueandfunction";
 import { toast } from "sonner";
+import { ParagraphFields } from "./ParagraphFields";
 
 export const HeroSectionManagement = () => {
   const { data, isLoading, error } = useGetHeroPromotionQuery();
@@ -22,7 +23,7 @@ export const HeroSectionManagement = () => {
   // ── Content State ──
   const [title1, setTitle1] = useState("");
   const [title2, setTitle2] = useState("");
-  const [description, setDescription] = useState("");
+  const [paragraphs, setParagraphs] = useState<string[]>(["", "", ""]);
 
   // ── Existing Images (ID-based) ──
   const [existingImages, setExistingImages] = useState<ExistingImage[]>([]);
@@ -43,14 +44,18 @@ export const HeroSectionManagement = () => {
 
     setTitle1(data.title1 ?? "");
     setTitle2(data.title2 ?? "");
-    setDescription(data.description ?? "");
+
+    // Split incoming description by \n into up to 3 slots
+    const parts = (data.description ?? "").split("\n").slice(0, 3);
+    const padded: string[] = [...parts, "", "", ""].slice(0, 3);
+    setParagraphs(padded);
+
     setExistingImages(data.existing_images ?? []);
     setDeletedImageIds([]);
     setNewFiles([]);
     setNewHeadings([]);
     setNewSubheadings([]);
   }, [data]);
-
   // ── Existing Image Handlers ──
 
   const handleExistingImageChange = (
@@ -125,7 +130,11 @@ export const HeroSectionManagement = () => {
       await updateHeroPromotion({
         title1,
         title2,
-        description,
+        // Filter empty, trim, join with \n
+        description: paragraphs
+          .map((p) => p.trim())
+          .filter(Boolean)
+          .join("\n"),
         deleted_image_ids: deletedImageIds,
         new_images: newFiles.length > 0 ? newFiles : null,
         new_headings: newHeadings,
@@ -215,11 +224,7 @@ export const HeroSectionManagement = () => {
           onClick={handleSave}
           disabled={isSaving || isUpdating}
           className={`px-5 py-2.5 rounded-lg text-sm text-black font-semibold transition-all duration-300 disabled:opacity-60
-      ${
-        saved
-          ? "bg-(--primary)/90"
-          : "bg-primary hover:brightness-110"
-      }`}
+      ${saved ? "bg-(--primary)/90" : "bg-primary hover:brightness-110"}`}
         >
           {isSaving || isUpdating
             ? "Saving…"
@@ -237,11 +242,10 @@ export const HeroSectionManagement = () => {
             <Field label="Title Line 1" value={title1} onChange={setTitle1} />
             <Field label="Title Line 2" value={title2} onChange={setTitle2} />
             <div className="md:col-span-2">
-              <Field
-                label="Description"
-                value={description}
-                onChange={setDescription}
-                multiline
+              <ParagraphFields
+                paragraphs={paragraphs}
+                onChange={setParagraphs}
+                disabled={isSaving || isUpdating}
               />
             </div>
           </div>

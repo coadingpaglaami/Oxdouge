@@ -9,6 +9,7 @@ import {
   Facebook,
   Instagram,
   Twitter,
+  Youtube,
 } from "lucide-react";
 import {
   useGetContactInfoQuery,
@@ -18,7 +19,7 @@ import {
 
 export interface ContactInfoResponse {
   email: string;
-  contact_number: string;
+  contact_number?: string;
   location: string;
   created_at: string;
   updated_at: string;
@@ -57,7 +58,7 @@ const resourcesLinks: QuickLink[] = [
 // Fallback contact info
 const fallbackContact: ContactInfoResponse = {
   email: "contact@notoverland.com",
-  contact_number: "+123 456 7890",
+  // contact_number: "+123 456 7890",
   location: "123 Adventure Lane, Explore City",
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),
@@ -81,11 +82,11 @@ export const Footer = () => {
       href: socialLinks?.instagram || "https://instagram.com",
       icon: Instagram,
     },
-    // {
-    //   name: "Twitter",
-    //   href: socialLinks?.x || "https://twitter.com",
-    //   icon: Twitter,
-    // },
+    {
+      name: "Youtube",
+      href: socialLinks?.x || "https://youtube.com",
+      icon: Youtube,
+    },
   ];
 
   // Use API data if available, otherwise use fallback
@@ -197,12 +198,12 @@ export const Footer = () => {
           </div>
 
           {/* Phone */}
-          <div className="flex items-center gap-2 group">
+          {/* <div className="flex items-center gap-2 group">
             <Phone className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors duration-200" />
             <span className="text-sm text-gray-300 group-hover:text-white transition-colors duration-200">
               {formatPhoneNumber(displayContact.contact_number)}
             </span>
-          </div>
+          </div> */}
 
           {/* Location */}
           <div className="flex items-center gap-2 group">
@@ -234,7 +235,7 @@ export const Footer = () => {
 
       {/* Bottom Copyright with dynamic year */}
       <div className="mt-8 border-t-[0.4px] border-[#FFD345]/20 pt-4 text-center text-white text-sm">
-        © {new Date().getFullYear()} NOT Overland. All rights reserved.
+        © {new Date().getFullYear()} Not Overland Tech. All rights reserved.
         {displayContact.updated_at && (
           <span className="block text-xs text-gray-500 mt-1">
             Last updated:{" "}

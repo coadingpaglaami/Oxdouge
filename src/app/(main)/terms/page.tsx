@@ -59,7 +59,9 @@ export default function TermsOfServicePage() {
 
     // Set first item active only once
     if (page === 1 && response.results.length > 0) {
-      setActivePolicyId((prev) => (prev === null ? response.results[0].id : prev));
+      setActivePolicyId((prev) =>
+        prev === null ? response.results[0].id : prev,
+      );
     }
   }, [data, page]);
 
@@ -79,7 +81,7 @@ export default function TermsOfServicePage() {
           setPage((prev) => prev + 1);
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
 
     if (loadMoreRef.current) {
@@ -124,7 +126,7 @@ export default function TermsOfServicePage() {
     const paragraphs = content.split("\n").filter((p) => p.trim() !== "");
     return paragraphs.map((paragraph, index) => (
       <div key={index} className="flex gap-3 group">
-        <span className="mt-1.5 shrink-0 text-[#FFD345] text-xs">•</span>
+        <span className="mt-1.5 shrink-0 text-primary text-xs">•</span>
         <p className="group-hover:text-gray-200 transition-colors leading-relaxed text-gray-300 m-0">
           {paragraph}
         </p>
@@ -137,7 +139,7 @@ export default function TermsOfServicePage() {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="flex items-center gap-3">
-          <Loader2 className="w-6 h-6 animate-spin text-[#FFD345]" />
+          <Loader2 className="w-6 h-6 animate-spin text-primary" />
           <p className="text-gray-400">Loading terms of service...</p>
         </div>
       </div>
@@ -148,11 +150,12 @@ export default function TermsOfServicePage() {
     <div className="min-h-screen bg-black text-white py-12 px-4 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="text-center mb-12">
-        <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-4">
+        <h1 className="text-5xl md:text-6xl font-bold bg-linear-to-r from-white to-gray-400 bg-clip-text text-transparent mb-4">
           Terms of Service
         </h1>
         <p className="text-lg md:text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed mb-2">
-          Please read these terms carefully before using our website and purchasing our products.
+          Please read these terms carefully before using our website and
+          purchasing our products.
         </p>
         {allPolicies.length > 0 && (
           <p className="text-sm text-gray-500">
@@ -170,7 +173,7 @@ export default function TermsOfServicePage() {
         {/* ── Table of Contents (sticky sidebar) ── */}
         <div className="lg:w-1/4">
           <div className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto custom-scrollbar">
-            <h2 className="text-xl font-bold mb-5 text-[#FFD345]">All Terms</h2>
+            <h2 className="text-xl font-bold mb-5 text-primary">All Terms</h2>
 
             <nav className="space-y-1 pr-2">
               {allPolicies.map((policy) => (
@@ -179,21 +182,21 @@ export default function TermsOfServicePage() {
                   onClick={() => scrollToPolicy(policy.id)}
                   className={`w-full flex items-center gap-2 py-2.5 px-3 rounded-lg transition-all duration-200 text-left group ${
                     activePolicyId === policy.id
-                      ? "bg-[#FFD345]/15 border-l-4 border-[#FFD345]"
-                      : "hover:bg-white/5 border-l-4 border-transparent hover:border-[#FFD345]/30"
+                      ? "bg-primary/15 border-l-4 border-primary"
+                      : "hover:bg-white/5 border-l-4 border-transparent hover:border-primary/30"
                   }`}
                 >
                   <ChevronRight
                     className={`w-4 h-4 shrink-0 transition-transform duration-200 ${
                       activePolicyId === policy.id
-                        ? "rotate-90 text-[#FFD345]"
-                        : "text-gray-500 group-hover:text-[#FFD345]"
+                        ? "rotate-90 text-primary"
+                        : "text-gray-500 group-hover:text-primary"
                     }`}
                   />
                   <span
                     className={`text-sm font-medium line-clamp-1 transition-colors duration-200 ${
                       activePolicyId === policy.id
-                        ? "text-[#FFD345]"
+                        ? "text-primary"
                         : "text-gray-400 group-hover:text-white"
                     }`}
                   >
@@ -205,7 +208,7 @@ export default function TermsOfServicePage() {
               {/* Infinite scroll sentinel */}
               <div ref={loadMoreRef} className="py-3">
                 {isFetching && page > 1 && (
-                  <div className="flex items-center justify-center gap-2 text-[#FFD345]">
+                  <div className="flex items-center justify-center gap-2 text-primary">
                     <Loader2 className="w-4 h-4 animate-spin" />
                     <span className="text-xs">Loading more...</span>
                   </div>
@@ -234,13 +237,17 @@ export default function TermsOfServicePage() {
                   id={`policy-${policy.id}`}
                   className={`scroll-mt-28 p-6 rounded-2xl transition-all duration-300 ${
                     activePolicyId === policy.id
-                      ? "bg-gradient-to-b from-[#FFD345]/10 to-transparent border border-[#FFD345]/20 shadow-lg shadow-[#FFD345]/5"
-                      : "bg-gradient-to-b from-gray-900/50 to-transparent hover:from-gray-800/50 border border-transparent"
+                      ? "bg-linear-to-b from-primary/10 to-transparent border border-primary/20 shadow-lg shadow-primary/5"
+                      : "bg-linear-to-b from-gray-900/50 to-transparent hover:from-gray-800/50 border border-transparent"
                   }`}
                 >
-                  <h2 className="text-lg font-bold mb-4 text-white">{policy.heading}</h2>
+                  <h2 className="text-lg font-bold mb-4 text-white">
+                    {policy.heading}
+                  </h2>
 
-                  <div className="space-y-3">{renderContent(policy.content)}</div>
+                  <div className="space-y-3">
+                    {renderContent(policy.content)}
+                  </div>
 
                   <div className="mt-5 pt-4 border-t border-white/10">
                     <p className="text-xs text-gray-600">
@@ -257,8 +264,10 @@ export default function TermsOfServicePage() {
 
               {isFetching && page > 1 && (
                 <div className="flex items-center justify-center gap-2 py-8">
-                  <Loader2 className="w-5 h-5 animate-spin text-[#FFD345]" />
-                  <span className="text-gray-400 text-sm">Loading more terms...</span>
+                  <Loader2 className="w-5 h-5 animate-spin text-primary" />
+                  <span className="text-gray-400 text-sm">
+                    Loading more terms...
+                  </span>
                 </div>
               )}
 
@@ -275,13 +284,14 @@ export default function TermsOfServicePage() {
       </div>
 
       {/* Legal Notice */}
-      <div className="mt-16 p-8 bg-gradient-to-r from-[#FFD345]/10 to-transparent rounded-2xl border border-[#FFD345]/20">
+      {/* <div className="mt-16 p-8 bg-gradient-to-r from-primary/10 to-transparent rounded-2xl border border-primary/20">
         <div className="text-center">
-          <h3 className="text-2xl font-bold mb-4 text-[#FFD345]">Legal Notice</h3>
+          <h3 className="text-2xl font-bold mb-4 text-primary">Legal Notice</h3>
           <p className="text-gray-300 mb-8 max-w-2xl mx-auto text-sm leading-relaxed">
-            These Terms of Service constitute a legally binding agreement between you and Not
-            Overland. By using our website and services, you acknowledge that you have read,
-            understood, and agree to be bound by these terms.
+            These Terms of Service constitute a legally binding agreement
+            between you and Not Overland. By using our website and services, you
+            acknowledge that you have read, understood, and agree to be bound by
+            these terms.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl mx-auto">
             {[
@@ -290,19 +300,30 @@ export default function TermsOfServicePage() {
               { title: "Business Hours", value: "Mon–Fri, 9AM–6PM PST" },
             ].map((item) => (
               <div key={item.title} className="text-center">
-                <h4 className="font-semibold text-[#FFD345] mb-1 text-sm">{item.title}</h4>
+                <h4 className="font-semibold text-primary mb-1 text-sm">
+                  {item.title}
+                </h4>
                 <p className="text-gray-400 text-sm">{item.value}</p>
               </div>
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
 
       <style jsx>{`
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #3a3a3a; }
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #2a2a2a;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #3a3a3a;
+        }
       `}</style>
     </div>
   );

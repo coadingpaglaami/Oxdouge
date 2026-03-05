@@ -60,7 +60,7 @@ export const FooterSection = () => {
     setEditState((prev) =>
       prev
         ? { ...prev, form: { ...prev.form, image: file }, previewUrl: url }
-        : prev
+        : prev,
     );
   };
 
@@ -109,8 +109,8 @@ export const FooterSection = () => {
               key={section.id}
               className={`group relative flex flex-col gap-4 p-5 rounded-xl border transition-all duration-300 ${
                 isEditing
-                  ? "border-[#FFD345]/40 bg-white/[0.06]"
-                  : "border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-[#FFD345]/20"
+                  ? "border-[var(--primary)]/40 bg-white/[0.06]"
+                  : "border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-[var(--primary)]/20"
               }`}
             >
               {/* ── Edit / Cancel / Save buttons (top-right) ── */}
@@ -121,7 +121,7 @@ export const FooterSection = () => {
                     <button
                       onClick={handleSave}
                       disabled={isUpdating}
-                      className="flex items-center justify-center w-7 h-7 rounded-md bg-[#FFD345] hover:bg-[#FFD345]/80 text-black transition-colors duration-200 disabled:opacity-50"
+                      className="flex items-center justify-center w-7 h-7 rounded-md bg-[var(--primary)] hover:bg-[var(--primary)]/80 text-black transition-colors duration-200 disabled:opacity-50"
                       title="Save"
                     >
                       {isUpdating ? (
@@ -130,6 +130,7 @@ export const FooterSection = () => {
                         <Check className="w-3.5 h-3.5" />
                       )}
                     </button>
+
                     {/* Cancel */}
                     <button
                       onClick={closeEdit}
@@ -143,7 +144,7 @@ export const FooterSection = () => {
                 ) : (
                   <button
                     onClick={() => openEdit(section)}
-                    className="flex items-center justify-center w-7 h-7 rounded-md bg-white/0 group-hover:bg-white/10 hover:!bg-[#FFD345]/20 text-gray-500 group-hover:text-gray-300 hover:!text-[#FFD345] transition-all duration-200"
+                    className="flex items-center justify-center w-7 h-7 rounded-md bg-white/0 group-hover:bg-white/10 hover:!bg-[var(--primary)]/20 text-gray-500 group-hover:text-gray-300 hover:!text-[var(--primary)] transition-all duration-200"
                     title="Edit"
                   >
                     <Pencil className="w-3.5 h-3.5" />
@@ -155,7 +156,9 @@ export const FooterSection = () => {
               <div className="flex items-center gap-3">
                 <div
                   className={`relative w-12 h-12 rounded-lg overflow-hidden bg-white/10 flex items-center justify-center shrink-0 ${
-                    isEditing ? "ring-2 ring-[#FFD345]/30 cursor-pointer" : ""
+                    isEditing
+                      ? "ring-2 ring-[var(--primary)]/30 cursor-pointer"
+                      : ""
                   }`}
                   onClick={() => isEditing && fileInputRef.current?.click()}
                   title={isEditing ? "Click to change image" : undefined}
@@ -177,7 +180,7 @@ export const FooterSection = () => {
                   {/* Overlay hint when editing */}
                   {isEditing && (
                     <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-200">
-                      <ImagePlus className="w-4 h-4 text-[#FFD345]" />
+                      <ImagePlus className="w-4 h-4 text-[var(--primary)]" />
                     </div>
                   )}
                 </div>
@@ -192,9 +195,10 @@ export const FooterSection = () => {
                       className="hidden"
                       onChange={handleImageChange}
                     />
+
                     <button
                       onClick={() => fileInputRef.current?.click()}
-                      className="text-xs text-[#FFD345]/70 hover:text-[#FFD345] flex items-center gap-1 transition-colors duration-200"
+                      className="text-xs text-[var(--primary)]/70 hover:text-[var(--primary)] flex items-center gap-1 transition-colors duration-200"
                     >
                       <ImagePlus className="w-3 h-3" />
                       Change image
@@ -215,14 +219,14 @@ export const FooterSection = () => {
                             ...prev,
                             form: { ...prev.form, title: e.target.value },
                           }
-                        : prev
+                        : prev,
                     )
                   }
-                  className="w-full bg-white/5 border border-white/10 focus:border-[#FFD345]/40 rounded-lg px-3 py-2 text-white text-sm font-semibold outline-none transition-colors duration-200 placeholder:text-gray-600"
+                  className="w-full bg-white/5 border border-white/10 focus:border-[var(--primary)]/40 rounded-lg px-3 py-2 text-white text-sm font-semibold outline-none transition-colors duration-200 placeholder:text-gray-600"
                   placeholder="Section title"
                 />
               ) : (
-                <h4 className="text-white font-semibold text-base leading-tight group-hover:text-[#FFD345] transition-colors duration-200 pr-8">
+                <h4 className="text-white font-semibold text-base leading-tight group-hover:text-[var(--primary)] transition-colors duration-200 pr-8">
                   {section.title}
                 </h4>
               )}
@@ -238,11 +242,11 @@ export const FooterSection = () => {
                             ...prev,
                             form: { ...prev.form, content: e.target.value },
                           }
-                        : prev
+                        : prev,
                     )
                   }
                   rows={4}
-                  className="w-full bg-white/5 border border-white/10 focus:border-[#FFD345]/40 rounded-lg px-3 py-2 text-gray-300 text-sm outline-none resize-none transition-colors duration-200 placeholder:text-gray-600 leading-relaxed"
+                  className="w-full bg-white/5 border border-white/10 focus:border-[var(--primary)]/40 rounded-lg px-3 py-2 text-gray-300 text-sm outline-none resize-none transition-colors duration-200 placeholder:text-gray-600 leading-relaxed"
                   placeholder="Section content"
                 />
               ) : (
@@ -253,7 +257,7 @@ export const FooterSection = () => {
 
               {/* ── Accent line (view mode only) ── */}
               {!isEditing && (
-                <div className="w-0 group-hover:w-8 h-0.5 bg-[#FFD345] transition-all duration-300 rounded-full mt-auto" />
+                <div className="w-0 group-hover:w-8 h-0.5 bg-[var(--primary)] transition-all duration-300 rounded-full mt-auto" />
               )}
             </div>
           );

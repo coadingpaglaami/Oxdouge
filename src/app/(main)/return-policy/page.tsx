@@ -169,7 +169,7 @@ export default function ReturnPolicyPage() {
       <div className="">
         {/* Header Section */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-linear-to-r from-white to-gray-400 bg-clip-text text-transparent">
             Return Policy
           </h1>
           <p className="text-lg md:text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
@@ -220,7 +220,7 @@ export default function ReturnPolicyPage() {
                 {/* Loading indicator for infinite scroll */}
                 <div ref={loadMoreRef} className="py-3">
                   {isFetching && page > 1 && (
-                    <div className="flex items-center justify-center gap-2 text-[#FFD345]">
+                    <div className="flex items-center justify-center gap-2 text-primary">
                       <Loader2 className="w-4 h-4 animate-spin" />
                       <span className="text-xs">Loading more...</span>
                     </div>
@@ -249,8 +249,8 @@ export default function ReturnPolicyPage() {
                     id={`policy-${policy.id}`}
                     className={`scroll-mt-24 p-6 rounded-2xl transition-all duration-300 ${
                       activePolicyId === policy.id
-                        ? "bg-gradient-to-b from-primary/10 to-transparent border border-primary/20 shadow-lg shadow-primary/5"
-                        : "bg-gradient-to-b from-gray-900/50 to-transparent hover:from-gray-800/50"
+                        ? "bg-linear-to-b from-primary/10 to-transparent border border-primary/20 shadow-lg shadow-primary/5"
+                        : "bg-linear-to-b from-gray-900/50 to-transparent hover:from-gray-800/50"
                     }`}
                   >
                     <h2 className="text-xl font-bold mb-4 text-white">
@@ -281,7 +281,7 @@ export default function ReturnPolicyPage() {
                 {/* Bottom loading indicator */}
                 <div ref={loadMoreRef} className="py-3">
                   {isFetching && page > 1 && (
-                    <div className="flex items-center justify-center gap-2 text-[#FFD345]">
+                    <div className="flex items-center justify-center gap-2 text-primary">
                       <Loader2 className="w-4 h-4 animate-spin" />
                       <span className="text-xs">Loading more...</span>
                     </div>
@@ -300,7 +300,7 @@ export default function ReturnPolicyPage() {
         </div>
 
         {/* Additional Info Box - Dynamic from useGetReturnHelpQuery */}
-        {helpData && (
+        {/* {helpData && (
           <div className="mt-16 p-8 bg-gradient-to-r from-primary/10 to-purple-600/10 rounded-2xl border border-primary/20 backdrop-blur-sm">
             <h3 className="text-2xl font-bold mb-4 text-primary">
               {helpData.title || "Need Help with a Return?"}
@@ -334,7 +334,6 @@ export default function ReturnPolicyPage() {
               </div>
             </div>
 
-            {/* Last updated for help data */}
             {helpData.updated_at && (
               <div className="mt-6 pt-4 border-t border-white/10">
                 <p className="text-xs text-gray-500">
@@ -350,12 +349,11 @@ export default function ReturnPolicyPage() {
           </div>
         )}
 
-        {/* Fallback if help data is loading */}
         {isHelpLoading && !helpData && (
           <div className="mt-16 p-8 bg-gradient-to-r from-primary/10 to-purple-600/10 rounded-2xl border border-primary/20 backdrop-blur-sm flex justify-center">
             <Loader2 className="w-6 h-6 animate-spin text-primary" />
           </div>
-        )}
+        )} */}
       </div>
 
       {/* Custom scrollbar styles */}

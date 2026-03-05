@@ -119,7 +119,7 @@ const Pagination = ({
             onClick={() => onPageChange(p)}
             className={`rounded-lg min-w-9 border font-medium transition-all ${
               p === page
-                ? "bg-[#FFD345] border-[#FFD345] text-[#121212] font-bold hover:bg-[#e6be30]"
+                ? "bg-primary border-primary text-[#121212] font-bold hover:bg-primary/90"
                 : "bg-transparent border-[#2A2A2A] text-[#aaa] hover:bg-[#2A2A2A] hover:text-white"
             }`}
           >
@@ -153,10 +153,10 @@ const PolicyCard = ({
 }) => {
   const points = contentToPoints(policy.content);
   return (
-    <div className="bg-[#1C1C1C] border border-[#2A2A2A] rounded-xl px-6 py-5 flex flex-col gap-4 transition-colors duration-200 hover:border-[#FFD345] group">
+    <div className="bg-[#1C1C1C] border border-[#2A2A2A] rounded-xl px-6 py-5 flex flex-col gap-4 transition-colors duration-200 hover:border-primary group">
       <div className="flex justify-between items-start gap-3">
         <div className="flex gap-3 items-center flex-1 min-w-0">
-          <RotateCcw size={18} className="text-[#FFD345] shrink-0" />
+          <RotateCcw size={18} className="text-primary shrink-0" />
           <h3 className="text-white font-bold text-[15px] leading-snug m-0 truncate">
             {policy.heading}
           </h3>
@@ -164,7 +164,7 @@ const PolicyCard = ({
         <div className="flex gap-2 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
           <button
             onClick={() => onEdit(policy)}
-            className="bg-transparent border border-[#2A2A2A] rounded-lg p-1.5 text-[#888] hover:border-[#FFD345] hover:text-[#FFD345] transition-all duration-150 flex items-center cursor-pointer"
+            className="bg-transparent border border-[#2A2A2A] rounded-lg p-1.5 text-[#888] hover:border-primary hover:text-primary transition-all duration-150 flex items-center cursor-pointer"
             title="Edit"
           >
             <Pencil size={14} />
@@ -181,7 +181,7 @@ const PolicyCard = ({
       <ul className="flex flex-col gap-2 pl-7 m-0 list-none">
         {points.map((point, i) => (
           <li key={i} className="flex gap-2.5 items-start">
-            <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-[#FFD345] shrink-0" />
+            <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
             <span className="text-[#999] text-sm leading-relaxed">{point}</span>
           </li>
         ))}
@@ -261,7 +261,7 @@ const PolicyFormDialog = ({
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="bg-[#1C1C1C] border border-[#2A2A2A] rounded-2xl text-white sm:max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-[#FFD345] text-lg font-bold">
+          <DialogTitle className="text-primary text-lg font-bold">
             {title}
           </DialogTitle>
         </DialogHeader>
@@ -275,7 +275,7 @@ const PolicyFormDialog = ({
               value={heading}
               onChange={(e) => setHeading(e.target.value)}
               placeholder="e.g. 30-Day Return Window"
-              className="bg-[#121212] border-[#2A2A2A] text-white placeholder:text-[#555] rounded-lg focus-visible:ring-[#FFD345] focus-visible:ring-1 focus-visible:border-[#FFD345]"
+              className="bg-[#121212] border-[#2A2A2A] text-white placeholder:text-[#555] rounded-lg focus-visible:ring-primary focus-visible:ring-1 focus-visible:border-primary"
             />
           </div>
 
@@ -293,12 +293,12 @@ const PolicyFormDialog = ({
               {points.map((point, index) => (
                 <div key={index} className="flex items-center gap-2">
                   <GripVertical size={14} className="text-[#444] shrink-0" />
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FFD345] shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
                   <Input
                     value={point}
                     onChange={(e) => handlePointChange(index, e.target.value)}
                     placeholder={`Point ${index + 1}...`}
-                    className="bg-[#121212] border-[#2A2A2A] text-white placeholder:text-[#555] rounded-lg focus-visible:ring-[#FFD345] focus-visible:ring-1 focus-visible:border-[#FFD345] flex-1"
+                    className="bg-[#121212] border-[#2A2A2A] text-white placeholder:text-[#555] rounded-lg focus-visible:ring-primary focus-visible:ring-1 focus-visible:border-primary flex-1"
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault();
@@ -319,7 +319,7 @@ const PolicyFormDialog = ({
 
             <button
               onClick={addPoint}
-              className="flex items-center gap-2 text-[#FFD345] text-sm font-medium mt-1 w-fit hover:opacity-80 transition-opacity cursor-pointer"
+              className="flex items-center gap-2 text-primary text-sm font-medium mt-1 w-fit hover:opacity-80 transition-opacity cursor-pointer"
             >
               <Plus size={14} />
               Add point
@@ -338,7 +338,7 @@ const PolicyFormDialog = ({
           <Button
             onClick={handleSubmit}
             disabled={isLoading || !isValid}
-            className="bg-[#FFD345] text-[#121212] font-bold hover:bg-[#e6be30] border-none disabled:opacity-50"
+            className="bg-primary text-[#121212] font-bold hover:bg-primary/90 border-none disabled:opacity-50"
           >
             {isLoading ? "Saving..." : !!initialData ? "Update" : "Add"}
           </Button>
@@ -419,7 +419,7 @@ export const ReturnPolicy = () => {
       {/* Header */}
       <div className="flex justify-between items-end mb-8">
         <div>
-          <p className="text-[#FFD345] text-xs font-bold uppercase tracking-widest m-0">
+          <p className="text-primary text-xs font-bold uppercase tracking-widest m-0">
             Store Configuration
           </p>
           <h1 className="text-white text-3xl font-bold mt-1.5 mb-1">
@@ -431,7 +431,7 @@ export const ReturnPolicy = () => {
         </div>
         <Button
           onClick={() => setIsAddOpen(true)}
-          className="bg-[#FFD345] text-[#121212] font-bold text-sm rounded-xl px-5 py-2.5 flex items-center gap-1.5 border-none hover:bg-[#e6be30] cursor-pointer"
+          className="bg-primary text-[#121212] font-bold text-sm rounded-xl px-5 py-2.5 flex items-center gap-1.5 border-none hover:bg-primary/90 cursor-pointer"
         >
           <Plus size={16} />
           Add Policy
@@ -501,7 +501,7 @@ export const ReturnPolicy = () => {
               Delete this policy?
             </AlertDialogTitle>
             <AlertDialogDescription className="text-[#888]">
-              <span className="text-[#FFD345] font-semibold">
+              <span className="text-primary font-semibold">
                 "{deleteTarget?.heading}"
               </span>{" "}
               will be permanently removed. This action cannot be undone.
@@ -521,7 +521,6 @@ export const ReturnPolicy = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <ReturnHelp />
     </div>
   );
 };

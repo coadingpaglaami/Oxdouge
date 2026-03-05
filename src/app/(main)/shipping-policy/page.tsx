@@ -196,7 +196,7 @@ export default function ShippingPolicyPage() {
                 {/* Infinite scroll sentinel */}
                 <div ref={loadMoreRef} className="py-3">
                   {isFetching && page > 1 && (
-                    <div className="flex items-center justify-center gap-2 text-[#FFD345]">
+                    <div className="flex items-center justify-center gap-2 text-primary">
                       <Loader2 className="w-4 h-4 animate-spin" />
                       <span className="text-xs">Loading more...</span>
                     </div>
@@ -256,7 +256,7 @@ export default function ShippingPolicyPage() {
                 {/* Bottom loading indicator */}
                 <div ref={loadMoreRef} className="py-3">
                   {isFetching && page > 1 && (
-                    <div className="flex items-center justify-center gap-2 text-[#FFD345]">
+                    <div className="flex items-center justify-center gap-2 text-primary">
                       <Loader2 className="w-4 h-4 animate-spin" />
                       <span className="text-xs">Loading more...</span>
                     </div>

@@ -2,11 +2,21 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Facebook, Instagram, Twitter, Pencil, X, Check, Loader2 } from "lucide-react";
+import {
+  Facebook,
+  Instagram,
+  Pencil,
+  X,
+  Check,
+  Loader2,
+  Youtube,
+} from "lucide-react";
 import {
   useGetSocialLinksQuery,
   useUpdateSocialLinksMutation,
 } from "@/api/ui_manager";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -44,6 +54,13 @@ const PLATFORMS: {
     placeholder: "https://instagram.com/yourhandle",
     brandColor: "#E1306C",
   },
+  {
+    key: "x",
+    label: "YouTube",
+    Icon: Youtube,
+    placeholder: "https://youtube.com/yourhandle",
+    brandColor: "#FF0033",
+  },
 ];
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -78,9 +95,11 @@ export const SocialLinks = () => {
     if (!data) return;
     try {
       await updateSocialLinks({ id: data.id, ...form }).unwrap();
+      toast.success("Social links updated successfully!");
       setIsEditing(false);
     } catch (err) {
       console.error("Failed to update social links:", err);
+      toast.error("Failed to update social links.");
     }
   };
 
@@ -102,17 +121,18 @@ export const SocialLinks = () => {
 
   if (isEditing) {
     return (
-      <div className="flex flex-col gap-3 p-4 rounded-xl border border-[#FFD345]/30 bg-white/[0.04] w-full max-w-sm">
+      <div className="flex flex-col gap-3 p-4 rounded-xl border border-[#FFD345]/30 bg-white/4 w-full max-w-sm">
         {/* Header */}
         <div className="flex items-center justify-between mb-1">
-          <span className="text-xs font-semibold text-[#FFD345] uppercase tracking-widest">
+          <span className="text-xs font-semibold text-primary uppercase tracking-widest">
             Edit Social Links
           </span>
           <div className="flex gap-1.5">
-            <button
+            <Button
               onClick={handleSave}
               disabled={isUpdating}
-              className="flex items-center justify-center w-7 h-7 rounded-md bg-[#FFD345] hover:bg-[#FFD345]/80 text-black transition-colors duration-200 disabled:opacity-50"
+              variant={"defaultGradient"}
+              className="flex items-center justify-center w-7 h-7 rounded-md but text-black transition-colors duration-200 disabled:opacity-50"
               title="Save"
             >
               {isUpdating ? (
@@ -120,7 +140,7 @@ export const SocialLinks = () => {
               ) : (
                 <Check className="w-3.5 h-3.5" />
               )}
-            </button>
+            </Button>
             <button
               onClick={cancelEdit}
               disabled={isUpdating}
@@ -139,10 +159,7 @@ export const SocialLinks = () => {
               className="flex items-center justify-center w-8 h-8 rounded-lg shrink-0"
               style={{ backgroundColor: `${brandColor}22` }}
             >
-              <Icon
-                className="w-4 h-4"
-                style={{ color: brandColor }}
-              />
+              <Icon className="w-4 h-4" style={{ color: brandColor }} />
             </div>
             <div className="flex-1 relative">
               <input
@@ -175,7 +192,7 @@ export const SocialLinks = () => {
             target="_blank"
             rel="noopener noreferrer"
             title={label}
-            className="group/icon relative flex items-center justify-center w-9 h-9 rounded-xl border border-white/5 bg-white/[0.03] hover:border-white/20 transition-all duration-200 hover:scale-105"
+            className="group/icon relative flex items-center justify-center w-9 h-9 rounded-xl border border-white/5 bg-white/3 hover:border-white/20 transition-all duration-200 hover:scale-105"
           >
             <Icon
               className="w-4 h-4 text-gray-400 transition-colors duration-200"
@@ -197,7 +214,13 @@ export const SocialLinks = () => {
       {/* Edit trigger */}
       <button
         onClick={openEdit}
-        className="flex items-center justify-center w-7 h-7 rounded-lg bg-white/0 group-hover:bg-white/8 hover:!bg-[#FFD345]/20 text-transparent group-hover:text-gray-500 hover:!text-[#FFD345] transition-all duration-200"
+        className="flex items-center justify-center w-7 h-7 rounded-lg bg-white/0 
+  group-hover:bg-white/8 
+  hover:bg-(--primary)/20 
+  text-transparent 
+  group-hover:text-gray-500 
+  hover:text-primary 
+  transition-all duration-200"
         title="Edit social links"
       >
         <Pencil className="w-3 h-3" />

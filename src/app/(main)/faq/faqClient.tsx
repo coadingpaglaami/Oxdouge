@@ -99,7 +99,7 @@ export default function FaqPage() {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="flex items-center gap-3">
-          <Loader2 className="w-6 h-6 animate-spin text-[#FFD345]" />
+          <Loader2 className="w-6 h-6 animate-spin text-primary" />
           <p className="text-gray-400">Loading FAQs...</p>
         </div>
       </div>
@@ -125,23 +125,23 @@ export default function FaqPage() {
           {allFaqs.map((faq, index) => (
             <div
               key={faq.id}
-              className="border border-[#FFD345] rounded-lg overflow-hidden bg-[#212121] transition-all duration-300 hover:border-[#FFD345]/80"
+              className="border border-primary rounded-lg overflow-hidden bg-[#212121] transition-all duration-300 hover:border-primary/80"
               style={{
                 animation: `fadeInUp 0.5s ease-out ${Math.min(index, 9) * 60}ms both`,
               }}
             >
               <button
                 onClick={() => toggleItem(faq.id)}
-                className="w-full flex justify-between items-center p-6 text-left hover:bg-[#FFD345]/5 transition-all duration-300 cursor-pointer"
+                className="w-full flex justify-between items-center p-6 text-left hover:bg-primary/5 transition-all duration-300 cursor-pointer"
               >
                 <span className="text-lg font-semibold pr-4">
                   {faq.question}
                 </span>
                 <div className="shrink-0">
                   {openItems.includes(faq.id) ? (
-                    <ChevronUp className="w-5 h-5 text-[#FFD345]" />
+                    <ChevronUp className="w-5 h-5 text-primary" />
                   ) : (
-                    <ChevronDown className="w-5 h-5 text-[#FFD345]" />
+                    <ChevronDown className="w-5 h-5 text-primary" />
                   )}
                 </div>
               </button>
@@ -153,7 +153,7 @@ export default function FaqPage() {
                     : "max-h-0 opacity-0"
                 }`}
               >
-                <div className="p-6 pt-0 border-t border-[#FFD345]/30">
+                <div className="p-6 pt-0 border-t border-primary/30">
                   <p className="text-gray-300 leading-relaxed mt-4">
                     {faq.answer}
                   </p>
@@ -175,7 +175,7 @@ export default function FaqPage() {
           {/* Infinite scroll sentinel */}
           <div ref={loadMoreRef} className="py-8">
             {isFetching && page > 1 && (
-              <div className="flex items-center justify-center gap-2 text-[#FFD345]">
+              <div className="flex items-center justify-center gap-2 text-primary">
                 <Loader2 className="w-5 h-5 animate-spin" />
                 <span className="text-sm">Loading more FAQs...</span>
               </div>
@@ -189,7 +189,7 @@ export default function FaqPage() {
         </div>
 
         {/* CTA */}
-        <div className="text-center border-t border-[#FFD345]/30 pt-16">
+        <div className="text-center border-t border-primary/30 pt-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Still have a question?
           </h2>
@@ -199,7 +199,8 @@ export default function FaqPage() {
           </p>
           <Button
             asChild
-            className="bg-linear-to-r from-[#FFD345] to-[#FFBB28] hover:from-[#FFDF76] hover:to-[#FFD345] text-black px-8 py-6 text-md rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[#FFD345]/20"
+            variant={"defaultGradient"}
+            className="bg-linear-to-r text-black px-8 py-6 text-md rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20"
           >
             <Link href="/contact" className="flex items-center gap-2 group">
               Contact Us

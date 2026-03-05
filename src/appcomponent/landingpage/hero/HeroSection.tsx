@@ -28,9 +28,9 @@ export const HeroSection = () => {
   }
 
   // Split title1 to get the first word for colored highlight
-  const titleWords = data?.title1?.split(' ') || ['Power', 'Everything'];
-  const firstWord = titleWords[0] || 'Power';
-  const remainingWords = titleWords.slice(1).join(' ') || 'Everything';
+  const titleWords = data?.title1?.split(" ") || ["Power", "Everything"];
+  const firstWord = titleWords[0] || "Power";
+  const remainingWords = titleWords.slice(1).join(" ") || "Everything";
 
   return (
     <section className="w-full md:h-screen relative flex flex-col md:flex-row overflow-hidden max-md:gap-8">
@@ -63,19 +63,29 @@ export const HeroSection = () => {
           </div>
 
           {/* Column 2: Huge text with dynamic title1 */}
-          <div className="flex flex-col">
-            <h1 className="text-white md:text-[80px] text-4xl md:leading-20 font-bold">
-              {firstWord}{' '}
-              <span className="text-primary">{remainingWords}</span>
-            </h1>
+          <div className="max-w-lg">
+            {(
+              data?.description ||
+              "Experience ultimate warmth with our smoke-free, energy-efficient portable heaters. Engineered for outdoor adventures, camping, and emergency preparedness."
+            )
+              .split("\n")
+              .map((line, index) => (
+                <p
+                  key={index}
+                  className="text-white md:text-[24px] text-sm max-md:text-justify"
+                >
+                  {line}
+                </p>
+              ))}
           </div>
 
           {/* Column 3: Dynamic description from API */}
-          <div className="max-w-lg">
+          {/* <div className="max-w-lg">
             <p className="text-white md:text-[24px] text-sm max-md:text-justify">
-              {data?.description || "Experience ultimate warmth with our smoke-free, energy-efficient portable heaters. Engineered for outdoor adventures, camping, and emergency preparedness."}
+              {data?.description ||
+                "Experience ultimate warmth with our smoke-free, energy-efficient portable heaters. Engineered for outdoor adventures, camping, and emergency preparedness."}
             </p>
-          </div>
+          </div> */}
 
           {/* Column 4: Buttons */}
           <div className="flex flex-row gap-4 mt-4">
@@ -107,7 +117,13 @@ export const HeroSection = () => {
 
       {/* Right Section with dynamic SwipperCards */}
       <div className="md:w-1/2 w-full flex items-center max-md:hidden">
-        <SwipperCards images={(data?.existing_images || []).filter((img) => img.heading !== null) as any} />
+        <SwipperCards
+          images={
+            (data?.existing_images || []).filter(
+              (img) => img.heading !== null,
+            ) as any
+          }
+        />
       </div>
 
       {/* Optional Overlay if needed */}
