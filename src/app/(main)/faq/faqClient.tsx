@@ -111,12 +111,12 @@ export default function FaqPage() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold bg-linear-to-r from-white to-gray-400 bg-clip-text text-transparent mb-6">
-            FAQ
+          <h1 className="text-3xl md:text-6xl font-bold bg-linear-to-r from-white to-gray-400 bg-clip-text text-transparent mb-6">
+            Frequently Asked Questions
           </h1>
-          <p className="text-lg md:text-xl text-[#BEBABA] max-w-2xl mx-auto leading-relaxed">
-            Thank you for shopping with us! This shipping policy explains how
-            and when your order will be processed, shipped and delivered.
+          <p className="text-base md:text-xl text-[#BEBABA] max-w-2xl mx-auto leading-relaxed">
+            Find quick answers to common questions about our products, ordering,
+            and support.
           </p>
         </div>
 

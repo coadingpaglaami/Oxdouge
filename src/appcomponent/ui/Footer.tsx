@@ -138,7 +138,7 @@ export const Footer = () => {
             height={60}
             className="w-32 h-32 self-center"
           />
-          <span className="font-bold text-lg">
+          <span className="font-bold text-lg text-center">
             {/* NOT <span className="text-primary">Overland</span> Tech */}
             {footerSections && footerSections.length > 0
               ? footerSections[0].title
