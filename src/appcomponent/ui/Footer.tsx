@@ -134,9 +134,10 @@ export const Footer = () => {
           <Image
             src="/landing/logo.svg"
             alt="Logo"
-            width={60}
-            height={60}
-            className="w-32 h-32 self-center"
+            width={80}
+            height={80}
+            priority
+            className="max-w-max mx-auto"
           />
           <span className="font-bold text-lg text-center">
             {/* NOT <span className="text-primary">Overland</span> Tech */}

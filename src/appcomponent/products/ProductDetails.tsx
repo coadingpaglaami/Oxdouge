@@ -50,9 +50,9 @@ export const ProductDetails = ({ id }: ProductDetailsProps) => {
           </div>
         </div>
       </div>
-      <h2 className="text-center md:text-2xl text-white font-bold p-8 bg-[#FFD34585]">
+      {/* <h2 className="text-center md:text-2xl text-white font-bold p-8 bg-[#FFD34585]">
         Enjoy Free Delivery on NOT Overland Tech
-      </h2>
+      </h2> */}
     </>
   );
 };
