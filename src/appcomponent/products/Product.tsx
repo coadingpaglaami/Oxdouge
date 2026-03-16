@@ -3,8 +3,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Heater } from "../reusable";
-import {  useGetProductUserQuery, useGetUserCategoryQuery } from "@/api/productApi";
+import {
+  useGetProductUserQuery,
+  useGetUserCategoryQuery,
+} from "@/api/productApi";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { useGetHeadingSectionQuery } from "@/api/ui_manager";
 
 export const Products = () => {
   const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null);
@@ -23,6 +27,9 @@ export const Products = () => {
     isLoading: categoryLoading,
     isFetching,
   } = useGetUserCategoryQuery({ page });
+
+  const { data: headingData, isLoading: headingLoading } =
+    useGetHeadingSectionQuery({});
 
   const limit = 10;
   const categories = categoryData?.results || [];
@@ -91,16 +98,19 @@ export const Products = () => {
   return (
     <div className="flex flex-col gap-10 w-full py-20">
       {/* Header Section */}
-      <div className="flex flex-col items-center text-center px-4">
-        <h2 className="text-3xl md:text-4xl font-semibold text-white">
-          Our Products
-        </h2>
-        <p className="mt-4 max-w-3xl text-[#BEBABA]">
-          We{"'"}re committed to providing outdoor enthusiasts with reliable,
-          portable power solutions that keep you connected and powered wherever
-          your adventures take you.
-        </p>
-      </div>
+      {headingLoading ? (
+        <Loader2 className="animate-spin mx-auto" size={28} />
+      ) : (
+        <div className="flex flex-col items-center text-center px-4">
+          <h2 className="text-3xl md:text-4xl font-semibold text-white">
+            {headingData?.[0]?.heading6 || "Our Products"}
+          </h2>
+          <p className="mt-4 max-w-3xl text-[#BEBABA]">
+            {headingData?.[0]?.subheading6 ||
+              "Explore our wide range of products designed to meet your needs."}
+          </p>
+        </div>
+      )}
 
       {/* Category Tabs */}
       <div className="flex justify-center items-center gap-2 w-full py-4 overflow-x-auto scrollbar-hide">
@@ -218,7 +228,7 @@ export const Products = () => {
               >
                 {pageNum}
               </Button>
-            )
+            ),
           )}
 
           {/* Next Button */}

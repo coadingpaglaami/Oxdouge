@@ -5,6 +5,7 @@ import {
   useGetHeadingSectionQuery,
   useUpdateHeadingSectionMutation,
 } from "@/api/ui_manager";
+import { toast } from "sonner";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -20,6 +21,8 @@ interface HeadingSection {
   subheading4: string;
   heading5: string;
   subheading5: string;
+  heading6: string;
+  subheading6: string;
   created_at: string;
   updated_at: string;
 }
@@ -31,6 +34,8 @@ interface HeadingSectionUpdatePayload {
   subheading2?: string;
   heading3?: string;
   subheading3?: string;
+  heading6?: string;
+  subheading6?: string;
 }
 
 interface FormState {
@@ -40,6 +45,8 @@ interface FormState {
   subheading2: string;
   heading3: string;
   subheading3: string;
+  heading6: string;
+  subheading6: string;
 }
 
 // ─── Config ───────────────────────────────────────────────────────────────────
@@ -68,6 +75,12 @@ const FIELD_CONFIG: {
     headingKey: "heading3",
     subheadingKey: "subheading3",
   },
+  {
+    label: "Our Products",
+    icon: "❝",
+    headingKey: "heading6",
+    subheadingKey: "subheading6",
+  },
 ];
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -86,6 +99,8 @@ export const HeadingManagement = () => {
     subheading2: "",
     heading3: "",
     subheading3: "",
+    heading6: "",
+    subheading6: "",
   });
   const [saved, setSaved] = useState(false);
 
@@ -98,6 +113,8 @@ export const HeadingManagement = () => {
         subheading2: record.subheading2,
         heading3: record.heading3,
         subheading3: record.subheading3,
+        heading6: record.heading6,
+        subheading6: record.subheading6,
       });
     }
   }, [record]);
@@ -114,8 +131,11 @@ export const HeadingManagement = () => {
       subheading2: form.subheading2,
       heading3: form.heading3,
       subheading3: form.subheading3,
+      heading6: form.heading6,
+      subheading6: form.subheading6,
     };
     await updateHeadingSection({ id: record.id, data: payload });
+    toast.success("Headings updated successfully!");
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
   };
