@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title: "Not Overland Tech | N.O.T",
   description: "Outdoor and overland gears without the overland tax. Committed to provide you with the most reliable and affordable solution for your adventures.",
   icons: {
-    icon: "/landing/logo.svg",
+    icon: "/landing/logo.png",
   },
   openGraph: {
     title: "Not Overland Tech | N.O.T",

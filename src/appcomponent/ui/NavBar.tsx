@@ -107,10 +107,10 @@ export const NavBar = () => {
       {/* Logo */}
       <Link href="/" className="flex items-center gap-2">
         <Image
-          src="/landing/logo.svg"
+          src="/landing/logo.png"
           alt="Logo"
-          width={80}
-          height={80}
+          width={85}
+          height={85}
           priority
         />
       </Link>

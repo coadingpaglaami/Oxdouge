@@ -132,10 +132,10 @@ export const Footer = () => {
         {/* Column 1: Logo + Description */}
         <div className="flex flex-col gap-4">
           <Image
-            src="/landing/logo.svg"
+            src="/landing/logo.png"
             alt="Logo"
-            width={80}
-            height={80}
+            width={85}
+            height={85}
             priority
             className="max-w-max mx-auto"
           />
