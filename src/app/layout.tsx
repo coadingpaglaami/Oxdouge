@@ -25,9 +25,9 @@ export const metadata: Metadata = {
     description: "Outdoor and overland gears without the overland tax. Committed to provide you with the most reliable and affordable solution for your adventures.",
     images: [
       {
-        url: "https://notoverlandtech.com/landing/logo.png",
-        height: 630,
-        width: 1200,
+        url: "https://notoverlandtech.com/landing/notlogo.png",
+        height: 1032,
+        width: 1100,
         alt: "Not Overland Tech",
       },
     ],
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Not Overland Tech | N.O.T",
     description: "Outdoor and overland gears without the overland tax. Committed to provide you with the most reliable and affordable solution for your adventures.",
-    images: ["https://notoverlandtech.com/landing/logo.png"],
+    images: ["https://notoverlandtech.com/landing/notlogo.png"],
   },
 };
 
